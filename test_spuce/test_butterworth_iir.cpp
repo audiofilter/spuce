@@ -12,23 +12,22 @@ using namespace spuce;
 //! \ingroup examples
 
 int main(int argc, char* argv[]) {
-  const long N = 256;
-  long O = 4;
+  const long N = 1024;
+  long O = 2;
   float_type imp;
-
+	float_type f_cutoff = 0.1;
+	
   if (argc > 1) {
-    O = atoi(argv[1]);
-    std::cout << "Order used = " << O << "\n";
+    f_cutoff = atof(argv[1]);
+    std::cout << "Order used = " << O << " cut-off = " << f_cutoff << "\n";
+		
   }
 
   iir_coeff BPF(O);
-  butterworth_iir(BPF, 0.1, 3.0);
-
+  butterworth_iir(BPF, f_cutoff, 3.0);
   BPF.print();
 
   iir_df<float_type> LPF(BPF);
-
-  LPF.print();
 
   std::vector<double> y(N, 0);
 

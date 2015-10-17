@@ -11,8 +11,8 @@ void butterworth_iir(iir_coeff& filt, float_type fcd, float_type amax = 3.0) {
   const float_type ten = 10.0;
   auto order = filt.getOrder();
   float_type epi = pow((float_type)(pow(ten, amax / ten) - 1.0), (float_type)(1. / (2.0 * order)));
-  // fcd - desired cutoff frequency (std::normalized)
-  float_type wca = (filt.get_type()) ? tan(0.5 * M_PI * fcd) / epi : tan(0.5 * M_PI * (1.0 - fcd)) / epi;
+  // fcd - desired cutoff frequency (normalized)
+  float_type wca = (filt.get_type()) ? tan(M_PI * fcd) / epi : tan(M_PI*(0.5-fcd))/ epi;
   // wca - pre-warped angular frequency
   auto n2 = (order + 1) / 2;
   butterworth_s(filt, wca, order, n2);
