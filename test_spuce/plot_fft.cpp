@@ -1,3 +1,4 @@
+#include <memory>
 #include "plot_fft.h"
 #include "MPLPlot.h"
 #include <complex>
