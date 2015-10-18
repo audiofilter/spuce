@@ -41,8 +41,6 @@ void elliptic_iir(iir_coeff& filt, float_type fcd, float_type ripple, float_type
   u = lamda_plane(k, m, order, epi);
   s_plane(filt, order, u, m, k, Kk, wc);
 
-	filt.print_pz();
-	
   filt.bilinear();
   filt.convert_to_ab();
 }

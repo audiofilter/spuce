@@ -2,7 +2,6 @@
 //! \author Tony Kirke
 #include <spuce/filters/chebyshev_iir.h>
 #include <cfloat>
-#include <iostream>
 namespace spuce {
 //! fcd = cut-off (1=sampling rate)
 //! ord = Filter order
