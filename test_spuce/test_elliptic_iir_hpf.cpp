@@ -12,19 +12,28 @@ using namespace spuce;
 //! \ingroup examples
 
 int main(int argc, char* argv[]) {
-  const long N = 256;
-  long O = 4;
+  const long N = 1024;
+  long O = 6;
   float_type imp;
+	float_type f_cutoff=0.2;
+	float_type bw = 0.2*f_cutoff;
+	float_type ripple = 1.0;
+	float_type stopband_atten = 40;
 
-  if (argc > 1) {
-    O = atoi(argv[1]);
-    std::cout << "Order used = " << O << "\n";
-  }
+	if (argc > 1) {
+    f_cutoff = atof(argv[1]);
+		bw = 0.2*f_cutoff;
+	}
+	std::cout << "Order used = " << O << ", cut-off = " << f_cutoff << ", stopband edge = " << f_cutoff+bw
+						<< ", stopband attenuation = " << stopband_atten
+						<< ", ripple = " << ripple << "\n";
 
-  iir_coeff BPF(O, false);
-  elliptic_iir(BPF, 0.2, 0.22, 40, 0.5);
+  iir_coeff BPF(O,false);
+  elliptic_iir(BPF, f_cutoff, ripple, stopband_atten, bw);
   iir_df<float_type> LPF(BPF);
 
+	BPF.print();
+ 
   std::vector<double> y(N, 0);
 
   imp = 1.0;

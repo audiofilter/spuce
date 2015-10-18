@@ -8,8 +8,10 @@ namespace spuce {
 //! \brief Design functions for iir filters
 //! \author Tony Kirke
 //! \ingroup functions iir
-iir_coeff* design_iir(const std::string& iir_type, const std::string& filter_type, int order, float_type fcd,
-                      float_type ripple = 0.1, float_type fstop = 0.5, float_type stopattn = -60) {
+iir_coeff* design_iir(const std::string& iir_type, const std::string& filter_type,
+											int order, float_type fcd,
+                      float_type ripple = 0.1, float_type stopattn = 60,
+											float_type bw = 0.1) {
   iir_coeff* filt = new iir_coeff(order);
   if (filter_type == "LOW_PASS") {
     filt->set_type(true);
@@ -24,7 +26,7 @@ iir_coeff* design_iir(const std::string& iir_type, const std::string& filter_typ
   } else if (iir_type == "chebyshev") {
     chebyshev_iir(*filt, fcd, ripple);
   } else if (iir_type == "elliptic") {
-    elliptic_iir(*filt, fcd, fstop, stopattn, ripple);
+    elliptic_iir(*filt, fcd, ripple, stopattn, bw);
   } else {
     std::cout << "Unknown iir type\n";
   }

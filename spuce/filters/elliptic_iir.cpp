@@ -6,18 +6,17 @@
 #define MACHEP 2.0 * FLT_MIN
 using namespace std;
 namespace spuce {
-void elliptic_iir(iir_coeff& filt, float_type fcd, float_type fstop, float_type stopattn, float_type ripple) {
+void elliptic_iir(iir_coeff& filt, float_type fcd, float_type ripple, float_type stopattn, float_type bw) {
   float_type m1, m2;
   float_type a, m, Kk1, Kpk1, k, wr, fstp, Kk, u;
   const float_type ten = 10.0;
-
   auto order = filt.getOrder();
   float_type epi = pow(ten, (ripple / ten));
   epi = sqrt(epi - 1.0);
+	float_type fstop = fcd + bw;
   //! wca - pre-warped angular frequency
-  float_type bw = fstop - fcd;
-  float_type wca = tan(M_PI * bw);
-  float_type wc = (filt.get_type()) ? tan(0.5 * M_PI * fcd) / epi : tan(0.5 * M_PI * (1.0 - fcd)) / epi;
+  float_type wca  = tan(M_PI * fcd);
+  float_type wc  =  (filt.get_type()) ? tan(M_PI * fcd) : tan(M_PI*(0.5-fcd));
   //! if stopattn < 1 dB assume it is stopband edge instead
   if (stopattn > 1.0) {
     a = pow(ten, (stopattn / ten));
@@ -32,14 +31,18 @@ void elliptic_iir(iir_coeff& filt, float_type fcd, float_type fstop, float_type 
   } else {
     fstp = stopattn;
   }
+
   wr = tan(fstp * M_PI) / wca;
   if (wr < 0.0) wr = -wr;
+	// Selectivity factor
   k = 1.0 / wr;
   m = k * k;
   Kk = ellpk(m);
   u = lamda_plane(k, m, order, epi);
   s_plane(filt, order, u, m, k, Kk, wc);
 
+	filt.print_pz();
+	
   filt.bilinear();
   filt.convert_to_ab();
 }
