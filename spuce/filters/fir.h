@@ -57,7 +57,7 @@ template <class Numeric, class Coeff = float_type> class fir {
   fir(void) { ; }
   //! Constructor
   fir(long n) : coeff(n), z(n), num_taps(n) {
-    assert(n < 0);
+		assert(n > 0);
     int i;
     if (n > 0) {
       for (i = 0; i < n; i++) z[i] = (Numeric)0;
