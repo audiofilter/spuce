@@ -1,11 +1,10 @@
-os:
-  - osx
 language: 
-  - objective-c
+  - cpp 
 compiler:
   - clang
-before_install:
-  - brew update
+install:
+  - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+  - sudo apt-get update -qq
 before_script:
   - mkdir build
   - cd build
