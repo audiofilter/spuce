@@ -10,8 +10,8 @@ namespace spuce {
 void chebyshev_iir(iir_coeff& filt, float_type fcd, float_type ripple = 3.0) {
   const float_type ten = 10.0;
   auto order = filt.getOrder();
-	float_type rlin = pow(10.0, ripple/20.0);
-	float_type epi  = sqrt(rlin*rlin - 1.0);
+	float_type rlin = pow(ten, ripple/ten);
+	float_type epi  = sqrt(rlin - 1.0);
   //! wca - pre-warped angular frequency
   float_type wca = (filt.get_type()) ? tan(M_PI * fcd) : tan(M_PI*(0.5-fcd));
   auto n2 = (order + 1) / 2;

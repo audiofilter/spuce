@@ -29,6 +29,15 @@ void iir_coeff::print() const {
   std::cout << "}\n";
   std::cout << "gain = " << getGain() << "\n";
 }
+void iir_coeff::print_pz() const {
+  std::cout << "zeros = {";
+  for (int i = 0; i < zeros.size(); i++) { std::cout << zeros[i] << " "; }
+  std::cout << "}\n";
+  std::cout << "poles = {";
+  for (int i = 0; i < poles.size(); i++) { std::cout << poles[i] << " "; }
+  std::cout << "}\n";
+  std::cout << "gain = " << getGain() << "\n";
+}
 
 int iir_coeff::isOdd(void) const { return odd; }
 int iir_coeff::getOrder(void) const { return order; }

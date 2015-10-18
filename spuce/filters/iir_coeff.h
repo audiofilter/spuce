@@ -42,6 +42,7 @@ class iir_coeff {
   bool get_type(void) const { return lpf; }
   void set_type(bool t) { lpf = t; }
   void print() const;
+  void print_pz() const;
 
  private:
   std::vector<std::complex<float_type> > poles;
