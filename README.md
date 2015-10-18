@@ -1,6 +1,9 @@
 # spuce - SPUC enhanced
 A rewrite of spuc with more testing, better code design and c++11 features.
 
+* Uses std::complex instead of custom complex class
+* Will focus of floating point instead of fixed-point modules
+
 Most of spuc was written many years ago before C++ compilers had good template support and was primarily written for fixed-point hardware design and simulation.
 
 The rewrite will occur gradually, adding code and features as they are developed.
