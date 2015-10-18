@@ -1,0 +1,13 @@
+os:
+  - osx
+language: 
+  - objective-c
+compiler:
+  - clang
+before_install:
+  - brew update
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ..
+script: make
