@@ -67,6 +67,7 @@ class make_filter {
   bool is_bpf();
   double ripple();
   double stopdB();
+	double fcutoff();
   void vertical_swipe(int len, bool in_passband, bool above_stop);
   double update(double *w);
   double update(double *w, double w_inc);

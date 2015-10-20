@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.4.0
+** Created by: Qt User Interface Compiler version 4.8.6
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,15 +10,15 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QMainWindow>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QStatusBar>
-#include <QtWidgets/QWidget>
+#include <QtGui/QAction>
+#include <QtGui/QApplication>
+#include <QtGui/QButtonGroup>
+#include <QtGui/QHeaderView>
+#include <QtGui/QLabel>
+#include <QtGui/QMainWindow>
+#include <QtGui/QPushButton>
+#include <QtGui/QStatusBar>
+#include <QtGui/QWidget>
 #include "qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
@@ -28,16 +28,21 @@ class Ui_MainWindow
 public:
     QWidget *centralWidget;
     QCustomPlot *customPlot;
-    QLabel *label;
     QPushButton *Chebyshev;
     QPushButton *Elliptic;
     QPushButton *Butterworth;
+    QLabel *order;
+    QLabel *order_2;
+    QLabel *ripple;
+    QLabel *order_3;
+    QLabel *order_4;
+    QLabel *fc;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
-            MainWindow->setObjectName(QStringLiteral("MainWindow"));
+            MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(800, 450);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
@@ -45,38 +50,54 @@ public:
         sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
         MainWindow->setSizePolicy(sizePolicy);
         centralWidget = new QWidget(MainWindow);
-        centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
         centralWidget->setSizePolicy(sizePolicy1);
         customPlot = new QCustomPlot(centralWidget);
-        customPlot->setObjectName(QStringLiteral("customPlot"));
+        customPlot->setObjectName(QString::fromUtf8("customPlot"));
         customPlot->setGeometry(QRect(200, 10, 581, 411));
         QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(customPlot->sizePolicy().hasHeightForWidth());
         customPlot->setSizePolicy(sizePolicy2);
-        label = new QLabel(centralWidget);
-        label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(10, 10, 101, 21));
         Chebyshev = new QPushButton(centralWidget);
-        Chebyshev->setObjectName(QStringLiteral("Chebyshev"));
-        Chebyshev->setGeometry(QRect(10, 70, 181, 27));
+        Chebyshev->setObjectName(QString::fromUtf8("Chebyshev"));
+        Chebyshev->setGeometry(QRect(10, 40, 181, 27));
         Chebyshev->setCheckable(true);
         Elliptic = new QPushButton(centralWidget);
-        Elliptic->setObjectName(QStringLiteral("Elliptic"));
-        Elliptic->setGeometry(QRect(10, 100, 181, 27));
+        Elliptic->setObjectName(QString::fromUtf8("Elliptic"));
+        Elliptic->setGeometry(QRect(10, 70, 181, 27));
         Elliptic->setCheckable(true);
         Butterworth = new QPushButton(centralWidget);
-        Butterworth->setObjectName(QStringLiteral("Butterworth"));
-        Butterworth->setGeometry(QRect(10, 40, 181, 27));
+        Butterworth->setObjectName(QString::fromUtf8("Butterworth"));
+        Butterworth->setGeometry(QRect(10, 10, 181, 27));
         Butterworth->setCheckable(true);
+        order = new QLabel(centralWidget);
+        order->setObjectName(QString::fromUtf8("order"));
+        order->setGeometry(QRect(150, 120, 41, 21));
+        order_2 = new QLabel(centralWidget);
+        order_2->setObjectName(QString::fromUtf8("order_2"));
+        order_2->setGeometry(QRect(20, 120, 111, 21));
+        ripple = new QLabel(centralWidget);
+        ripple->setObjectName(QString::fromUtf8("ripple"));
+        ripple->setGeometry(QRect(150, 160, 41, 21));
+        order_3 = new QLabel(centralWidget);
+        order_3->setObjectName(QString::fromUtf8("order_3"));
+        order_3->setGeometry(QRect(20, 160, 111, 31));
+        order_3->setWordWrap(true);
+        order_4 = new QLabel(centralWidget);
+        order_4->setObjectName(QString::fromUtf8("order_4"));
+        order_4->setGeometry(QRect(20, 210, 111, 21));
+        fc = new QLabel(centralWidget);
+        fc->setObjectName(QString::fromUtf8("fc"));
+        fc->setGeometry(QRect(150, 210, 41, 21));
         MainWindow->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(MainWindow);
-        statusBar->setObjectName(QStringLiteral("statusBar"));
+        statusBar->setObjectName(QString::fromUtf8("statusBar"));
         MainWindow->setStatusBar(statusBar);
 
         retranslateUi(MainWindow);
@@ -87,10 +108,15 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "QCustomPlot simple demo", 0));
-        label->setText(QApplication::translate("MainWindow", "Filter Type", 0));
         Chebyshev->setText(QApplication::translate("MainWindow", "Chebyshev", 0));
         Elliptic->setText(QApplication::translate("MainWindow", "Elliptic", 0));
         Butterworth->setText(QApplication::translate("MainWindow", "Butterworth", 0));
+        order->setText(QApplication::translate("MainWindow", "Order", 0));
+        order_2->setText(QApplication::translate("MainWindow", "Active Filter Order", 0));
+        ripple->setText(QApplication::translate("MainWindow", "ripple", 0));
+        order_3->setText(QApplication::translate("MainWindow", "Chebyshev/Elliptic Ripple", 0));
+        order_4->setText(QApplication::translate("MainWindow", "Cut-off/Edge", 0));
+        fc->setText(QApplication::translate("MainWindow", "fc", 0));
     } // retranslateUi
 
 };

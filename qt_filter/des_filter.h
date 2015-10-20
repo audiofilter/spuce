@@ -38,4 +38,5 @@ EXTERNC double get_mag(double w);
 EXTERNC int get_order();
 EXTERNC double stopdB();
 EXTERNC double ripple();
+EXTERNC double fc();
 

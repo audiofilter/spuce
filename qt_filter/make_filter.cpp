@@ -106,6 +106,16 @@ double make_filter::get_fc(int len, bool in_passband) {
   }
   return (fc);
 }
+double make_filter::fcutoff() {
+	double fc;
+  switch (shape) {
+	case Butterworth:      fc = butterworth_fc;      break;
+	case Chebyshev:      fc = chebyshev_fc; break;
+	case Elliptic:        fc = elliptic_pass_edge;      break;
+	case None:      fc = 0;      break;
+  }
+  return (fc);
+}
 
 int make_filter::get_order() {
   switch (shape) {

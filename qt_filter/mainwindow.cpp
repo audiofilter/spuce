@@ -51,6 +51,10 @@ void MainWindow::BChanged() {
   if (Butterworth_on==NULL) {
 		shape = "Butterworth";
 		lpf_sel(shape.c_str());
+		order = get_order();
+		ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
+		ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
+		ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
 		Butterworth_on = ui->customPlot->addGraph();
 		plot2(ui->customPlot);
   } else {
@@ -63,6 +67,10 @@ void MainWindow::CChanged() {
   if (Chebyshev_on==NULL) {
 		shape = "Chebyshev";
 		lpf_sel(shape.c_str());
+		order = get_order();
+		ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
+		ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
+		ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
 		Chebyshev_on = ui->customPlot->addGraph();
 		plot2(ui->customPlot);
   } else {
@@ -75,6 +83,10 @@ void MainWindow::EChanged() {
   if (Elliptic_on==NULL) {
 		shape = "Elliptic";
 		lpf_sel(shape.c_str());
+		order = get_order();
+		ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
+		ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
+		ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
 		Elliptic_on = ui->customPlot->addGraph();
 		plot2(ui->customPlot);
   } else {
@@ -96,6 +108,9 @@ QCPGraph* MainWindow::GetPtr() {
 void MainWindow::setup(QCustomPlot *customPlot)
 {
   demoName = "spuce : Low Pass Filter Demo";
+
+	ui->order->setText(QApplication::translate("MainWindow", "3", 0));
+	
   customPlot->legend->setVisible(false);
   customPlot->legend->setFont(QFont("Helvetica",9));
   // set locale to english, so we get english decimal separator:
@@ -121,6 +136,11 @@ void MainWindow::plot2(QCustomPlot *customPlot)
     x0[i] = (double)0.5*i/pts;
     y0[i] = y_inc*(w[i]);
   }
+	order = get_order();
+	ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
+	ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
+	ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
+	
   customPlot->graph()->setData(x0, y0);
   customPlot->graph()->setLineStyle(QCPGraph::lsLine); //(QCPGraph::LineStyle)(rand()%5+1));
   customPlot->graph()->setScatterStyle(QCPScatterStyle::ssNone); // (QCP::ScatterStyle)(rand()%9+1));
@@ -151,6 +171,10 @@ void MainWindow::plot3(QCustomPlot *customPlot)
     x0[i] = (double)0.5*i/pts;
     y0[i] = y_inc*(w[i]);
   }
+	order = get_order();
+	ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
+	ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
+	ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
 
   customPlot->graph()->setData(x0, y0);
   customPlot->graph()->setLineStyle(QCPGraph::lsLine); 
@@ -199,7 +223,6 @@ void MainWindow::graphMoveEvent(QMouseEvent *event)
 	double m = get_mag(x);
 	bool in_passband = (m>-3);
 	
-	//std::cout << "Pos = " << x << " " << y << " "  << m << "\n";
 	double y_db = -100.0*y + 10;
 	bool above_stop = (-y_db < m);
 	
@@ -208,6 +231,12 @@ void MainWindow::graphMoveEvent(QMouseEvent *event)
   } else {
 		vertical_swipe(-ydis,in_passband,above_stop);
   }
+
+	order = get_order();
+	ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
+	ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
+	ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
+	
   QCPGraph* ptr = GetPtr();
   dragStartPosition = event->pos();
   if (ptr != NULL) {

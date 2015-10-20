@@ -27,6 +27,7 @@ void lpf_sel(const char* sel) { pLPF->sel_filter(sel); }
 void set_filter_type(int t) { pLPF->set_filter_type(t); }
 double horiz_swipe(int len, bool in_passband) {  return (pLPF->horiz_swipe(len, in_passband));}
 double get_fc(int len, bool in_passband) {  return (pLPF->get_fc(len, in_passband));}
+double fc() {  return (pLPF->fcutoff());}
 int get_order() { return (pLPF->get_order()); }
 double ripple() { return (pLPF->ripple()); }
 double stopdB() { return (pLPF->stopdB()); }
