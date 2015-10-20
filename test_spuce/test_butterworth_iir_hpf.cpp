@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
 		
   }
 
-  iir_coeff BPF(O,false);
+  iir_coeff BPF(O,filter_type::high);
   butterworth_iir(BPF, f_cutoff, 3.0);
 
   BPF.print();

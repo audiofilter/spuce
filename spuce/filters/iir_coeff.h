@@ -7,10 +7,14 @@ namespace spuce {
 //!  \brief  Class for iir filter design
 //!  \author Tony Kirke
 //!  \ingroup classes iir
+
+// Only low and high are implemented so far	
+enum class filter_type {low,high,bandpass,bandstop};
+	
 class iir_coeff {
  public:
   //! ord = Filter order
-  iir_coeff(long ord = 1, bool lp = true);
+  iir_coeff(long ord = 1, filter_type lp = filter_type::low);
   //! Destructor
   ~iir_coeff();
   //! Do bilinear transformation
@@ -39,8 +43,8 @@ class iir_coeff {
   int isOdd(void) const;
   std::vector<float_type> get_a() const;
   std::vector<float_type> get_b() const;
-  bool get_type(void) const { return lpf; }
-  void set_type(bool t) { lpf = t; }
+  filter_type get_type(void) const { return lpf; }
+  void set_type(filter_type t) { lpf = t; }
   void print() const;
   void print_pz() const;
 
@@ -57,7 +61,7 @@ class iir_coeff {
   long ap_state;
   std::vector<float_type> a_tf;
   std::vector<float_type> b_tf;
-  bool lpf;
+  filter_type lpf;
 };
 // template_instantiations: float_type, std::complex<float_type>
 }  // namespace spuce

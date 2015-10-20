@@ -8,15 +8,15 @@ namespace spuce {
 //! \brief Design functions for iir filters
 //! \author Tony Kirke
 //! \ingroup functions iir
-iir_coeff* design_iir(const std::string& iir_type, const std::string& filter_type,
+iir_coeff* design_iir(const std::string& iir_type, const std::string& filt_type,
 											int order, float_type fcd,
                       float_type ripple = 0.1, float_type stopattn = 60,
 											float_type bw = 0.1) {
   iir_coeff* filt = new iir_coeff(order);
-  if (filter_type == "LOW_PASS") {
-    filt->set_type(true);
-  } else if (filter_type == "HIGH_PASS") {
-    filt->set_type(false);
+  if (filt_type == "LOW_PASS") {
+    filt->set_type(filter_type::low);
+  } else if (filt_type == "HIGH_PASS") {
+    filt->set_type(filter_type::high);
   } else {
     std::cout << "Unsupported band type\n";
   }

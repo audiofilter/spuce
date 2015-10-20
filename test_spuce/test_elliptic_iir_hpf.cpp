@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 						<< ", stopband attenuation = " << stopband_atten
 						<< ", ripple = " << ripple << "\n";
 
-  iir_coeff BPF(O,false);
+  iir_coeff BPF(O,filter_type::high);
   elliptic_iir(BPF, f_cutoff, ripple, stopband_atten, bw);
   iir_df<float_type> LPF(BPF);
 

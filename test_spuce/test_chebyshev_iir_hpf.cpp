@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Order used = " << O << " cut-off = " << f_cutoff << " ripple = " << ripple << "\n";
   }
 
-  iir_coeff BPF(O,false);
+  iir_coeff BPF(O,filter_type::high);
   chebyshev_iir(BPF, f_cutoff, ripple);
 	BPF.print();
 

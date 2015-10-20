@@ -45,7 +45,7 @@ int iir_coeff::getState(void) const { return state; }
 int iir_coeff::getN2(void) const { return n2; }
 float_type iir_coeff::getGain(void) const { return gain; }
 
-iir_coeff::iir_coeff(long ord, bool lp)
+iir_coeff::iir_coeff(long ord, filter_type lp)
     : poles((ord + 1) / 2), zeros((ord + 1) / 2), a_tf(ord + 1), b_tf(ord + 1), lpf(lp) {
   // amax - attenuation at cutoff
   order = ord;
@@ -96,7 +96,7 @@ void iir_coeff::convert_to_ab() {
   if (odd) gain *= 0.5 * (1.0 - real(poles[0]));
   hpf_gain = hpf_p_gain / hpf_z_gain;
 
-  if (!lpf) gain = hpf_gain;
+  if (lpf == filter_type::high) gain = hpf_gain;
 
   state = 3;  // in Z-domain 2nd order A/B coefficients
   a_tf = p2_to_poly(poles);

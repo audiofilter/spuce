@@ -16,7 +16,7 @@ void elliptic_iir(iir_coeff& filt, float_type fcd, float_type ripple, float_type
 	float_type fstop = fcd + bw;
   //! wca - pre-warped angular frequency
   float_type wca  = tan(M_PI * fcd);
-  float_type wc  =  (filt.get_type()) ? tan(M_PI * fcd) : tan(M_PI*(0.5-fcd));
+  float_type wc  =  (filt.get_type()==filter_type::low) ? tan(M_PI * fcd) : tan(M_PI*(0.5-fcd));
   //! if stopattn < 1 dB assume it is stopband edge instead
   if (stopattn > 1.0) {
     a = pow(ten, (stopattn / ten));
@@ -78,7 +78,7 @@ void s_plane(iir_coeff& filt, int n, float_type u, float_type m, float_type k, f
     ellpj(b, m, sn, cn, dn);
     r = k * sn * sn1;
     r = 1.0 / (cn1 * cn1 + r * r);
-    if (filt.get_type()) {
+    if (filt.get_type()==filter_type::low) {
       if (sn != 0) {
         filt.set_zero(-std::complex<float_type>(0.0, wc / (k * sn)), j);
       } else {

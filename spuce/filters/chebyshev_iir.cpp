@@ -12,7 +12,7 @@ void chebyshev_iir(iir_coeff& filt, float_type fcd, float_type ripple = 3.0) {
 	float_type rlin = pow(ten, ripple/ten);
 	float_type epi  = sqrt(rlin - 1.0);
   //! wca - pre-warped angular frequency
-  float_type wca = (filt.get_type()) ? tan(M_PI * fcd) : tan(M_PI*(0.5-fcd));
+  float_type wca = (filt.get_type()==filter_type::low) ? tan(M_PI * fcd) : tan(M_PI*(0.5-fcd));
   auto n2 = (order + 1) / 2;
   chebyshev_s(filt, wca, epi, order, n2);
   filt.bilinear();
@@ -28,7 +28,7 @@ void chebyshev_s(iir_coeff& filt, float_type wp, float_type epi, long n, long n2
   float_type cm = 0.5*((1.0/lambda) + lambda);
   for (int j = 0; j < n2; j++) {
     arg = 0.5 * M_PI * (2*l-1) / ((float_type)(n));
-    if (filt.get_type()) {
+    if (filt.get_type()==filter_type::low) {
 			filt.set_pole(wp * std::complex<float_type>(sm * sin(arg), cm * cos(arg)), n2-1-j);
       filt.set_zero(FLT_MAX, n2-1-j);
     } else {
