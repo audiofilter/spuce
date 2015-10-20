@@ -12,5 +12,6 @@ There will be less concern for fixed-point code initially.
 Currently there is some code for IIR Filter Design & Implementation
 
 For testing, python + matplotlib is used.
+QT5 needed for test application
 
 [![Build Status](https://travis-ci.org/audiofilter/spuce.png)](https://travis-ci.org/audiofilter/spuce)
