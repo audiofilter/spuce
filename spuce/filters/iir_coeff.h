@@ -34,7 +34,7 @@ class iir_coeff {
   float_type get_coeff_a(long i) const;
   float_type get_coeff_b(long i) const;
   float_type max_abs_coeff();
-  void quantize(int bits) { ; }
+  void apply_gain(float_type g);
   float_type freqz_mag(float_type freq);
   float_type getGain(void) const;
   int getOrder(void) const;

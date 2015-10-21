@@ -18,6 +18,7 @@ void butterworth_iir(iir_coeff& filt, float_type fcd, float_type amax = 3.0) {
   butterworth_s(filt, wca, order, n2);
   filt.bilinear();
   filt.convert_to_ab();
+  filt.print();
 }
 //! Calculate roots
 void butterworth_s(iir_coeff& filt, float_type wp, long n, long n2) {

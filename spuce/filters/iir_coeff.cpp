@@ -27,7 +27,6 @@ void iir_coeff::print() const {
   std::cout << "B = {";
   for (int i = 0; i < b_tf.size(); i++) { std::cout << b_tf[i] << " "; }
   std::cout << "}\n";
-  std::cout << "gain = " << getGain() << "\n";
 }
 void iir_coeff::print_pz() const {
   std::cout << "zeros = {";
@@ -44,7 +43,11 @@ int iir_coeff::getOrder(void) const { return order; }
 	//int iir_coeff::getState(void) const { return state; }
 int iir_coeff::getN2(void) const { return n2; }
 float_type iir_coeff::getGain(void) const { return gain; }
-
+void iir_coeff::apply_gain(float_type g) {
+    for (int i=0;i<b_tf.size();i++) {
+        b_tf[i] *= g;
+    }
+}
 iir_coeff::iir_coeff(long ord, filter_type lp)
     : poles((ord + 1) / 2), zeros((ord + 1) / 2), a_tf(ord + 1), b_tf(ord + 1), lpf(lp) {
   // amax - attenuation at cutoff
@@ -76,10 +79,10 @@ void iir_coeff::bilinear() {
   state = filter_state::s2;  // in Z-domain now!
 }
 void iir_coeff::convert_to_ab() {
-  double hpf_z_gain = 0;
-  double hpf_p_gain = 0;
-  double z_gain = 0;
-  double p_gain = 0;
+  float_type hpf_z_gain = 0;
+  float_type hpf_p_gain = 0;
+  float_type z_gain = 0;
+  float_type p_gain = 0;
   gain = (float_type)1.0;
 
   z_root_to_ab(zeros);
@@ -100,7 +103,9 @@ void iir_coeff::convert_to_ab() {
   state = filter_state::s3;  // in Z-domain 2nd order A/B coefficients
   a_tf = p2_to_poly(poles);
   b_tf = p2_to_poly(zeros);
-
+  // Apply gain to b coefficents
+  apply_gain(gain);
+  
 }
 void iir_coeff::ab_to_tf() {
   a_tf = p2_to_poly(poles);

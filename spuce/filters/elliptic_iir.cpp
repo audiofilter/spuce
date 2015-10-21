@@ -43,6 +43,9 @@ void elliptic_iir(iir_coeff& filt, float_type fcd, float_type ripple, float_type
 
   filt.bilinear();
   filt.convert_to_ab();
+  // Must scale even order filter by this factor
+  float_type gain = pow(ten, -(ripple / 20.0));
+  if (!filt.isOdd()) filt.apply_gain(gain);
 }
 //! get roots in Lamda plane
 float_type lamda_plane(float_type k, float_type m, int n, float_type eps) {

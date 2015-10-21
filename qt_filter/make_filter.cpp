@@ -222,9 +222,9 @@ void make_filter::vertical_swipe(int len, bool in_passband, bool above_stop) {
 }
 double make_filter::update(double *w) { return (update(w, 1.0)); }
 double make_filter::update(double *w, double inc) {
-  double fc=0;
+    double fc=0;
 	iir_coeff* cf=NULL;
-  switch (shape) {
+    switch (shape) {
 	case None:
 		for (int i = 0; i < pts; i++) w[i] = 1.0;
 		break;
@@ -241,9 +241,9 @@ double make_filter::update(double *w, double inc) {
 		cf = design_iir("butterworth","LOW_PASS",butterworth_order,fc);
 		break;
 	}
-	iir_freq(*cf, pass_type == high, pts, w, inc);
+    iir_freq(*cf, pts, w, inc);
 	if (cf) delete cf;
-  return (fc);
+    return (fc);
 }
 double make_filter::get_mag(double w) {
 	double mag =0;

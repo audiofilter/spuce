@@ -16,22 +16,13 @@
 */
 #include "other_freq.h"
 namespace spuce {
-	void iir_freq(iir_coeff& MF, bool hpf, int pts, double* w, double inc) {
-		double h0;
-		h0 = MF.freqz_mag(0);
-		double h,t,tl;
-		
-		if (h0 < 0.01) h0 = 1.0;
-		if (hpf) h0 = 1.0/MF.getGain();
-		
-		double w_inc = inc*M_PI/(float)pts;
-		for (int i=0;i<pts;i++) {
-			h = MF.freqz_mag(w_inc*i);
-			t = h/h0;
-			if (t==0) t = 0.00001;
-			tl = 20.0*log(t)/log(10.0);
-			w[i] = tl;
-		}
-	}
+void iir_freq(iir_coeff& MF, int pts, double* w, double inc) {
+    double w_inc = inc*M_PI/(float)pts;
+    for (int i=0;i<pts;i++) {
+        double t = MF.freqz_mag(w_inc*i);
+        if (t==0) t = 0.00001;
+        w[i] = 20.0*log(t)/log(10.0);
+    }
+}
 }
 	
