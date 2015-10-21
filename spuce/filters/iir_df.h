@@ -25,9 +25,8 @@ template <class Numeric, class Coeff = float_type> class iir_df {
   }
 
   iir_df<Numeric, Coeff>(const iir_coeff& filt) : poles(filt.getOrder()), zeros(filt.getOrder() + 1) {
-    float_type gain = filt.getGain();
     // Apply gain to feedforward taps to normalize
-    for (auto i = 0; i < filt.getOrder() + 1; i++) zeros.settap(i, gain * filt.get_b(i));
+    for (auto i = 0; i < filt.getOrder() + 1; i++) zeros.settap(i, filt.get_b(i));
     // For feedback, skip a[0] which is 1 and used negative of remaining coefficients
     // for `iir` part
     for (auto i = 0; i < filt.getOrder(); i++) poles.settap(i, -filt.get_a(i + 1));
