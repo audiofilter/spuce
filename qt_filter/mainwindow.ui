@@ -171,6 +171,48 @@
      <string>fc</string>
     </property>
    </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>240</y>
+      <width>120</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Filter Type</string>
+    </property>
+    <widget class="QRadioButton" name="LowPass">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>97</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>LowPass</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="HighPass">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>97</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>High Pass</string>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

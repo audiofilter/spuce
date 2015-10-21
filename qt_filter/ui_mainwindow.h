@@ -13,10 +13,12 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QGroupBox>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QMainWindow>
 #include <QtGui/QPushButton>
+#include <QtGui/QRadioButton>
 #include <QtGui/QStatusBar>
 #include <QtGui/QWidget>
 #include "qcustomplot.h"
@@ -37,6 +39,9 @@ public:
     QLabel *order_3;
     QLabel *order_4;
     QLabel *fc;
+    QGroupBox *groupBox;
+    QRadioButton *LowPass;
+    QRadioButton *HighPass;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -95,6 +100,16 @@ public:
         fc = new QLabel(centralWidget);
         fc->setObjectName(QString::fromUtf8("fc"));
         fc->setGeometry(QRect(150, 210, 41, 21));
+        groupBox = new QGroupBox(centralWidget);
+        groupBox->setObjectName(QString::fromUtf8("groupBox"));
+        groupBox->setGeometry(QRect(20, 240, 120, 111));
+        LowPass = new QRadioButton(groupBox);
+        LowPass->setObjectName(QString::fromUtf8("LowPass"));
+        LowPass->setGeometry(QRect(10, 30, 97, 18));
+        LowPass->setChecked(true);
+        HighPass = new QRadioButton(groupBox);
+        HighPass->setObjectName(QString::fromUtf8("HighPass"));
+        HighPass->setGeometry(QRect(10, 70, 97, 18));
         MainWindow->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
@@ -117,6 +132,9 @@ public:
         order_3->setText(QApplication::translate("MainWindow", "Chebyshev/Elliptic Ripple", 0));
         order_4->setText(QApplication::translate("MainWindow", "Cut-off/Edge", 0));
         fc->setText(QApplication::translate("MainWindow", "fc", 0));
+        groupBox->setTitle(QApplication::translate("MainWindow", "Filter Type", 0));
+        LowPass->setText(QApplication::translate("MainWindow", "LowPass", 0));
+        HighPass->setText(QApplication::translate("MainWindow", "High Pass", 0));
     } // retranslateUi
 
 };

@@ -54,6 +54,7 @@ class make_filter {
 
   int pts;
   double fs;
+	std::string f_type;
 	
   typedef double audio_data_type;
 

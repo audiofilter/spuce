@@ -25,7 +25,7 @@ void make_filter::sel_filter(const char *c_sel) {
   if (sel == "Chebyshev")    change_filter(Chebyshev);
   else if (sel == "Butterworth")    change_filter(Butterworth);
   else if (sel == "Elliptic")    change_filter(Elliptic);
-  else    std::cout << "Invalid filter selection\n";
+  else    std::cout << "Invalid filter selection " << c_sel << "\n";
 }
 
 void make_filter::change_filter(fil_enum f) {
@@ -34,7 +34,13 @@ void make_filter::change_filter(fil_enum f) {
 }
 
 void make_filter::set_filter_type(int t) {
-	pass_type = low;
+	if (t == 1) {
+		pass_type = low;
+		f_type = "LOW_PASS";
+	} else {
+		pass_type = high;
+		f_type = "HIGH_PASS";
+	}
 }
 
 void make_filter::init(int points) { pts = points; }
@@ -150,7 +156,7 @@ double make_filter::horiz_swipe(int len, bool in_passband) {
   if (len < 0)    inc = 2;
   else    inc = 0.5;
 
-	//std::cout << "in_pass = " << in_passband << "\n";
+	//	std::cout << "in_pass = " << in_passband << "\n";
 	
   switch (shape) {
     case Butterworth:
@@ -222,23 +228,23 @@ void make_filter::vertical_swipe(int len, bool in_passband, bool above_stop) {
 }
 double make_filter::update(double *w) { return (update(w, 1.0)); }
 double make_filter::update(double *w, double inc) {
-    double fc=0;
+	double fc=0;
 	iir_coeff* cf=NULL;
-    switch (shape) {
+	switch (shape) {
 	case None:
 		for (int i = 0; i < pts; i++) w[i] = 1.0;
 		break;
 	case Elliptic: 
-		cf = design_iir("elliptic","LOW_PASS",elliptic_order, elliptic_pass_edge, elliptic_ripple,	elliptic_stop_edge, elliptic_stop_db);
+		cf = design_iir("elliptic",f_type,elliptic_order, elliptic_pass_edge, elliptic_ripple,	elliptic_stop_edge, elliptic_stop_db);
 		fc =  (elliptic_pass_edge);
 		break;
 	case Chebyshev: 
-		cf = design_iir("chebyshev","LOW_PASS",chebyshev_order,chebyshev_fc, chebyshev_ripple);
+		cf = design_iir("chebyshev",f_type,chebyshev_order,chebyshev_fc, chebyshev_ripple);
 		fc =  (chebyshev_fc);
 		break;
 	case Butterworth:
 		fc = butterworth_fc;
-		cf = design_iir("butterworth","LOW_PASS",butterworth_order,fc);
+		cf = design_iir("butterworth",f_type,butterworth_order,fc);
 		break;
 	}
     iir_freq(*cf, pts, w, inc);
@@ -251,19 +257,17 @@ double make_filter::get_mag(double w) {
   switch (shape) {
 	case None:
 		break;
-	case Elliptic: 
-		cf = design_iir("elliptic","LOW_PASS",elliptic_order, elliptic_pass_edge, elliptic_ripple,	elliptic_stop_edge, elliptic_stop_db);
+	case Elliptic:
+		cf = design_iir("elliptic",f_type,elliptic_order, elliptic_pass_edge, elliptic_ripple,	elliptic_stop_edge, elliptic_stop_db);
 		break;
 	case Chebyshev: 
-		cf = design_iir("chebyshev","LOW_PASS",chebyshev_order,chebyshev_fc, chebyshev_ripple);
+		cf = design_iir("chebyshev",f_type,chebyshev_order,chebyshev_fc, chebyshev_ripple);
 		break;
 	case Butterworth:
-		cf = design_iir("butterworth","LOW_PASS",butterworth_order,butterworth_fc);
+		cf = design_iir("butterworth",f_type,butterworth_order,butterworth_fc);
 		break;
 	}
-	//	std::cout <<" freq = " << w << " ";
-	mag = 20.0*log(0.1*cf->freqz_mag(w))/log(10.0);
-	//	std::cout <<" gain = " << mag << "\n";
+	mag = 20.0*log(cf->freqz_mag(w))/log(10.0);
 	if (cf) delete cf;
   return (mag);
 }

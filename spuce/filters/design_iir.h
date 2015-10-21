@@ -18,7 +18,7 @@ iir_coeff* design_iir(const std::string& iir_type, const std::string& filt_type,
   } else if (filt_type == "HIGH_PASS") {
     filt->set_type(filter_type::high);
   } else {
-    std::cout << "Unsupported band type\n";
+    std::cout << "Unsupported band type :" << filt_type << "\n";
   }
 
   if (iir_type == "butterworth") {

@@ -44,6 +44,8 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)),		  this, SLOT(graphPressEvent(QMouseEvent*)));
   connect(ui->customPlot, SIGNAL(mouseMove(QMouseEvent*)), 		  this, SLOT(graphMoveEvent(QMouseEvent*)));
 
+	//  connect(ui->LowPass, SIGNAL(released()), this, SLOT(LowChanged()));
+	
 
   ui->customPlot->replot();
 }
@@ -51,6 +53,13 @@ void MainWindow::BChanged() {
   if (Butterworth_on==NULL) {
 		shape = "Butterworth";
 		lpf_sel(shape.c_str());
+		if (ui->LowPass->isChecked()) {
+			set_filter_type(1);
+		} else {
+			set_filter_type(0);
+		}
+	
+
 		order = get_order();
 		ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
 		ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
@@ -110,6 +119,11 @@ void MainWindow::setup(QCustomPlot *customPlot)
   demoName = "spuce : Low Pass Filter Demo";
 
 	ui->order->setText(QApplication::translate("MainWindow", "3", 0));
+
+	QVBoxLayout *vbox = new QVBoxLayout;
+	vbox->addWidget(ui->LowPass);
+	vbox->addWidget(ui->HighPass);
+	ui->groupBox->setLayout(vbox);
 	
   customPlot->legend->setVisible(false);
   customPlot->legend->setFont(QFont("Helvetica",9));
@@ -213,6 +227,12 @@ void MainWindow::graphMoveEvent(QMouseEvent *event)
 
   if (((event->pos() - dragStartPosition).manhattanLength()) < QApplication::startDragDistance()) return;
 
+	if (ui->LowPass->isChecked()) {
+		set_filter_type(1);
+	} else {
+		set_filter_type(0);
+	}
+	
   QPoint dis = (event->pos() - dragStartPosition);
   double xdis = dis.x();
   double ydis = dis.y();
