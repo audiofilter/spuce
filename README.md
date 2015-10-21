@@ -15,3 +15,5 @@ For testing, python + matplotlib is used.
 QT5 needed for test application
 
 [![Build Status](https://travis-ci.org/audiofilter/spuce.png)](https://travis-ci.org/audiofilter/spuce)
+
+![Demo App](App.png "Demo App")
