@@ -1,20 +1,4 @@
 #pragma once
-/*
-    Copyright (C) 2014 Tony Kirke
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 #include <spuce/filters/iir_coeff.h>
 #include <spuce/filters/fir_coeff.h>
 
@@ -46,7 +30,6 @@ class make_filter {
   double elliptic_stop_db;
   double elliptic_ripple;
   double chebyshev_ripple;
-  bool hpf;
 
   int elliptic_order;
   int butterworth_order;
@@ -54,7 +37,7 @@ class make_filter {
 
   int pts;
   double fs;
-	std::string f_type;
+  std::string f_type;
 	
   typedef double audio_data_type;
 
@@ -68,11 +51,11 @@ class make_filter {
   bool is_bpf();
   double ripple();
   double stopdB();
-	double fcutoff();
+  double fcutoff();
   void vertical_swipe(int len, bool in_passband, bool above_stop);
   double update(double *w);
   double update(double *w, double w_inc);
-	double get_mag(double w);
+  double get_mag(double w);
 
   void sel_filter(const char *sel);
   void change_filter(fil_enum f);
