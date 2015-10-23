@@ -46,7 +46,6 @@ void make_filter::reset() {
 
   elliptic_pass_edge = 0.2;
   elliptic_trans = 0.1;
-  elliptic_stop_edge = elliptic_pass_edge + elliptic_trans;
 
   elliptic_stop_db = 50;
   elliptic_ripple = 1.0;
@@ -155,7 +154,6 @@ double make_filter::horiz_swipe(int len, bool in_passband) {
         elliptic_stop_db = limit(gain * elliptic_stop_db, 100, 10.0);
         elliptic_trans =   limit(gain * elliptic_trans, 0.49 - elliptic_pass_edge, 0.001);
       }
-      elliptic_stop_edge = elliptic_pass_edge + elliptic_trans;
       break;
 	case None:
       break;
@@ -218,7 +216,7 @@ double make_filter::update(double *w, double inc) {
 		for (int i = 0; i < pts; i++) w[i] = 1.0;
 		break;
 	case Elliptic: 
-		cf = design_iir("elliptic",f_type,elliptic_order, elliptic_pass_edge, elliptic_ripple,	elliptic_stop_edge, elliptic_stop_db);
+		cf = design_iir("elliptic",f_type,elliptic_order, elliptic_pass_edge, elliptic_ripple, elliptic_stop_db);
 		fc =  (elliptic_pass_edge);
 		break;
 	case Chebyshev: 
@@ -241,7 +239,7 @@ double make_filter::get_mag(double w) {
 	case None:
 		break;
 	case Elliptic:
-		cf = design_iir("elliptic",f_type,elliptic_order, elliptic_pass_edge, elliptic_ripple,	elliptic_stop_edge, elliptic_stop_db);
+		cf = design_iir("elliptic",f_type,elliptic_order, elliptic_pass_edge, elliptic_ripple,	elliptic_stop_db);
 		break;
 	case Chebyshev: 
 		cf = design_iir("chebyshev",f_type,chebyshev_order,chebyshev_fc, chebyshev_ripple);

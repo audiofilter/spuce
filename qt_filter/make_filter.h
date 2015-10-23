@@ -25,7 +25,6 @@ class make_filter {
   double elliptic_halfband_ripple;
   double variable_ripple;
   double elliptic_pass_edge;
-  double elliptic_stop_edge;
   double elliptic_trans;
   double elliptic_stop_db;
   double elliptic_ripple;

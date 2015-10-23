@@ -15,7 +15,7 @@ typedef std::complex<double> dtype;
 int main(int argv, char* argc[]) {
   const long N = 256;
 	
-	iir_coeff* filt = design_iir("butterworth", "LOW_PASS", 2, 0.2, 0.1, 60.0, 0.4);
+	iir_coeff* filt = design_iir("butterworth", "LOW_PASS", 2, 0.2, 0.1, 60.0);
 	// get the tap from iir_coeff for iir_filter, incorporating the gain to feedforward taps
 	std::vector<double> b = filt->get_b();
 	std::vector<double> a = filt->get_a();

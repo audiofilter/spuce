@@ -16,20 +16,18 @@ int main(int argc, char* argv[]) {
   long O = 6;
   float_type imp;
 	float_type f_cutoff=0.2;
-	float_type bw = 0.2*f_cutoff;
 	float_type ripple = 1.0;
 	float_type stopband_atten = 40;
 
 	if (argc > 1) {
     f_cutoff = atof(argv[1]);
-		bw = 0.2*f_cutoff;
 	}
-	std::cout << "Order used = " << O << ", cut-off = " << f_cutoff << ", stopband edge = " << f_cutoff+bw
+	std::cout << "Order used = " << O << ", cut-off = " << f_cutoff 
 						<< ", stopband attenuation = " << stopband_atten
 						<< ", ripple = " << ripple << "\n";
 
   iir_coeff BPF(O,filter_type::high);
-  elliptic_iir(BPF, f_cutoff, ripple, stopband_atten, bw);
+  elliptic_iir(BPF, f_cutoff, ripple, stopband_atten);
   iir_df<float_type> LPF(BPF);
 
 	BPF.print();
