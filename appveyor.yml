@@ -1,0 +1,38 @@
+########################################################################
+## * not all components will be configured
+## * build only on a 64-bit environment
+## * only builds for release configuration
+##
+## FAIL: The build takes too long, most components are disabled.
+## TODO: but build takes too long... 40 min limit
+## * run the self tests after install
+########################################################################
+
+version: '{build}'
+
+platform: x64
+
+configuration:
+  - RelWithDebInfo
+
+environment:
+  global:
+    GENERATOR: Visual Studio 12 Win64
+
+# Operating system (build VM template)
+os: Windows Server 2012 R2
+
+# branches to build
+branches:
+  # whitelist
+  only:
+    - master
+
+#before_build:
+
+# configure and build
+build_script:
+  - mkdir build && cd build
+  - cmake ../ -G "%GENERATOR%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DENABLE_GUI=OFF -DENABLE_PYTHON=OFF 
+  - cmake --build . --config %CONFIGURATION%
+

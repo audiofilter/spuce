@@ -10,7 +10,12 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 add_definitions("-std=c++11")
 
 add_subdirectory(spuce)
-add_subdirectory(qt_filter)
-add_subdirectory(test_spuce)
-
+option(ENABLE_GUI "Enable QT application" ON)
+if (ENABLE_GUI)
+	add_subdirectory(qt_filter)
+endif()
+option(ENABLE_PYTHON "Enable python testing" ON)
+if (ENABLE_PYTHON)
+	add_subdirectory(test_spuce)
+endif()
 	
