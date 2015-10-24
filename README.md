@@ -3,6 +3,8 @@ A rewrite of spuc with more testing, better code design and c++11 features.
 
 * Uses std::complex instead of custom complex class
 * Will focus of floating point instead of fixed-point modules
+* Includes Chebyshev2 filter
+* Adding support for Bandpass and Bandstop designs
 
 Most of spuc was written many years ago before C++ compilers had good template support and was primarily written for fixed-point hardware design and simulation.
 
