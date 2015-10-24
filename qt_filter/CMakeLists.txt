@@ -30,7 +30,10 @@ ADD_DEFINITIONS(${QT5Widgets_DEFINITIONS})
 
 ADD_LIBRARY(filtlib ${SOURCES})
 ADD_EXECUTABLE(plotdes ${plotdes_SOURCES} ${plotdes_HEADERS_MOC})
+set_property(TARGET filtlib PROPERTY CXX_STANDARD 11)
+
 TARGET_LINK_LIBRARIES(plotdes filtlib ${QT_LIBRARIES} spucelib)
+set_property(TARGET plotdes PROPERTY CXX_STANDARD 11)
 QT5_USE_Modules(plotdes Gui)
 QT5_USE_Modules(plotdes Core)
 QT5_USE_Modules(plotdes Widgets)
