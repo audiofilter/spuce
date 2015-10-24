@@ -10,16 +10,19 @@ enum fil_enum {
   None,
   Butterworth,
   Chebyshev,
+  Chebyshev2,
   Elliptic
 };
 
 class make_filter {
-  enum fil_type { low, high, band };
 
  public:
+	double center;
+	
   double elliptic_fc;
   double butterworth_fc;
   double chebyshev_fc;
+  double chebyshev2_fc;
   double cut_stop_db;
   double cut_fc;
   double elliptic_halfband_ripple;
@@ -29,20 +32,22 @@ class make_filter {
   double elliptic_stop_db;
   double elliptic_ripple;
   double chebyshev_ripple;
+  double chebyshev2_stop_db;
 
   int elliptic_order;
   int butterworth_order;
   int chebyshev_order;
+  int chebyshev2_order;
 
   int pts;
   double fs;
+	int fil_type;
   std::string f_type;
 	
   typedef double audio_data_type;
 
   fil_enum shape;
   fil_enum last_shape;
-  fil_type pass_type;
 
   double horiz_swipe(int len, bool in_passband);
   double get_fc(int len, bool in_passband);
@@ -66,6 +71,8 @@ class make_filter {
   void reset();
   void clear_filters();
   void set_filter_type(int h);
+	void set_center_freq(int l);
+  int get_filter_type();
   void set_fs(double f);
 };
 }  // namespace spuce

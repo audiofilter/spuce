@@ -6,6 +6,7 @@ cmake_minimum_required(VERSION 2.8)
 SET(FILT_SRCS  
 	filters/butterworth_iir.cpp
 	filters/chebyshev_iir.cpp
+	filters/chebyshev2_iir.cpp
 	filters/elliptic_iir.cpp
 	filters/find_roots.cpp
 	filters/fir_coeff.cpp

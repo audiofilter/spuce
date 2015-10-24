@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
   Butterworth_on = NULL;
   Chebyshev_on = NULL;
+	Chebyshev2_on = NULL;
   Elliptic_on = NULL;
 
   graph_counter = 0;
@@ -39,27 +40,30 @@ MainWindow::MainWindow(QWidget *parent) :
 
   connect(ui->Butterworth, SIGNAL(released()), this, SLOT(BChanged()));
   connect(ui->Chebyshev, SIGNAL(released()), this, SLOT(CChanged()));
+	connect(ui->Chebyshev2, SIGNAL(released()), this, SLOT(C2Changed()));
   connect(ui->Elliptic, SIGNAL(released()), this, SLOT(EChanged()));
 
   connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)),		  this, SLOT(graphPressEvent(QMouseEvent*)));
   connect(ui->customPlot, SIGNAL(mouseMove(QMouseEvent*)), 		  this, SLOT(graphMoveEvent(QMouseEvent*)));
 
-	//  connect(ui->LowPass, SIGNAL(released()), this, SLOT(LowChanged()));
-	
-
   ui->customPlot->replot();
 }
+void MainWindow::BoxChecked() {
+	if (ui->LowPass->isChecked()) {
+		set_filter_type(0);
+	} else if (ui->HighPass->isChecked()) {
+		set_filter_type(1);
+	}	else if (ui->BandPass->isChecked()) {
+		set_filter_type(2);
+	}	else if (ui->BandStop->isChecked()) {
+		set_filter_type(3);
+	}
+}
+
 void MainWindow::BChanged() {
   if (Butterworth_on==NULL) {
 		shape = "Butterworth";
 		lpf_sel(shape.c_str());
-		if (ui->LowPass->isChecked()) {
-			set_filter_type(1);
-		} else {
-			set_filter_type(0);
-		}
-	
-
 		order = get_order();
 		ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
 		ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
@@ -88,6 +92,22 @@ void MainWindow::CChanged() {
 		ui->customPlot->replot();
   }
 }
+void MainWindow::C2Changed() {
+  if (Chebyshev2_on==NULL) {
+		shape = "Chebyshev2";
+		lpf_sel(shape.c_str());
+		order = get_order();
+		ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
+		ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
+		ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
+		Chebyshev2_on = ui->customPlot->addGraph();
+		plot2(ui->customPlot);
+  } else {
+		ui->customPlot->removeGraph(Chebyshev2_on);
+		Chebyshev2_on = NULL;
+		ui->customPlot->replot();
+  }
+}
 void MainWindow::EChanged() {
   if (Elliptic_on==NULL) {
 		shape = "Elliptic";
@@ -108,6 +128,7 @@ void MainWindow::EChanged() {
 QCPGraph* MainWindow::GetPtr() {
   //  std::cout << " shape was = " << shape << "\n";
 	if (shape == "Chebyshev") return(Chebyshev_on);
+	else if (shape=="Chebyshev2")	return(Chebyshev2_on);
 	else if (shape=="Butterworth")	return(Butterworth_on);
 	else if (shape=="Elliptic") return(Elliptic_on);
 	else std::cout << "Invalid filter selection\n";
@@ -123,6 +144,8 @@ void MainWindow::setup(QCustomPlot *customPlot)
 	QVBoxLayout *vbox = new QVBoxLayout;
 	vbox->addWidget(ui->LowPass);
 	vbox->addWidget(ui->HighPass);
+	vbox->addWidget(ui->BandPass);
+	vbox->addWidget(ui->BandStop);
 	ui->groupBox->setLayout(vbox);
 	
   customPlot->legend->setVisible(false);
@@ -227,11 +250,7 @@ void MainWindow::graphMoveEvent(QMouseEvent *event)
 
   if (((event->pos() - dragStartPosition).manhattanLength()) < QApplication::startDragDistance()) return;
 
-	if (ui->LowPass->isChecked()) {
-		set_filter_type(1);
-	} else {
-		set_filter_type(0);
-	}
+	BoxChecked();
 	
   QPoint dis = (event->pos() - dragStartPosition);
   double xdis = dis.x();
@@ -247,7 +266,12 @@ void MainWindow::graphMoveEvent(QMouseEvent *event)
 	bool above_stop = (-y_db < m);
 	
   if (fabs(xdis) > fabs(ydis)) {
-		horiz_swipe(xdis,in_passband);
+		// Bandpass or Bandstop
+		if (get_filter_type() > 1) {
+			set_center(xdis);
+		} else {
+			horiz_swipe(xdis,in_passband);
+		}
   } else {
 		vertical_swipe(-ydis,in_passband,above_stop);
   }

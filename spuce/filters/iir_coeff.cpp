@@ -35,7 +35,6 @@ void iir_coeff::print_pz() const {
   std::cout << "poles = {";
   for (size_t i = 0; i < poles.size(); i++) { std::cout << poles[i] << " "; }
   std::cout << "}\n";
-  std::cout << "gain = " << getGain() << "\n";
 }
 
 int iir_coeff::isOdd(void) const { return odd; }
@@ -48,12 +47,29 @@ void iir_coeff::apply_gain(float_type g) {
         b_tf[i] *= g;
     }
 }
+// Doesn't change filter_type or center frequency, but loses all other info	
+void iir_coeff::resize(long ord) {
+	order = ord;
+	gain = hpf_gain = 1.0;
+  n2 = (order + 1) / 2;
+  odd = (order % 2);
+	poles.resize(n2);
+	zeros.resize(n2);
+	a_tf.resize(ord+1);
+	b_tf.resize(ord+1);
+  for (int j = 0; j < n2; j++) {
+    poles[j] = std::complex<float_type>(0.0, 0.0);
+    zeros[j] = std::complex<float_type>(0.0, 0.0);
+  }
+  state = filter_state::s0;  // un-initialized
+}
 iir_coeff::iir_coeff(long ord, filter_type lp)
     : poles((ord + 1) / 2), zeros((ord + 1) / 2), a_tf(ord + 1), b_tf(ord + 1), lpf(lp) {
   // amax - attenuation at cutoff
   order = ord;
   n2 = (order + 1) / 2;
   odd = (order % 2);
+	c0 = 0; // Put at fs/4
   for (int j = 0; j < n2; j++) {
     poles[j] = std::complex<float_type>(0.0, 0.0);
     zeros[j] = std::complex<float_type>(0.0, 0.0);
@@ -67,17 +83,54 @@ iir_coeff::~iir_coeff() {}
 // bilinear
 void iir_coeff::bilinear() {
   hpf_gain = 1.0;
-  if (odd) {
-    hpf_gain = 1.0 + real(poles[0]);
-    zeros[0] = ((float_type)1.0 - zeros[0]) / ((float_type)1.0 + zeros[0]);
-    poles[0] = ((float_type)1.0 - poles[0]) / ((float_type)1.0 + poles[0]);
-  }
-  for (int j = odd; j < n2; j++) {
+  if (odd) hpf_gain = 1.0 + real(poles[0]);
+  for (int j = 0; j < n2; j++) {
     zeros[j] = ((float_type)1.0 - zeros[j]) / ((float_type)1.0 + zeros[j]);
     poles[j] = ((float_type)1.0 - poles[j]) / ((float_type)1.0 + poles[j]);
   }
   state = filter_state::s2;  // in Z-domain now!
 }
+void iir_coeff::set_bandpass_gain() {
+	float_type gain = freqz_mag(0.5*M_PI-get_center());
+	apply_gain(1.0/gain);
+}	
+	
+void iir_coeff::make_band(float_type c0) {
+
+	std::vector<std::complex<float_type>> old_poles;
+	std::vector<std::complex<float_type>> old_zeros;
+
+	for (int i=0;i<poles.size();i++) {
+		old_poles.push_back(poles[i]);
+		old_zeros.push_back(zeros[i]);
+	}
+	
+	resize(2*getOrder());
+
+	// 1st 1/2 only
+  for (int j = 0; j < n2/2; j++) {
+    poles[j] = old_poles[j];
+    zeros[j] = old_zeros[j];
+  }
+
+	float q=1;
+	// q should be -1 for bandpass, 1 for bandstop	
+	if (lpf == filter_type::bandpass) q = -1;
+
+	for (int j = 0; j < n2/2; j++) {
+		std::complex<float_type> p0 = c0*(1.0+q*poles[j]);
+		std::complex<float_type> z0 = c0*(1.0+q*zeros[j]);
+    poles[j] = 0.5*(p0 + sqrt(p0*p0 - 4*q*poles[j]));
+		poles[j+n2/2] = (c0 - poles[j])/(1.0 - c0*poles[j]);
+    zeros[j] = 0.5*(z0 + sqrt(z0*z0 - 4*q*zeros[j]));
+		zeros[j+n2/2] = (c0 - zeros[j])/(1.0 - c0*zeros[j]);
+  }
+	/*
+		std::cout << "Part II\n";
+		print_pz();
+	*/
+}
+	
 void iir_coeff::convert_to_ab() {
   float_type hpf_z_gain = 0;
   float_type hpf_p_gain = 0;
@@ -102,8 +155,7 @@ void iir_coeff::convert_to_ab() {
   a_tf = p2_to_poly(poles);
   b_tf = p2_to_poly(zeros);
   // Apply gain to b coefficents
-  apply_gain(gain);
-  
+	apply_gain(gain);
 }
 void iir_coeff::ab_to_tf() {
   a_tf = p2_to_poly(poles);

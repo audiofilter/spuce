@@ -4,7 +4,7 @@
 #include <QtWidgets/QMainWindow>
 #include "qcustomplot.h" 
 
-enum shape_enum {None, Butterworth, Chebyshev, Elliptic};
+enum shape_enum {None, Butterworth, Chebyshev, Chebyshev2, Elliptic};
 
 namespace Ui {
   class MainWindow;
@@ -21,6 +21,7 @@ public:
   void setup(QCustomPlot *customPlot);
   void plot2(QCustomPlot *customPlot);
   void plot3(QCustomPlot *customPlot);
+	void BoxChecked();
   
 private:
   Ui::MainWindow *ui;
@@ -30,6 +31,7 @@ private:
 public slots:
   void BChanged();
   void CChanged(); 
+  void C2Changed(); 
   void EChanged(); 
   void graphPressEvent(QMouseEvent *event);
   void graphMoveEvent(QMouseEvent *event);
@@ -44,6 +46,7 @@ private:
   double* w;
 
   QCPGraph*  Butterworth_on;
+	QCPGraph*  Chebyshev2_on;
   QCPGraph*  Chebyshev_on;
   QCPGraph*  Elliptic_on;
   int graph_counter;

@@ -58,7 +58,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="Elliptic">
+   <widget class="QPushButton" name="Chebyshev2">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -68,7 +68,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Elliptic</string>
+     <string>Inverse Chebyshev</string>
     </property>
     <property name="checkable">
      <bool>true</bool>
@@ -94,7 +94,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>120</y>
+      <y>140</y>
       <width>41</width>
       <height>21</height>
      </rect>
@@ -107,7 +107,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>120</y>
+      <y>140</y>
       <width>111</width>
       <height>21</height>
      </rect>
@@ -120,7 +120,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>160</y>
+      <y>180</y>
       <width>41</width>
       <height>21</height>
      </rect>
@@ -133,7 +133,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>160</y>
+      <y>170</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -162,7 +162,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>210</y>
+      <y>220</y>
       <width>41</width>
       <height>21</height>
      </rect>
@@ -177,8 +177,11 @@
       <x>20</x>
       <y>240</y>
       <width>120</width>
-      <height>111</height>
+      <height>151</height>
      </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
     </property>
     <property name="title">
      <string>Filter Type</string>
@@ -203,7 +206,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>70</y>
+       <y>50</y>
        <width>97</width>
        <height>18</height>
       </rect>
@@ -212,6 +215,48 @@
       <string>High Pass</string>
      </property>
     </widget>
+    <widget class="QRadioButton" name="BandPass">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>97</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>BandPass</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="BandStop">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>97</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>BandStop</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="Elliptic">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>181</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Elliptic</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
