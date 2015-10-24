@@ -144,7 +144,6 @@ void make_filter::set_center_freq(int len) {
 
   double gain = pow(2, 0.002 * len);
   double ogain = 1.0 / gain;
-  double inc;
 
   if (len < 0)    inc = 2;
   else    inc = 0.5;
