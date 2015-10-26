@@ -106,30 +106,56 @@ void iir_coeff::make_band(float_type c0) {
 		old_zeros.push_back(zeros[i]);
 	}
 	
+	bool was_odd = isOdd();
 	resize(2*getOrder());
 
 	// 1st 1/2 only
   for (int j = 0; j < n2/2; j++) {
-    poles[j] = old_poles[j];
-    zeros[j] = old_zeros[j];
+		//    poles[j] = old_poles[j];
+		//    zeros[j] = old_zeros[j];
   }
+
+	poles.resize(n2/2);
+	zeros.resize(n2/2);
 
 	float q=1;
 	// q should be -1 for bandpass, 1 for bandstop	
 	if (lpf == filter_type::bandpass) q = -1;
 
-	for (int j = 0; j < n2/2; j++) {
-		std::complex<float_type> p0 = c0*(1.0+q*poles[j]);
-		std::complex<float_type> z0 = c0*(1.0+q*zeros[j]);
-    poles[j] = 0.5*(p0 + sqrt(p0*p0 - 4*q*poles[j]));
-		poles[j+n2/2] = (c0 - poles[j])/(1.0 - c0*poles[j]);
-    zeros[j] = 0.5*(z0 + sqrt(z0*z0 - 4*q*zeros[j]));
-		zeros[j+n2/2] = (c0 - zeros[j])/(1.0 - c0*zeros[j]);
+	int k=0;
+	// For Original odd order filters, skip the 1st pole/zero
+	for (int j = was_odd; j < was_odd+n2/2; j++) {
+		std::complex<float_type> p0 = c0*(1.0+q*old_poles[j]);
+		std::complex<float_type> z0 = c0*(1.0+q*old_zeros[j]);
+    poles[k] = 0.5*(p0 + sqrt(p0*p0 - 4*q*old_poles[j]));
+		poles[k+n2/2] = (c0 - poles[k])/(1.0 - c0*poles[k]);
+    zeros[k] = 0.5*(z0 + sqrt(z0*z0 - 4*q*old_zeros[j]));
+		zeros[k+n2/2] = (c0 - zeros[k])/(1.0 - c0*zeros[k]);
+		k++;
   }
-	/*
-		std::cout << "Part II\n";
-		print_pz();
-	*/
+	// Convert from poles/zeros to transfer function (except 1st pole/zero for odd original size)
+	convert_to_ab();
+
+	// if originally, even we are done, otherwise
+	if (was_odd) {
+		// Resize a_tf,b_tf (for now) by removing last 2 elements
+		a_tf.pop_back();
+		a_tf.pop_back();
+		b_tf.pop_back();
+		b_tf.pop_back();
+		// Actual polynomial will be real only
+		std::vector<float_type> zz = {1,0,-1};
+		std::vector<float_type> pp = {1,0,0};
+		std::complex<float_type> p0 = c0*(1.0+q*old_poles[0]);
+		std::complex<float_type> z0 = c0*(1.0+q*old_zeros[0]);
+		z0 = 0.5*(z0 + sqrt(z0*z0 - 4*q*old_zeros[0]));
+    p0 = 0.5*(p0 + sqrt(p0*p0 - 4*q*old_poles[0]));
+		//std::cout << "z0 = " << z0 << "\n";
+		zz[2] = -std::real(z0)*std::real(z0);
+		pp[2] = std::imag(p0)*std::imag(p0);
+		b_tf = convolve(zz,b_tf);
+		a_tf = convolve(pp,a_tf);
+	}
 }
 	
 void iir_coeff::convert_to_ab() {

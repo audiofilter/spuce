@@ -44,8 +44,9 @@ void elliptic_iir(iir_coeff& filt, float_type fcd, float_type ripple, float_type
   filt.bilinear();
 	if (filt.get_type()==filter_type::bandpass || filt.get_type()==filter_type::bandstop) {
 		filt.make_band(filt.get_center());
+	} else {
+		filt.convert_to_ab();
 	}
-  filt.convert_to_ab();
 	if (filt.get_type()==filter_type::bandpass) filt.set_bandpass_gain();
   // Must scale even order filter by this factor
   float_type gain = pow(ten, -(ripple / 20.0));

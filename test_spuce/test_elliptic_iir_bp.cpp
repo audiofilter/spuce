@@ -3,7 +3,7 @@
 #include <iomanip>
 using namespace std;
 #include <spuce/filters/iir_coeff.h>
-#include <spuce/filters/butterworth_iir.h>
+#include <spuce/filters/elliptic_iir.h>
 #include <spuce/filters/iir_df.h>
 #include "plot_fft.h"
 
@@ -15,20 +15,23 @@ int main(int argc, char* argv[]) {
   const long N = 1024;
   long O = 3;
   float_type imp;
-	float_type f_cutoff = 0.1;
-	
-  if (argc > 1) {
+	float_type f_cutoff=0.1;
+	float_type ripple = 0.1;
+	float_type stopband_atten = 40;
+
+	if (argc > 1) {
     f_cutoff = atof(argv[1]);
-    std::cout << "Order used = " << O << " cut-off = " << f_cutoff << "\n";
-		
-  }
+	}
+	std::cout << "Order used = " << O << ", cut-off = " << f_cutoff 
+						<< ", stopband attenuation = " << stopband_atten
+						<< ", ripple = " << ripple << "\n";
 
   iir_coeff BPF(O,filter_type::bandpass);
-  butterworth_iir(BPF, f_cutoff, 3.0);
-  BPF.print();
-
+  elliptic_iir(BPF, f_cutoff, ripple, stopband_atten);
   iir_df<float_type> LPF(BPF);
 
+	BPF.print();
+ 
   std::vector<double> y(N, 0);
 
   imp = 1.0;
