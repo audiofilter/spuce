@@ -23,7 +23,7 @@ notifications:
   - provider: Slack
     auth_token:
       secure: kBl9BlxvRMr9liHmnBs14A==
-    channel: development
+    channel: github
     template: "{{message}}, {{commitId}}, ..."
 
 # Operating system (build VM template)
