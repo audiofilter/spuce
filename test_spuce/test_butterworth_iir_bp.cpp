@@ -16,9 +16,11 @@ int main(int argc, char* argv[]) {
   long O = 3;
   float_type imp;
 	float_type f_cutoff = 0.05;
-
+	float_type f_center = 0.14158;
 	// Approximately same params as octave
 	// [z0,p0,g0] = butter(3,[0.10015 0.20015]);
+	// sqrt(0.10015 * 0.20015) = 0.14158
+	// cos(0.14158*pi) = 0.9027
 	
   if (argc > 1) {
     f_cutoff = atof(argv[1]);
@@ -26,7 +28,7 @@ int main(int argc, char* argv[]) {
 	std::cout << "Order used = " << O << " cut-off = " << f_cutoff << "\n";
 
   iir_coeff BPF(O,filter_type::bandpass);
-	BPF.set_center(0.9);
+	BPF.set_center(f_center);
   butterworth_iir(BPF, f_cutoff, 3.0);
   BPF.print();
 

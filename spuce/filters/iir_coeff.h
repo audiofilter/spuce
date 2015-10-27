@@ -47,7 +47,7 @@ class iir_coeff {
   std::vector<float_type> get_b() const;
   filter_type get_type(void) const { return lpf; }
   void set_type(filter_type t) { lpf = t; }
-	void set_center(float_type c) { c0 = c; }
+	void set_center(float_type c) { c0 = cos(c*M_PI); }
 	void set_bandpass_gain();
 	float_type get_center() { return c0;}
   void print() const;
