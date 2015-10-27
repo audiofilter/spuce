@@ -103,7 +103,7 @@ void iir_coeff::make_band(float_type c0) {
     old_zeros.push_back(zeros[i]);
   }
 
-  bool was_odd = isOdd();
+  int was_odd = isOdd();
 
   resize(2 * getOrder());
 
