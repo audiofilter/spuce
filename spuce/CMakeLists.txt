@@ -11,6 +11,9 @@ SET(FILT_SRCS
 	filters/find_roots.cpp
 	filters/fir_coeff.cpp
 	filters/iir_coeff.cpp
+	# FIR stuff
+	filters/remez_fir.cpp
+	filters/fir_inv_dft.cpp
 )
 
 add_library(spucelib ${FILT_SRCS})
