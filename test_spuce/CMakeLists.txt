@@ -19,7 +19,9 @@ SET(TARGETS
 	butterworth_iir butterworth_iir_hpf
 	butterworth_iir_bp butterworth_iir_bs
 	elliptic_iir_bp
-	iir iir_df iir_df2)
+	iir iir_df iir_df2
+	remez
+	)
 
 FOREACH(mod ${TARGETS})
 	SET(SRC test_${mod}.cpp)
