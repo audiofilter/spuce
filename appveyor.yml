@@ -19,6 +19,13 @@ environment:
   global:
     GENERATOR: Visual Studio 12 Win64
 
+notifications:
+  - provider: Slack
+    auth_token:
+      secure: kBl9BlxvRMr9liHmnBs14A==
+    channel: development
+    template: "{{message}}, {{commitId}}, ..."
+
 # Operating system (build VM template)
 os: Windows Server 2012 R2
 
