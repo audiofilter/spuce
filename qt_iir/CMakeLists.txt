@@ -1,8 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 SET(CMAKE_BUILD_TYPE "DEBUG")
-PROJECT("plotdes")
-Message("Project spuce plotdes")
+PROJECT("iir_plot")
+Message("Project spuce iir_plot")
 
 set(CMAKE_CXX_FLAGS " -std=c++11 ")
 set(CMAKE_PREFIX_PATH "/usr/local/opt/qt5")
@@ -22,20 +22,20 @@ set(SOURCES
 	des_filter.cpp 
 )
 
-SET(plotdes_SOURCES main.cpp mainwindow.cpp other_freq.cpp qcustomplot.cpp)
-SET(plotdes_HEADERS mainwindow.h other_freq.h qcustomplot.h)
+SET(iir_plot_SOURCES main.cpp mainwindow.cpp other_freq.cpp qcustomplot.cpp)
+SET(iir_plot_HEADERS mainwindow.h other_freq.h qcustomplot.h)
 
 INCLUDE_DIRECTORIES(${QT5_INCLUDES})
 ADD_DEFINITIONS(${QT5Widgets_DEFINITIONS})
 
 ADD_LIBRARY(filtlib ${SOURCES})
-ADD_EXECUTABLE(plotdes ${plotdes_SOURCES} ${plotdes_HEADERS_MOC})
+ADD_EXECUTABLE(iir_plot ${iir_plot_SOURCES} ${iir_plot_HEADERS_MOC})
 set_property(TARGET filtlib PROPERTY CXX_STANDARD 11)
 
-TARGET_LINK_LIBRARIES(plotdes filtlib ${QT_LIBRARIES} spucelib)
-set_property(TARGET plotdes PROPERTY CXX_STANDARD 11)
-QT5_USE_Modules(plotdes Gui)
-QT5_USE_Modules(plotdes Core)
-QT5_USE_Modules(plotdes Widgets)
-QT5_USE_Modules(plotdes PrintSupport)
+TARGET_LINK_LIBRARIES(iir_plot filtlib ${QT_LIBRARIES} spucelib)
+set_property(TARGET iir_plot PROPERTY CXX_STANDARD 11)
+QT5_USE_Modules(iir_plot Gui)
+QT5_USE_Modules(iir_plot Core)
+QT5_USE_Modules(iir_plot Widgets)
+QT5_USE_Modules(iir_plot PrintSupport)
 

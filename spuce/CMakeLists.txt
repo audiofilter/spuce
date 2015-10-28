@@ -12,7 +12,12 @@ SET(FILT_SRCS
 	filters/fir_coeff.cpp
 	filters/iir_coeff.cpp
 	# FIR stuff
+	filters/gaussian_fir.cpp
+	filters/butterworth_fir.cpp
+	filters/raised_cosine_imp.cpp
+	filters/root_raised_cosine_imp.cpp
 	filters/remez_fir.cpp
+	filters/create_remez_lpfir.cpp
 	filters/fir_inv_dft.cpp
 )
 
