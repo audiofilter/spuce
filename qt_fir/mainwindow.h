@@ -1,16 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+// Copyright (c) 2015 Tony Kirke. License MIT  (http://www.opensource.org/licenses/mit-license.php)
 
 #include <QtWidgets/QMainWindow>
 #include "qcustomplot.h" 
 
-
-enum shape_enum {None,MaxflatHalfband, EllipticHalfband, 
-				 Butterworth, Chebyshev, Elliptic,  
-				 MaxflatFIR, GaussianFIR, RemezFIR, 
-				 RaisedCosine, VariableAllpass, VariableShelf, Notch50,
-				 NotchIIR, CutBoost, Shelf, Cic, Comb, 
-				 CombAllpass, RootRaisedCosine};
+enum shape_enum {None, MaxflatFIR, GaussianFIR, RemezFIR, 
+								 RaisedCosine, RootRaisedCosine};
 
 namespace Ui {
   class MainWindow;
@@ -41,9 +37,7 @@ public slots:
   void FHChanged(); 
   void RCChanged(); 
   void RRCChanged(); 
-  void EHChanged(); 
   void RChanged(); 
-  void NChanged(); 
   void CBChanged(); 
   void graphPressEvent(QMouseEvent *event);
   void graphMoveEvent(QMouseEvent *event);
@@ -56,21 +50,18 @@ private:
   double alpha;
   int taps;
   int order;
-  int bits;
   std::string shape;
   double* w;
 
-  QCPGraph*  Butterworth_on;
-  QCPGraph*  Chebyshev_on;
-  QCPGraph*  Elliptic_on;
+  QCPGraph*  Hanning_on;
+  QCPGraph*  Hamming_on;
+  QCPGraph*  Blackmann_on;
   QCPGraph*  MaxflatFIR_on;
-  QCPGraph*  MaxflatHalfband_on;
+  QCPGraph*  Bartlett_on;
   QCPGraph*  RaisedCosine_on;
   QCPGraph*  RootRaisedCosine_on;
-  QCPGraph*  EllipticHalfband_on;
   QCPGraph*  Remez_on;
-  QCPGraph*  NotchIIR_on;
-  QCPGraph*  CutBoost_on;
+  QCPGraph*  Kaiser_on;
   int graph_counter;
 
   QPoint dragStartPosition;

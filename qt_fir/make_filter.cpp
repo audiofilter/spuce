@@ -1,21 +1,5 @@
-/*
-    Copyright (C) 2014 Tony Kirke
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (c) 2015 Tony Kirke. License MIT  (http://www.opensource.org/licenses/mit-license.php)
 #include "make_filter.h"
-#define USE_DBL
 #include "other_freq.h"
 #include <spuce/filters/butterworth_fir.h>
 #include <spuce/filters/gaussian_fir.h>
@@ -26,7 +10,6 @@ namespace spuce {
 
 void make_filter::sel_filter(const char *c_sel) {
   std::string sel(c_sel);
-  // std::cout << "Sel = " << sel << "\n";
   if (sel == "Maxflat FIR")
     change_filter(MaxflatFIR);
   else if (sel == "Gaussian FIR")
@@ -142,17 +125,6 @@ int make_filter::get_order() {
 }
 	bool make_filter::is_bpf() { return (false);}
 
-bool make_filter::is_fir() {
-  switch (shape) {
-    case MaxflatFIR:      return (true);      break;
-    case GaussianFIR:      return (true);      break;
-    case RemezFIR:      return (true);      break;
-    case RaisedCosine:      return (true);      break;
-    case RootRaisedCosine:      return (true);      break;
-    default:   break;
-  }
-  return (false);
-}
 double make_filter::ripple() {
   switch (shape) {
     case RemezFIR:      return (0.0);      break;  // for now

@@ -1,19 +1,4 @@
-/*
-    Copyright (C) 2014 Tony Kirke
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (c) 2015 Tony Kirke. License MIT  (http://www.opensource.org/licenses/mit-license.php)
 #include "des_filter.h"
 #include "make_filter.h"
 
@@ -28,7 +13,6 @@ void set_filter_type(int t) { pLPF->set_filter_type(t); }
 double horiz_swipe(int len, bool in_passband) {  return (pLPF->horiz_swipe(len, in_passband));}
 double get_fc(int len, bool in_passband) {  return (pLPF->get_fc(len, in_passband));}
 int get_order() { return (pLPF->get_order()); }
-bool is_fir() { return (pLPF->is_fir()); }
 bool is_bpf() { return (pLPF->is_bpf()); }
 double ripple() { return (pLPF->ripple()); }
 double stopdB() { return (pLPF->stopdB()); }

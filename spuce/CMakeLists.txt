@@ -19,6 +19,7 @@ SET(FILT_SRCS
 	filters/remez_fir.cpp
 	filters/create_remez_lpfir.cpp
 	filters/fir_inv_dft.cpp
+	filters/window.cpp
 )
 
 add_library(spucelib ${FILT_SRCS})

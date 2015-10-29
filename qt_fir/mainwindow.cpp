@@ -1,3 +1,4 @@
+// Copyright (c) 2015 Tony Kirke. License MIT  (http://www.opensource.org/licenses/mit-license.php)
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <cmath>
@@ -14,30 +15,27 @@ MainWindow::MainWindow(QWidget *parent) :
   ui(new Ui::MainWindow)
 {
   pass_edge = 0;
-  order = 3;
+  order = 13;
   taps = 25;
   alpha = 0.25;
   trans = 0.1;
   stop_dBs = 40;
-  bits = 0;
   pts = 250;
   w = new double[pts];
   for (int i=0;i<pts;i++) {
-	w[i] = (double)i*i;
+		w[i] = (double)i*i;
   }
   lpf_init(pts);
 
-  Butterworth_on = NULL;
-  Chebyshev_on = NULL;
-  Elliptic_on = NULL;
+  Hanning_on = NULL;
+  Hamming_on = NULL;
+  Blackmann_on = NULL;
   MaxflatFIR_on = NULL;
-  MaxflatHalfband_on = NULL;
+  Bartlett_on = NULL;
   RaisedCosine_on = NULL;
   RootRaisedCosine_on = NULL;
-  EllipticHalfband_on = NULL;
   Remez_on = NULL;
-  NotchIIR_on = NULL;
-  CutBoost_on = NULL;
+  Kaiser_on = NULL;
 
   graph_counter = 0;
 
@@ -48,174 +46,146 @@ MainWindow::MainWindow(QWidget *parent) :
   setWindowTitle("QCustomPlot: "+demoName);
   statusBar()->clearMessage();
 
-  connect(ui->Butterworth, SIGNAL(released()), this, SLOT(BChanged()));
-  connect(ui->Chebyshev, SIGNAL(released()), this, SLOT(CChanged()));
-  connect(ui->Elliptic, SIGNAL(released()), this, SLOT(EChanged()));
+  connect(ui->Hanning, SIGNAL(released()), this, SLOT(BChanged()));
+  connect(ui->Hamming, SIGNAL(released()), this, SLOT(CChanged()));
+  connect(ui->Blackmann, SIGNAL(released()), this, SLOT(EChanged()));
   connect(ui->MaxflatFIR, SIGNAL(released()), this, SLOT(FChanged()));
-  connect(ui->MaxflatHalfband, SIGNAL(released()), this, SLOT(FHChanged()));
+  connect(ui->Bartlett, SIGNAL(released()), this, SLOT(FHChanged()));
   connect(ui->RaisedCosine, SIGNAL(released()), this, SLOT(RCChanged()));
   connect(ui->RootRaisedCosine, SIGNAL(released()), this, SLOT(RRCChanged()));
-  connect(ui->EllipticHalfband, SIGNAL(released()), this, SLOT(EHChanged()));
   connect(ui->Remez, SIGNAL(released()), this, SLOT(RChanged()));
-  connect(ui->NotchIIR, SIGNAL(released()), this, SLOT(NChanged()));
-  connect(ui->CutBoost, SIGNAL(released()), this, SLOT(CBChanged()));
+  connect(ui->Kaiser, SIGNAL(released()), this, SLOT(CBChanged()));
 
   connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), 
-		  this, SLOT(graphPressEvent(QMouseEvent*)));
+					this, SLOT(graphPressEvent(QMouseEvent*)));
   connect(ui->customPlot, SIGNAL(mouseMove(QMouseEvent*)), 
-		  this, SLOT(graphMoveEvent(QMouseEvent*)));
+					this, SLOT(graphMoveEvent(QMouseEvent*)));
 
 
   ui->customPlot->replot();
 }
 void MainWindow::BChanged() {
-  if (Butterworth_on==NULL) {
-	shape = "Butterworth";
-	lpf_sel(shape.c_str());
-	Butterworth_on = ui->customPlot->addGraph();
-	plot2(ui->customPlot);
+  if (Hanning_on==NULL) {
+		shape = "Hanning";
+		lpf_sel(shape.c_str());
+		Hanning_on = ui->customPlot->addGraph();
+		plot2(ui->customPlot);
   } else {
-	ui->customPlot->removeGraph(Butterworth_on);
-	Butterworth_on = NULL;
-	ui->customPlot->replot();
+		ui->customPlot->removeGraph(Hanning_on);
+		Hanning_on = NULL;
+		ui->customPlot->replot();
   }
 }
 void MainWindow::CChanged() {
-  if (Chebyshev_on==NULL) {
-	shape = "Chebyshev";
-	lpf_sel(shape.c_str());
-	Chebyshev_on = ui->customPlot->addGraph();
-	plot2(ui->customPlot);
+  if (Hamming_on==NULL) {
+		shape = "Hamming";
+		lpf_sel(shape.c_str());
+		Hamming_on = ui->customPlot->addGraph();
+		plot2(ui->customPlot);
   } else {
-	ui->customPlot->removeGraph(Chebyshev_on);
-	Chebyshev_on = NULL;
-	ui->customPlot->replot();
+		ui->customPlot->removeGraph(Hamming_on);
+		Hamming_on = NULL;
+		ui->customPlot->replot();
   }
 }
 void MainWindow::EChanged() {
-  if (Elliptic_on==NULL) {
-	shape = "Elliptic";
-	lpf_sel(shape.c_str());
-	Elliptic_on = ui->customPlot->addGraph();
-	plot2(ui->customPlot);
+  if (Blackmann_on==NULL) {
+		shape = "Blackmann";
+		lpf_sel(shape.c_str());
+		Blackmann_on = ui->customPlot->addGraph();
+		plot2(ui->customPlot);
   } else {
-	ui->customPlot->removeGraph(Elliptic_on);
-	Elliptic_on = NULL;
-	ui->customPlot->replot();
+		ui->customPlot->removeGraph(Blackmann_on);
+		Blackmann_on = NULL;
+		ui->customPlot->replot();
   }
 }
 void MainWindow::FChanged() {
   if (MaxflatFIR_on==NULL) {
-	shape = "Maxflat FIR";
-	lpf_sel(shape.c_str());
-	MaxflatFIR_on = ui->customPlot->addGraph();
-	plot2(ui->customPlot);
+		shape = "Maxflat FIR";
+		lpf_sel(shape.c_str());
+		MaxflatFIR_on = ui->customPlot->addGraph();
+		plot2(ui->customPlot);
   } else {
-	ui->customPlot->removeGraph(MaxflatFIR_on);
-	MaxflatFIR_on = NULL;
-	ui->customPlot->replot();
+		ui->customPlot->removeGraph(MaxflatFIR_on);
+		MaxflatFIR_on = NULL;
+		ui->customPlot->replot();
   }
 }
 void MainWindow::FHChanged() {
-  if (MaxflatHalfband_on==NULL) {
-	shape = "Maxflat Subband";
-	lpf_sel(shape.c_str());
-	MaxflatHalfband_on = ui->customPlot->addGraph();
-	plot2(ui->customPlot);
+  if (Bartlett_on==NULL) {
+		shape = "Bartlett";
+		lpf_sel(shape.c_str());
+		Bartlett_on = ui->customPlot->addGraph();
+		plot2(ui->customPlot);
   } else {
-	ui->customPlot->removeGraph(MaxflatHalfband_on);
-	MaxflatHalfband_on = NULL;
-	ui->customPlot->replot();
+		ui->customPlot->removeGraph(Bartlett_on);
+		Bartlett_on = NULL;
+		ui->customPlot->replot();
   }
 }
 void MainWindow::RCChanged() {
   if (RaisedCosine_on==NULL) {
-	shape = "Raised Cosine";
-	lpf_sel(shape.c_str());
-	RaisedCosine_on = ui->customPlot->addGraph();
-	plot2(ui->customPlot);
+		shape = "Raised Cosine";
+		lpf_sel(shape.c_str());
+		RaisedCosine_on = ui->customPlot->addGraph();
+		plot2(ui->customPlot);
   } else {
-	ui->customPlot->removeGraph(RaisedCosine_on);
-	RaisedCosine_on = NULL;
-	ui->customPlot->replot();
+		ui->customPlot->removeGraph(RaisedCosine_on);
+		RaisedCosine_on = NULL;
+		ui->customPlot->replot();
   }
 }
 void MainWindow::RRCChanged() {
   if (RootRaisedCosine_on==NULL) {
-	shape = "Root Raised Cosine";
-	lpf_sel(shape.c_str());
-	RootRaisedCosine_on = ui->customPlot->addGraph();
-	plot2(ui->customPlot);
+		shape = "Root Raised Cosine";
+		lpf_sel(shape.c_str());
+		RootRaisedCosine_on = ui->customPlot->addGraph();
+		plot2(ui->customPlot);
   } else {
-	ui->customPlot->removeGraph(RootRaisedCosine_on);
-	RootRaisedCosine_on = NULL;
-	ui->customPlot->replot();
-  }
-}
-void MainWindow::EHChanged() {
-  if (EllipticHalfband_on==NULL) {
-	shape = "Elliptic Subband";
-	lpf_sel(shape.c_str());
-	EllipticHalfband_on = ui->customPlot->addGraph();
-	plot2(ui->customPlot);
-  } else {
-	ui->customPlot->removeGraph(EllipticHalfband_on);
-	EllipticHalfband_on = NULL;
-	ui->customPlot->replot();
+		ui->customPlot->removeGraph(RootRaisedCosine_on);
+		RootRaisedCosine_on = NULL;
+		ui->customPlot->replot();
   }
 }
 void MainWindow::RChanged() {
   if (Remez_on==NULL) {
-	shape = "Remez FIR";
-	lpf_sel(shape.c_str());
-	Remez_on = ui->customPlot->addGraph();
-	plot2(ui->customPlot);
+		shape = "Remez FIR";
+		lpf_sel(shape.c_str());
+		Remez_on = ui->customPlot->addGraph();
+		plot2(ui->customPlot);
   } else {
-	ui->customPlot->removeGraph(Remez_on);
-	Remez_on = NULL;
-	ui->customPlot->replot();
-  }
-}
-void MainWindow::NChanged() {
-  if (NotchIIR_on==NULL) {
-	shape = "Notch";
-	lpf_sel(shape.c_str());
-	NotchIIR_on = ui->customPlot->addGraph();
-	plot2(ui->customPlot);
-  } else {
-	ui->customPlot->removeGraph(NotchIIR_on);
-	NotchIIR_on = NULL;
-	ui->customPlot->replot();
+		ui->customPlot->removeGraph(Remez_on);
+		Remez_on = NULL;
+		ui->customPlot->replot();
   }
 }
 void MainWindow::CBChanged() {
-  if (CutBoost_on==NULL) {
-	shape = "Cut/Boost";
-	lpf_sel(shape.c_str());
-	CutBoost_on = ui->customPlot->addGraph();
-	plot2(ui->customPlot);
+  if (Kaiser_on==NULL) {
+		shape = "Kaiser";
+		lpf_sel(shape.c_str());
+		Kaiser_on = ui->customPlot->addGraph();
+		plot2(ui->customPlot);
   } else {
-	ui->customPlot->removeGraph(CutBoost_on);
-	CutBoost_on = NULL;
-	ui->customPlot->replot();
+		ui->customPlot->removeGraph(Kaiser_on);
+		Kaiser_on = NULL;
+		ui->customPlot->replot();
   }
 }
 /////////////////////////////
 QCPGraph* MainWindow::GetPtr() {
   //  std::cout << " shape was = " << shape << "\n";
-	if (shape == "Chebyshev") return(Chebyshev_on);
-	else if (shape=="Maxflat Subband") return(MaxflatHalfband_on);
-	else if (shape=="Elliptic Subband") return(EllipticHalfband_on);
-	else if (shape=="Butterworth")	return(Butterworth_on);
-	else if (shape=="Elliptic") return(Elliptic_on);
+	if (shape == "Hamming") return(Hamming_on);
+	else if (shape=="Bartlett") return(Bartlett_on);
+	else if (shape=="Hanning")	return(Hanning_on);
+	else if (shape=="Blackmann") return(Blackmann_on);
 	else if (shape=="Maxflat FIR") return(MaxflatFIR_on);
 	else if (shape=="Remez FIR") return(Remez_on);
 	else if (shape=="Raised Cosine") return(RaisedCosine_on);
-	else if (shape=="Notch") return(NotchIIR_on);
-	else if (shape=="Cut/Boost") return(CutBoost_on);
+	else if (shape=="Kaiser") return(Kaiser_on);
 	else if (shape=="Root Raised Cosine") return(RootRaisedCosine_on);
 	else std::cout << "Invalid filter selection\n";
-	return(Butterworth_on);
+	return(Hanning_on);
 }
 ////////////////////////////////////
 void MainWindow::setup(QCustomPlot *customPlot)

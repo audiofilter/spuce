@@ -77,11 +77,19 @@ void butterworth_fir(fir_coeff<float_type>& butfir, float_type spb) {
       if (i2 != i) lamda[i] /= (2.0 * (ak[i] - cos(beta[i2])));
 
   float_type ht;
+	float_type sum=0;
+	float_type coeff;
   for (j = 0; j < taps; j++) {
     ht = 0.0;
     t = 2*M_PI * j / (float_type)spbi;
     for (i = 0; i < end; i++) ht += lamda[i] * ::exp(-t * ak[i]) * (xk[i] * cos(t * wk[i]) + yk[i] * sin(t * wk[i]));
-    butfir.settap(j,2.0*M_PI * ht);
+		coeff = 2.0*M_PI*ht;
+		sum += coeff;
+    butfir.settap(j,coeff);
   }
+	// Normalize
+  for (j = 0; j < taps; j++) {
+		butfir.settap(j,butfir.gettap(j)/sum);
+	}
 }
 }  // namespace spuce

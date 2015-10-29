@@ -55,7 +55,7 @@
      <string>Filter Type</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Chebyshev">
+   <widget class="QPushButton" name="Hamming">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -65,13 +65,13 @@
      </rect>
     </property>
     <property name="text">
-     <string>Chebyshev</string>
+     <string>Hamming</string>
     </property>
     <property name="checkable">
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="Elliptic">
+   <widget class="QPushButton" name="Blackmann">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -81,7 +81,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Elliptic</string>
+     <string>Blackmann</string>
     </property>
     <property name="checkable">
      <bool>true</bool>
@@ -91,7 +91,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>130</y>
+      <y>190</y>
       <width>181</width>
       <height>27</height>
      </rect>
@@ -103,7 +103,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="MaxflatHalfband">
+   <widget class="QPushButton" name="Kaiser">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -113,7 +113,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>MaxflatHalfband</string>
+     <string>Kaiser</string>
     </property>
     <property name="checkable">
      <bool>true</bool>
@@ -151,17 +151,17 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="EllipticHalfband">
+   <widget class="QPushButton" name="Bartlett">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>190</y>
+      <y>130</y>
       <width>181</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
-     <string>EllipticHalfband</string>
+     <string>Bartlett</string>
     </property>
     <property name="checkable">
      <bool>true</bool>
@@ -183,39 +183,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="NotchIIR">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>310</y>
-      <width>181</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Notch</string>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="CutBoost">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>340</y>
-      <width>181</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>CutBoost</string>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="Butterworth">
+   <widget class="QPushButton" name="Hanning">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -225,7 +193,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Butterworth</string>
+     <string>Hanning</string>
     </property>
     <property name="checkable">
      <bool>true</bool>
