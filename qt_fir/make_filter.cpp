@@ -10,18 +10,17 @@ namespace spuce {
 
 void make_filter::sel_filter(const char *c_sel) {
   std::string sel(c_sel);
-  if (sel == "Maxflat FIR")
-    change_filter(MaxflatFIR);
-  else if (sel == "Gaussian FIR")
-    change_filter(GaussianFIR);
-  else if (sel == "Remez FIR")
-    change_filter(RemezFIR);
-  else if (sel == "Raised Cosine")
-    change_filter(RaisedCosine);
-  else if (sel == "Root Raised Cosine")
-    change_filter(RootRaisedCosine);
-  else if (sel == "None")
-    change_filter(None);
+  if (sel == "Hamming")    change_filter(Hamming);
+  else if (sel == "Hanning")    change_filter(Hanning);
+  else if (sel == "Blackman")    change_filter(Blackman);
+  else if (sel == "Bartlett")    change_filter(Bartlett);
+  else if (sel == "Kaiser")    change_filter(Kaiser);
+  else if (sel == "Maxflat FIR")    change_filter(MaxflatFIR);
+  else if (sel == "Gaussian FIR")    change_filter(GaussianFIR);
+  else if (sel == "Remez FIR")    change_filter(RemezFIR);
+  else if (sel == "Raised Cosine")    change_filter(RaisedCosine);
+  else if (sel == "Root Raised Cosine")    change_filter(RootRaisedCosine);
+  else if (sel == "None")    change_filter(None);
   else
     std::cout << "Invalid filter selection\n";
 }
@@ -61,6 +60,13 @@ void make_filter::reset() {
 
   rc_alpha = rrc_alpha = 0.25;
 
+	hamming_taps = 23;
+	hanning_taps = 23;
+	bartlett_taps =23 ;
+	blackman_taps =23;
+	kaiser_taps=23;
+
+	
   gauss_taps = 21;
   remez_taps = 33;
   maxflat_taps = 45;
@@ -105,6 +111,11 @@ double make_filter::get_fc(int len, bool in_passband) {
       }
       break;
     case RootRaisedCosine:      break;
+	case Hanning:
+	case Hamming:
+	case Blackman:
+	case Bartlett:
+	case Kaiser:
     case None:
       fc = 0;
       break;
@@ -114,11 +125,16 @@ double make_filter::get_fc(int len, bool in_passband) {
 
 int make_filter::get_order() {
   switch (shape) {
-	case MaxflatFIR:      return (maxflat_taps);      break;
-	case GaussianFIR:      return (gauss_taps);      break;
+	case Hamming:    return (hamming_taps);      break;
+	case Hanning:    return (hanning_taps);      break;
+	case Blackman:    return (blackman_taps);      break;
+	case Bartlett:    return (bartlett_taps);      break;
+	case MaxflatFIR:    return (maxflat_taps);      break;
+	case GaussianFIR:   return (gauss_taps);      break;
 	case RemezFIR:      return (remez_taps);      break;
-	case RaisedCosine:      return (rc_taps);      break;
+	case RaisedCosine:  return (rc_taps);      break;
 	case RootRaisedCosine:      return (rrc_taps);      break;
+	case Kaiser:
 	case None:      return (0);
   }
   return (0);
@@ -175,7 +191,12 @@ double make_filter::horiz_swipe(int len, bool in_passband) {
     case RootRaisedCosine:
       rrc_alpha = limit(gain * rrc_alpha, 1, 0.01);
       break;
-    case None:
+	case Hanning:
+	case Hamming:
+	case Blackman:
+	case Bartlett:
+	case Kaiser:
+	case None:
       break;
   }
   return (0.0);
@@ -229,9 +250,6 @@ double make_filter::update(double *w, double inc) {
   int freq_off = 0;
 
   switch (shape) {
-	case None:
-		for (int i = 0; i < pts; i++) w[i] = 1.0;
-		break;
 	case MaxflatFIR: {
 		fir_coeff<double> Maxflat_Fir(maxflat_taps);
 		fc = maxflat_fc;
@@ -269,9 +287,18 @@ double make_filter::update(double *w, double inc) {
 		root_raised_cosine(RootRaisedCosine_Fir, rrc_alpha, 2);
 		fir_coeff_freq(RootRaisedCosine_Fir, pts, w, freq_off, inc);
 	}
+		
 		return (0.5);
 		break;
-		
+	case Hanning:
+	case Hamming:
+	case Blackman:
+	case Bartlett:
+	case Kaiser:
+	case None:
+		for (int i = 0; i < pts; i++) w[i] = 1.0;
+		break;
+
   }
   return (0);
 }

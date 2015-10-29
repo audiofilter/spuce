@@ -8,6 +8,11 @@ namespace spuce {
 
 enum fil_enum {
   None,
+	Hanning,
+	Hamming,
+	Bartlett,
+	Blackman,
+	Kaiser,
   MaxflatFIR,
   GaussianFIR,
   RemezFIR,
@@ -30,6 +35,7 @@ class make_filter {
   double remez_trans;
   double rc_alpha;
   double rrc_alpha;
+
   bool hpf;
 
   int gauss_taps;
@@ -37,6 +43,11 @@ class make_filter {
   int maxflat_taps;
   int rc_taps;
   int rrc_taps;
+  int hamming_taps;
+  int hanning_taps;
+  int bartlett_taps;
+  int blackman_taps;
+  int kaiser_taps;
 
   int pts;
   int bits;
