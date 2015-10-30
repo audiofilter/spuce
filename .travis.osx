@@ -4,8 +4,12 @@ language:
   - objective-c
 compiler:
   - clang
+notifications:
+  slack: spuc:VfvBwrKcCRGX7RWcZBIfXFBr
 before_install:
   - brew update
+install:
+  - brew install qt5
 before_script:
   - mkdir build
   - cd build

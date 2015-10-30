@@ -1,6 +1,8 @@
 dist: trusty
 language:  cpp
 compiler : gcc
+notifications:
+  slack: spuc:VfvBwrKcCRGX7RWcZBIfXFBr
 before_install
   - sudo apt-get update -qq
 install
