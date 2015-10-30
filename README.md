@@ -18,4 +18,6 @@ QT5 needed for test application
 
 - Travis: [![Build Status](https://travis-ci.org/audiofilter/spuce.png)](https://travis-ci.org/audiofilter/spuce)
 - AppVeyor: [![Build status](https://ci.appveyor.com/api/projects/status/vmjw8ie1ag7wdfne?svg=true)](https://ci.appveyor.com/project/audiofilter/spuce)
-![Demo App](App.png "Demo App")
+![Demo App](App.png "IIR Designer")
+
+![Demo App](Fir.png "FIR Designer")
