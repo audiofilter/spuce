@@ -31,10 +31,11 @@ class make_filter {
   double rrc_fc;
   double maxflat_fc;
   double gauss_fc;
-  double variable_ripple;
+  double kaiser_ripple;
   double remez_trans;
   double rc_alpha;
   double rrc_alpha;
+	double kaiser_tw;
 
   int gauss_taps;
   int remez_taps;
@@ -48,8 +49,6 @@ class make_filter {
   int kaiser_taps;
 
   int pts;
-  int bits;
-  double fs;
 	
   typedef double audio_data_type;
 
@@ -58,15 +57,11 @@ class make_filter {
   fil_type pass_type;
 
   double horiz_swipe(int len, bool in_passband);
-  double get_fc(int len, bool in_passband);
   int get_order();
   bool is_fir();
   bool is_bpf();
-  double ripple();
-  double stopdB();
   void vertical_swipe(int len, bool in_passband, bool above_stop);
   double update(double *w);
-  double update(double *w, double w_inc);
 
   void sel_filter(const char *sel);
   void change_filter(fil_enum f);
@@ -76,8 +71,6 @@ class make_filter {
   ~make_filter();
   void init(int points);
   void reset();
-  void clear_filters();
   void set_filter_type(int h);
-  void set_fs(double f);
 };
 }  // namespace spuce

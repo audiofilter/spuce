@@ -54,15 +54,11 @@ void make_filter::set_filter_type(int t) {
 }
 
 void make_filter::init(int points) { pts = points; }
-void make_filter::set_fs(double f) { fs = f * 1000.0; }
 
 make_filter::~make_filter() {}
 make_filter::make_filter() {
   reset();
-  fs = 44100;
 }
-
-void make_filter::clear_filters() {}
 
 void make_filter::reset() {
   pass_type = low;
@@ -83,7 +79,8 @@ void make_filter::reset() {
 	bartlett_taps =23 ;
 	blackman_taps =23;
 	kaiser_taps=23;
-
+	kaiser_tw = 0.1;
+	kaiser_ripple = 1.0;
 	
   gauss_taps = 21;
   remez_taps = 33;
@@ -91,7 +88,6 @@ void make_filter::reset() {
   rc_taps = rrc_taps = 33;
   shape = RemezFIR;
   last_shape = shape;
-	bits = 0;
 }
 
 double make_filter::limit(double x, double mx, double mn) {
@@ -100,45 +96,6 @@ double make_filter::limit(double x, double mx, double mn) {
   else if (x < mn)
     x = mn;
   return x;
-}
-
-double make_filter::get_fc(int len, bool in_passband) {
-  // Convert swipe to dB inc/decrease
-  double fc = 0.5;
-  double gain = pow(2, 0.002 * len);
-
-  switch (shape) {
-    case MaxflatFIR:
-      fc = 2.0 * limit(gain * maxflat_fc, 0.4, 0.001);
-      break;
-    case GaussianFIR:
-      fc = 2.0 * limit(gain * gauss_fc, 0.4, 0.001);
-      break;
-    case RemezFIR:
-      if (in_passband) {
-        fc = limit(gain * remez_pass_edge, 1.0 - remez_trans, 0.001);
-      } else {
-        fc = remez_pass_edge;
-      }
-      break;
-    case RaisedCosine:
-      if (in_passband) {
-        fc = limit(gain * rc_fc, 0.5, 0.001);
-      } else {
-        fc = rc_fc;
-      }
-      break;
-    case RootRaisedCosine:      break;
-	case Hanning:
-	case Hamming:
-	case Blackman:
-	case Bartlett:
-	case Kaiser:
-    case None:
-      fc = 0;
-      break;
-  }
-  return (fc);
 }
 
 int make_filter::get_order() {
@@ -159,18 +116,6 @@ int make_filter::get_order() {
 }
 	bool make_filter::is_bpf() { return (false);}
 
-double make_filter::ripple() {
-  switch (shape) {
-    case RemezFIR:      return (0.0);      break;  // for now
-    default:      return (0.0);
-  }
-  return (0.0);
-}
-
-double make_filter::stopdB() {
-	return (0.0);
-}
-
 double make_filter::horiz_swipe(int len, bool in_passband) {
   // Convert swipe to dB inc/decrease
   const double min_fc = 0.0;
@@ -184,36 +129,37 @@ double make_filter::horiz_swipe(int len, bool in_passband) {
     inc = 0.5;
 
   switch (shape) {
-    case MaxflatFIR:
-      maxflat_fc = limit(gain * maxflat_fc, 0.4, 0.001);
-      break;
-    case GaussianFIR:
-      gauss_fc = limit(gain * gauss_fc, 0.4, min_fc);
-      break;
-    case RemezFIR:
-      if (in_passband) {
-        remez_pass_edge =
-            limit(gain * remez_pass_edge, 0.95 - remez_trans, 0.001);
-      } else {
-        remez_trans = limit(gain * remez_trans, 0.95 - remez_pass_edge, 0.001);
-      }
-      remez_stop_edge = remez_pass_edge + remez_trans;
-      break;
-    case RaisedCosine:
-      if (in_passband) {
-        rc_fc = limit(gain * rc_fc, 0.5, 0.001);
-      } else {
-        rc_alpha = limit(gain * rc_alpha, 1, 0.01);
-      }
-      break;
-    case RootRaisedCosine:
-      rrc_alpha = limit(gain * rrc_alpha, 1, 0.01);
-      break;
+	case MaxflatFIR:
+		maxflat_fc = limit(gain * maxflat_fc, 0.4, 0.001);
+		break;
+	case GaussianFIR:
+		gauss_fc = limit(gain * gauss_fc, 0.4, min_fc);
+		break;
+	case RemezFIR:
+		if (in_passband) {
+			remez_pass_edge = limit(gain * remez_pass_edge, 0.95 - remez_trans, 0.001);
+		} else {
+			remez_trans = limit(gain * remez_trans, 0.95 - remez_pass_edge, 0.001);
+		}
+		remez_stop_edge = remez_pass_edge + remez_trans;
+		break;
+	case RaisedCosine:
+		if (in_passband) {
+			rc_fc = limit(gain * rc_fc, 0.5, 0.001);
+		} else {
+			rc_alpha = limit(gain * rc_alpha, 1, 0.01);
+		}
+		break;
+	case RootRaisedCosine:
+		rrc_alpha = limit(gain * rrc_alpha, 1, 0.01);
+		break;
+	case Kaiser:
+		kaiser_tw = limit(gain * kaiser_tw, 0.95, 0.001);
+		break;
 	case Hanning:
 	case Hamming:
 	case Blackman:
 	case Bartlett:
-	case Kaiser:
 	case None:
       break;
   }
@@ -234,56 +180,58 @@ void make_filter::vertical_swipe(int len, bool in_passband, bool above_stop) {
   double ogain = 1.0 / gain;
 
   switch (shape) {
-    case MaxflatFIR:
-      maxflat_taps = limit(maxflat_taps + 8 * inc, MAX_FIR, MIN_FIR);
-      break;
-    case GaussianFIR:
-      gauss_taps = limit(gauss_taps + inc, MAX_FIR, MIN_FIR);
-      break;
+	case MaxflatFIR:
+		maxflat_taps = limit(maxflat_taps + 8 * inc, MAX_FIR, MIN_FIR);
+		break;
+	case GaussianFIR:
+		gauss_taps = limit(gauss_taps + inc, MAX_FIR, MIN_FIR);
+		break;
     // FIX ME - should change to passband ripple while in passband
-    case RemezFIR:
-      if (in_passband) {
-        remez_stop_weight = limit(ogain * remez_stop_weight, 100, 0.01);
-      } else {
-        if (above_stop) {
-          remez_stop_weight = limit(ogain * remez_stop_weight, 100, 0.01);
-        } else {
-          remez_taps = limit(remez_taps + inc, MAX_FIR, MIN_FIR);
-          break;
-        }
-      }
-    case RootRaisedCosine:
-      rrc_taps = limit(rrc_taps + 2 * inc, MAX_FIR, MIN_FIR);
-      break;
-    case RaisedCosine:
-      rc_taps = limit(rc_taps + 2 * inc, MAX_FIR, MIN_FIR);
-      break;
-    default:
-      break;
+	case RemezFIR:
+		if (in_passband) {
+			remez_stop_weight = limit(ogain * remez_stop_weight, 100, 0.01);
+		} else {
+			if (above_stop) {
+				remez_stop_weight = limit(ogain * remez_stop_weight, 100, 0.01);
+			} else {
+				remez_taps = limit(remez_taps + inc, MAX_FIR, MIN_FIR);
+				break;
+			}
+		}
+	case RootRaisedCosine:
+		rrc_taps = limit(rrc_taps + 2 * inc, MAX_FIR, MIN_FIR);
+		break;
+	case RaisedCosine:
+		rc_taps = limit(rc_taps + 2 * inc, MAX_FIR, MIN_FIR);
+		break;
+	case Kaiser:
+		kaiser_ripple = limit(gain * kaiser_ripple, 2.0, 0.01);
+		break;
+	default:
+		break;
   }
 }
-double make_filter::update(double *w) { return (update(w, 1.0)); }
-double make_filter::update(double *w, double inc) {
+double make_filter::update(double *w) {
 	double bt=1;
 	double spb=1;
-	double alpha = 0.1;
 	double beta = 0.1;
 	std::vector<double> taps;
 
   switch (shape) {
-	case RemezFIR: taps =design_fir("remez", remez_taps, remez_pass_edge, remez_stop_edge, remez_stop_weight);		break;
-	case MaxflatFIR: taps = design_fir("butterworth", maxflat_taps, 0, maxflat_fc, 0);		break;
-	case GaussianFIR: taps = design_fir("gaussian", gauss_taps, 0, spb,bt);		break;
-	case RaisedCosine: taps = design_fir("rootraisedcosine", rc_taps, rc_alpha, 1.0/rc_fc, 0);		break;
+	case RemezFIR:         taps = design_fir("remez", remez_taps, remez_pass_edge, remez_stop_edge, remez_stop_weight);		break;
+	case MaxflatFIR:       taps = design_fir("butterworth", maxflat_taps, 0, maxflat_fc, 0);		break;
+	case GaussianFIR:      taps = design_fir("gaussian", gauss_taps, 0, spb,bt);		break;
+	case RaisedCosine:     taps = design_fir("rootraisedcosine", rc_taps, rc_alpha, 1.0/rc_fc, 0);		break;
 	case RootRaisedCosine: taps = design_fir("rootraisedcosine", rrc_taps, rrc_alpha, 2, 0); break;
-	case Hanning:		taps = design_window("hanning", hanning_taps, alpha,beta); break;
-	case Hamming:		taps = design_window("hamming", hamming_taps, alpha,beta); break;
-	case Blackman:	taps = design_window("blackman", blackman_taps, alpha,beta); break;
-	case Bartlett:		taps = design_window("bartlett", bartlett_taps, alpha,beta); break;
-	case Kaiser:		taps = design_window("kaiser", kaiser_taps, alpha, beta); break;
+	//
+	case Hanning:		       taps = design_window("hanning", hanning_taps); break;
+	case Hamming:		       taps = design_window("hamming", hamming_taps); break;
+	case Blackman:	       taps = design_window("blackman", blackman_taps); break;
+	case Bartlett:	       taps = design_window("bartlett", bartlett_taps); break;
+	case Kaiser:		       taps = design_window("kaiser", kaiser_taps, kaiser_tw, beta); break;
 	case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
 	}
-	fir_freq(taps, pts, w,inc);
+	fir_freq(taps, pts, w, 1.0);
   return (0);
 }
 

@@ -6,7 +6,7 @@ namespace spuce {
 //! \brief Design functions for window functions
 //! \author Tony Kirke
 //! \ingroup functions fir
-std::vector<float_type> design_window(const std::string& fir_type, int order, float_type alpha, float_type beta=0.1) {
+std::vector<float_type> design_window(const std::string& fir_type, int order, float_type tw=0.1, float_type ripple_db=0.1) {
 
 	std::vector<float_type> win;
 	if (fir_type == "hamming") {
@@ -16,7 +16,7 @@ std::vector<float_type> design_window(const std::string& fir_type, int order, fl
 	}	else if (fir_type == "blackman") {
 		win =  blackman(order);
 	}	else if (fir_type == "kaiser") {
-		win =  kaiser(order, alpha, beta);
+		win =  kaiser(order, tw, ripple_db);
   } else {
 		win = bartlett(order);
   }

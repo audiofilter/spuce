@@ -210,7 +210,7 @@ void MainWindow::plot2(QCustomPlot *customPlot)
 {
   QVector<double> x0(pts), y0(pts);
 
-  update_w(w,1.0);
+  update_w(w);
   double y_inc = 1.0; 
   for (int i=0; i<pts; ++i)   {
     x0[i] = (double)0.5*i/pts;
@@ -241,7 +241,7 @@ void MainWindow::plot3(QCustomPlot *customPlot)
 {
   QVector<double> x0(pts), y0(pts);
 
-  update_w(w,1.0);
+  update_w(w);
   double y_inc = 1.0; 
   for (int i=0; i<pts; ++i)   {
     x0[i] = (double)0.5*i/pts;
