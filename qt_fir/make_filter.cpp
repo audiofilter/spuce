@@ -80,7 +80,7 @@ void make_filter::reset() {
 	blackman_taps =23;
 	kaiser_taps=23;
 	kaiser_tw = 0.1;
-	kaiser_ripple = 1.0;
+	kaiser_ripple = 0.04;
 	
   gauss_taps = 21;
   remez_taps = 33;
@@ -205,22 +205,19 @@ void make_filter::vertical_swipe(int len, bool in_passband, bool above_stop) {
 		rc_taps = limit(rc_taps + 2 * inc, MAX_FIR, MIN_FIR);
 		break;
 	case Kaiser:
-		kaiser_ripple = limit(gain * kaiser_ripple, 2.0, 0.01);
+		kaiser_ripple = limit(gain * kaiser_ripple, 0.1, 0.01);
 		break;
 	default:
 		break;
   }
 }
 double make_filter::update(double *w) {
-	double bt=1;
-	double spb=1;
-	double beta = 0.1;
 	std::vector<double> taps;
 
   switch (shape) {
 	case RemezFIR:         taps = design_fir("remez", remez_taps, remez_pass_edge, remez_stop_edge, remez_stop_weight);		break;
 	case MaxflatFIR:       taps = design_fir("butterworth", maxflat_taps, 0, maxflat_fc, 0);		break;
-	case GaussianFIR:      taps = design_fir("gaussian", gauss_taps, 0, spb,bt);		break;
+	case GaussianFIR:      taps = design_fir("gaussian", gauss_taps, 0, 0.4, gauss_fc);		break;
 	case RaisedCosine:     taps = design_fir("rootraisedcosine", rc_taps, rc_alpha, 1.0/rc_fc, 0);		break;
 	case RootRaisedCosine: taps = design_fir("rootraisedcosine", rrc_taps, rrc_alpha, 2, 0); break;
 	//
@@ -228,7 +225,7 @@ double make_filter::update(double *w) {
 	case Hamming:		       taps = design_window("hamming", hamming_taps); break;
 	case Blackman:	       taps = design_window("blackman", blackman_taps); break;
 	case Bartlett:	       taps = design_window("bartlett", bartlett_taps); break;
-	case Kaiser:		       taps = design_window("kaiser", kaiser_taps, kaiser_tw, beta); break;
+	case Kaiser:		       taps = design_window("kaiser", kaiser_taps, kaiser_tw, kaiser_ripple); break;
 	case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
 	}
 	fir_freq(taps, pts, w, 1.0);

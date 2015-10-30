@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
   RaisedCosine_on = NULL;
   RootRaisedCosine_on = NULL;
   Remez_on = NULL;
+  Gaussian_on = NULL;
   Kaiser_on = NULL;
 
   graph_counter = 0;
@@ -54,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->RaisedCosine, SIGNAL(released()), this, SLOT(RCChanged()));
   connect(ui->RootRaisedCosine, SIGNAL(released()), this, SLOT(RRCChanged()));
   connect(ui->Remez, SIGNAL(released()), this, SLOT(RChanged()));
+  connect(ui->Gaussian, SIGNAL(released()), this, SLOT(GChanged()));
   connect(ui->Kaiser, SIGNAL(released()), this, SLOT(CBChanged()));
 
   connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), 
@@ -160,6 +162,18 @@ void MainWindow::RChanged() {
 		ui->customPlot->replot();
   }
 }
+void MainWindow::GChanged() {
+  if (Gaussian_on==NULL) {
+		shape = "Gaussian FIR";
+		lpf_sel(shape.c_str());
+		Gaussian_on = ui->customPlot->addGraph();
+		plot2(ui->customPlot);
+  } else {
+		ui->customPlot->removeGraph(Gaussian_on);
+		Gaussian_on = NULL;
+		ui->customPlot->replot();
+  }
+}
 void MainWindow::CBChanged() {
   if (Kaiser_on==NULL) {
 		shape = "Kaiser";
@@ -180,6 +194,7 @@ QCPGraph* MainWindow::GetPtr() {
 	else if (shape=="Hanning")	return(Hanning_on);
 	else if (shape=="Blackman") return(Blackman_on);
 	else if (shape=="Maxflat FIR") return(MaxflatFIR_on);
+	else if (shape=="Gaussian FIR") return(Gaussian_on);
 	else if (shape=="Remez FIR") return(Remez_on);
 	else if (shape=="Raised Cosine") return(RaisedCosine_on);
 	else if (shape=="Kaiser") return(Kaiser_on);

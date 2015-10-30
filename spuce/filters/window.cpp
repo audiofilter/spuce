@@ -101,8 +101,9 @@ std::vector<float_type> kaiser(long nf, float_type tw, float_type ripple) {
     if (odd)   xi = i + 0.5;
 		float_type bm = (2*xi/M - 1);
     w[i] = io(beta * sqrt(1. - bm*bm)) * bes;
-    w[nf - 1 - i] = w[i];
+    w[nf - 2 - i] = w[i];
   }
+  //for (int i = 0; i < nf; i++) std::cout << "w[" << i << "] = " << w[i] << "\n";
   return (w);
 }
 

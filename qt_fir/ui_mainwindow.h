@@ -37,6 +37,7 @@ public:
     QPushButton *RootRaisedCosine;
     QPushButton *Bartlett;
     QPushButton *Remez;
+    QPushButton *Gaussian;
     QPushButton *Hanning;
     QStatusBar *statusBar;
 
@@ -100,6 +101,10 @@ public:
         Remez->setObjectName(QStringLiteral("Remez"));
         Remez->setGeometry(QRect(10, 280, 181, 27));
         Remez->setCheckable(true);
+        Gaussian = new QPushButton(centralWidget);
+        Gaussian->setObjectName(QStringLiteral("Gaussian"));
+        Gaussian->setGeometry(QRect(10, 310, 181, 27));
+        Gaussian->setCheckable(true);
         Hanning = new QPushButton(centralWidget);
         Hanning->setObjectName(QStringLiteral("Hanning"));
         Hanning->setGeometry(QRect(10, 40, 181, 27));
@@ -126,6 +131,7 @@ public:
         RootRaisedCosine->setText(QApplication::translate("MainWindow", "RootRaisedCosine", 0));
         Bartlett->setText(QApplication::translate("MainWindow", "Bartlett", 0));
         Remez->setText(QApplication::translate("MainWindow", "Remez", 0));
+        Gaussian->setText(QApplication::translate("MainWindow", "Gaussian", 0));
         Hanning->setText(QApplication::translate("MainWindow", "Hanning", 0));
     } // retranslateUi
 

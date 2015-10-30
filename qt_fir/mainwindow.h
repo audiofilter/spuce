@@ -32,6 +32,7 @@ private:
 public slots:
   void BChanged();
   void CChanged(); 
+  void GChanged(); 
   void EChanged(); 
   void FChanged(); 
   void FHChanged(); 
@@ -61,6 +62,7 @@ private:
   QCPGraph*  RaisedCosine_on;
   QCPGraph*  RootRaisedCosine_on;
   QCPGraph*  Remez_on;
+  QCPGraph*  Gaussian_on;
   QCPGraph*  Kaiser_on;
   int graph_counter;
 
