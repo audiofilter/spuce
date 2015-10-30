@@ -21,7 +21,7 @@ environment:
 
 notifications:
   - provider: Slack
-    access_token:	xoxp-13185284785-13181066693-13580482535-8e6bf7284b
+    auth_token:	xoxp-13185284785-13181066693-13580482535-8e6bf7284b
     channel: github
     template: "{{message}}, {{commitId}}, ..."
 
