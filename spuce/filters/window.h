@@ -24,7 +24,7 @@ std::vector<float_type> blackman(long nf);
 //! \brief kaiser window
 //! \author Tony Kirke
 //!  \ingroup functions fir
-std::vector<float_type> kaiser(long nf, float_type tw, float ripple);
+std::vector<float_type> kaiser(long nf, float_type tw, float_type ripple);
 //!  \brief dolph chebyshev window design
 //! \author Tony Kirke
 //!  \ingroup functions fir

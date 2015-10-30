@@ -8,7 +8,7 @@
 #define TWOPI 2*M_PI
 namespace spuce {
 
-inline std::complex<float> expj(float x) { return (std::complex<float>(std::cos(x), std::sin(x))); }
+inline std::complex<float_type> expj(float_type x) { return (std::complex<float_type>(std::cos(x), std::sin(x))); }
 inline float_type coshin(float_type x) { return (log(x + sqrt(x * x - 1.))); }
 
 //!  \author Tony Kirke,  Copyright(c) 2001
@@ -85,11 +85,11 @@ std::vector<float_type> blackman(long nf) {
 }
 //!  \ingroup fir
 //! \brief kaiser window
-std::vector<float_type> kaiser(long nf, float_type tw, float ripple) {
+std::vector<float_type> kaiser(long nf, float_type tw, float_type ripple) {
   // nf = filter length in samples
 	float_type tww = tw*M_PI;
 	float_type A = -20.0*log10(ripple);
-	int M = (A>21.0) ? ceil((A-7.95)/(2.285*tww)) : ceil(5.79/tww);
+	int M = (A>21.0) ? (int)ceil((A-7.95)/(2.285*tww)) : (int)ceil(5.79/tww);
 	float_type beta = (A>50) ? (0.1102*(A-8.7)) : 
 		((A<=21) ? 0.0 : (0.5842*pow(A-21.0,0.4) + 0.07886*(A-21.0)));
   // beta = parameter of kaiser window
@@ -152,7 +152,7 @@ std::vector<float_type> cheby(long nf, long n, long ieo, float_type dp, float_ty
     // also the frequency response is antisymmetric in frequency
     //
     if (ieo != 1) {
-      pie = p * expj(-f * M_PI);
+      pie = std::complex<float_type>(p * expj(-f * M_PI));
       if (i > (nf / 2 + 1)) pie *= -1;
     }
     // use dft to give window
@@ -219,7 +219,7 @@ std::vector<float_type> bartlett(long nf) {
   std::vector<float_type> w(nf);
 	float_type sum=0;
   for (int i = 0; i < nf / 2; i++) {
-    float win = 2.0 * i / (nf - 1);
+    float_type win = 2.0 * i / (nf - 1);
     w[i] = win;
     w[nf - 1 - i] = win;
   }
