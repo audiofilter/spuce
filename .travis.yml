@@ -1,14 +1,8 @@
 dist: trusty
 language:  cpp
 compiler : gcc
-notifications:
-  slack: spuc:VfvBwrKcCRGX7RWcZBIfXFBr
-before_install
-  - sudo apt-get update -qq
 install
-  - sudo apt-get install -qq libnuma-dev cmake
-  - sudo apt-get install -qq python-dev python-numpy
-  - sudo apt-get install -qq qt5-qmake qtbase5-dev qtdeclarative5-dev
+  - sudo apt-get install -qq cmake
 before_script:
   - mkdir build
   - cd build
