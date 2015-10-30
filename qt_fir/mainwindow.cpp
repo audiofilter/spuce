@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
   Hanning_on = NULL;
   Hamming_on = NULL;
-  Blackmann_on = NULL;
+  Blackman_on = NULL;
   MaxflatFIR_on = NULL;
   Bartlett_on = NULL;
   RaisedCosine_on = NULL;
@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
   connect(ui->Hanning, SIGNAL(released()), this, SLOT(BChanged()));
   connect(ui->Hamming, SIGNAL(released()), this, SLOT(CChanged()));
-  connect(ui->Blackmann, SIGNAL(released()), this, SLOT(EChanged()));
+  connect(ui->Blackman, SIGNAL(released()), this, SLOT(EChanged()));
   connect(ui->MaxflatFIR, SIGNAL(released()), this, SLOT(FChanged()));
   connect(ui->Bartlett, SIGNAL(released()), this, SLOT(FHChanged()));
   connect(ui->RaisedCosine, SIGNAL(released()), this, SLOT(RCChanged()));
@@ -89,14 +89,14 @@ void MainWindow::CChanged() {
   }
 }
 void MainWindow::EChanged() {
-  if (Blackmann_on==NULL) {
-		shape = "Blackmann";
+  if (Blackman_on==NULL) {
+		shape = "Blackman";
 		lpf_sel(shape.c_str());
-		Blackmann_on = ui->customPlot->addGraph();
+		Blackman_on = ui->customPlot->addGraph();
 		plot2(ui->customPlot);
   } else {
-		ui->customPlot->removeGraph(Blackmann_on);
-		Blackmann_on = NULL;
+		ui->customPlot->removeGraph(Blackman_on);
+		Blackman_on = NULL;
 		ui->customPlot->replot();
   }
 }
@@ -178,7 +178,7 @@ QCPGraph* MainWindow::GetPtr() {
 	if (shape == "Hamming") return(Hamming_on);
 	else if (shape=="Bartlett") return(Bartlett_on);
 	else if (shape=="Hanning")	return(Hanning_on);
-	else if (shape=="Blackmann") return(Blackmann_on);
+	else if (shape=="Blackman") return(Blackman_on);
 	else if (shape=="Maxflat FIR") return(MaxflatFIR_on);
 	else if (shape=="Remez FIR") return(Remez_on);
 	else if (shape=="Raised Cosine") return(RaisedCosine_on);

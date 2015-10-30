@@ -55,7 +55,7 @@ private:
 
   QCPGraph*  Hanning_on;
   QCPGraph*  Hamming_on;
-  QCPGraph*  Blackmann_on;
+  QCPGraph*  Blackman_on;
   QCPGraph*  MaxflatFIR_on;
   QCPGraph*  Bartlett_on;
   QCPGraph*  RaisedCosine_on;

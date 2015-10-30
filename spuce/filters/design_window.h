@@ -6,19 +6,25 @@ namespace spuce {
 //! \brief Design functions for window functions
 //! \author Tony Kirke
 //! \ingroup functions fir
-std::vector<double> design_window(const std::string& fir_type,
-																	int order, float_type alpha, float_type beta=0.1) {
+std::vector<float_type> design_window(const std::string& fir_type, int order, float_type alpha, float_type beta=0.1) {
 
+	std::vector<float_type> win;
 	if (fir_type == "hamming") {
-		return hamming(order, 0.54, 0.46);
+		win = hamming(order, 0.54, 0.46);
 	}	else if (fir_type == "hanning") {
-		return hanning(order);
+		win = hanning(order);
 	}	else if (fir_type == "blackman") {
-		return blackman(order);
+		win =  blackman(order);
 	}	else if (fir_type == "kaiser") {
-		return kaiser(order, 0.1);
+		win =  kaiser(order, alpha, beta);
   } else {
-		return bartlett(order);
+		win = bartlett(order);
   }
+
+	// Normalize DC response to 1.0
+	float_type sum = 0;
+	for (int i=0;i<win.size();i++) sum += win[i];
+	for (int i=0;i<win.size();i++) win[i] /= sum;
+	return win;
 }
 }  // namespace spuce

@@ -71,7 +71,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="Blackmann">
+   <widget class="QPushButton" name="Blackman">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -81,7 +81,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Blackmann</string>
+     <string>Blackman</string>
     </property>
     <property name="checkable">
      <bool>true</bool>

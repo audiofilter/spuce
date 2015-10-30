@@ -42,16 +42,11 @@ std::vector<float_type> hamming(long nf, float_type alpha, float_type beta) {
   std::vector<float_type> w(nf);
   long odd = nf % 2;
   float_type xi;
-	float_type sum=0;
   for (int i = 0; i < nf; i++) {
     xi = i;
     if (odd) xi += 0.5;
     w[i] = alpha - beta*::cos(TWOPI * xi / nf);
-		sum += w[i];
   }
-  for (int i = 0; i < nf; i++) {
-		w[i] /= sum;
-	}
   return (w);
 }
 //
@@ -64,14 +59,11 @@ std::vector<float_type> hanning(long nf) {
   // beta = constant of window--generally beta=1-alpha
   long odd = nf % 2;
   float_type xi;
-	float_type sum=0;
   for (int i = 0; i < nf; i++) {
     xi = i;
     if (odd) xi += 0.5;
     w[i] = 0.5 * (1 - ::cos(TWOPI * xi / nf));
-		sum += w[i];
   }
-  for (int i = 0; i < nf; i++) w[i] /= sum;
   return (w);
 }
 //:
@@ -84,42 +76,33 @@ std::vector<float_type> blackman(long nf) {
   std::vector<float_type> w(nf);
   long odd = nf % 2;
   float_type xi;
-	float_type sum=0;
   for (int i = 0; i < nf; i++) {
     xi = i;
     if (odd) xi += 0.5;
     w[i] = 0.42 - 0.5 * ::cos(TWOPI * xi / nf) + 0.08 * ::cos(2 * TWOPI * xi / nf);
-		sum += w[i];
   }
-  for (int i = 0; i < nf; i++) w[i] /= sum;
   return (w);
 }
 //!  \ingroup fir
 //! \brief kaiser window
-std::vector<float_type> kaiser(long nf, float_type beta) {
+std::vector<float_type> kaiser(long nf, float_type tw, float ripple) {
   // nf = filter length in samples
+	float_type tww = tw*M_PI;
+	float_type A = -20.0*log10(ripple);
+	int M = (A>21.0) ? ceil((A-7.95)/(2.285*tww)) : ceil(5.79/tww);
+	float_type beta = (A>50) ? (0.1102*(A-8.7)) : 
+		((A<=21) ? 0.0 : (0.5842*pow(A-21.0,0.4) + 0.07886*(A-21.0)));
   // beta = parameter of kaiser window
   std::vector<float_type> w(nf);
   float_type bes = 1.0 / io(beta);
-  long i;
   long odd = nf % 2;
-  float_type xi;
-  float_type xind = (nf - 1) * (nf - 1);
-	float_type sum=0;
-  for (i = 0; i < nf; i++) {
-    if (odd)
-      xi = i + 0.5;
-    else
-      xi = i;
-    xi = 4 * xi * xi;
-    w[i] = io(beta * sqrt(1. - xi / xind)) * bes;
-		sum += w[i];
+  for (int i = 0; i < nf/2; i++) {
+		float_type xi = i;
+    if (odd)   xi = i + 0.5;
+		float_type bm = (2*xi/M - 1);
+    w[i] = io(beta * sqrt(1. - bm*bm)) * bes;
+    w[nf - 1 - i] = w[i];
   }
-	for (int i = 0; i < nf; i++) {
-		//		w[i] /= sum;
-		//std::cout << "w[" << i << "] = " << w[i] << "\n";
-	}
-
   return (w);
 }
 
@@ -238,15 +221,11 @@ std::vector<float_type> bartlett(long nf) {
   for (int i = 0; i < nf / 2; i++) {
     float win = 2.0 * i / (nf - 1);
     w[i] = win;
-		sum += w[i];
     w[nf - 1 - i] = win;
-		sum += w[nf-1-i];
   }
   if (nf % 2 == 1) {
 		w[nf / 2] = 1.0;
-		sum += 1.0;
 	}
-	for (int i=0;i<nf;i++) w[i] /= sum;
   return (w);
 }
 }  // namespace spuce

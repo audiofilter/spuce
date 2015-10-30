@@ -22,7 +22,7 @@ set(SOURCES
 	des_filter.cpp 
 )
 
-SET(fir_plot_SOURCES main.cpp mainwindow.cpp other_freq.cpp qcustomplot.cpp)
+SET(fir_plot_SOURCES main.cpp mainwindow.cpp qcustomplot.cpp)
 SET(fir_plot_HEADERS mainwindow.h other_freq.h qcustomplot.h)
 
 INCLUDE_DIRECTORIES(${QT5_INCLUDES})

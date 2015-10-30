@@ -1,10 +1,32 @@
 // Copyright (c) 2015 Tony Kirke. License MIT  (http://www.opensource.org/licenses/mit-license.php)
 #include "make_filter.h"
-#include "other_freq.h"
+#include <cmath>
+#include <complex>
 #include <spuce/filters/design_window.h>
 #include <spuce/filters/design_fir.h>
 namespace spuce {
 
+void fir_freq(std::vector<double>& MF, int pts, double* w, double inc) {
+  double t;
+  double w_inc = inc*M_PI/(float)pts; 
+  std::complex<double> z_inc, nom;
+	
+  for (int i=0;i<pts;i++) {
+    double wf = w_inc*i;
+    std::complex<double> z(1,0);
+		z_inc = std::complex<double>(cos(wf),sin(wf));
+		nom = 0;
+		for (int j=0;j<MF.size();j++) {
+			nom += z*(std::complex<double>(MF[j]));
+			z *= z_inc;
+		}
+		t = sqrt(norm(nom));
+    if (t==0) t = 0.00001;
+    t = 20.0*log(t)/log(10.0);
+    w[i] = t;
+  }
+}
+	
 void make_filter::sel_filter(const char *c_sel) {
   std::string sel(c_sel);
   if (sel == "Hamming")    change_filter(Hamming);
@@ -43,7 +65,6 @@ make_filter::make_filter() {
 void make_filter::clear_filters() {}
 
 void make_filter::reset() {
-  hpf = false;
   pass_type = low;
 
   maxflat_fc = 0.16;
@@ -251,15 +272,15 @@ double make_filter::update(double *w, double inc) {
 
   switch (shape) {
 	case RemezFIR: taps =design_fir("remez", remez_taps, remez_pass_edge, remez_stop_edge, remez_stop_weight);		break;
-	case MaxflatFIR: taps = design_fir("butterworth", maxflat_taps, 0, maxflat_fc);		break;
-	case GaussianFIR: taps = design_fir("gaussian", gauss_taps, 0, bt, spb);		break;
-	case RaisedCosine: taps = design_fir("rootraisedcosine", rc_taps, rc_alpha, 0, 0, 1.0/rc_fc);		break;
-	case RootRaisedCosine: taps = design_fir("rootraisedcosine", rrc_taps, rrc_alpha, 0, 0, 2); break;
+	case MaxflatFIR: taps = design_fir("butterworth", maxflat_taps, 0, maxflat_fc, 0);		break;
+	case GaussianFIR: taps = design_fir("gaussian", gauss_taps, 0, spb,bt);		break;
+	case RaisedCosine: taps = design_fir("rootraisedcosine", rc_taps, rc_alpha, 1.0/rc_fc, 0);		break;
+	case RootRaisedCosine: taps = design_fir("rootraisedcosine", rrc_taps, rrc_alpha, 2, 0); break;
 	case Hanning:		taps = design_window("hanning", hanning_taps, alpha,beta); break;
 	case Hamming:		taps = design_window("hamming", hamming_taps, alpha,beta); break;
 	case Blackman:	taps = design_window("blackman", blackman_taps, alpha,beta); break;
 	case Bartlett:		taps = design_window("bartlett", bartlett_taps, alpha,beta); break;
-	case Kaiser:		taps = design_window("kaiser", kaiser_taps, alpha,beta); break;
+	case Kaiser:		taps = design_window("kaiser", kaiser_taps, alpha, beta); break;
 	case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
 	}
 	fir_freq(taps, pts, w,inc);

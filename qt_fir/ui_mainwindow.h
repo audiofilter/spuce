@@ -30,7 +30,7 @@ public:
     QCustomPlot *customPlot;
     QLabel *label;
     QPushButton *Hamming;
-    QPushButton *Blackmann;
+    QPushButton *Blackman;
     QPushButton *MaxflatFIR;
     QPushButton *Kaiser;
     QPushButton *RaisedCosine;
@@ -72,10 +72,10 @@ public:
         Hamming->setObjectName(QStringLiteral("Hamming"));
         Hamming->setGeometry(QRect(10, 70, 181, 27));
         Hamming->setCheckable(true);
-        Blackmann = new QPushButton(centralWidget);
-        Blackmann->setObjectName(QStringLiteral("Blackmann"));
-        Blackmann->setGeometry(QRect(10, 100, 181, 27));
-        Blackmann->setCheckable(true);
+        Blackman = new QPushButton(centralWidget);
+        Blackman->setObjectName(QStringLiteral("Blackman"));
+        Blackman->setGeometry(QRect(10, 100, 181, 27));
+        Blackman->setCheckable(true);
         MaxflatFIR = new QPushButton(centralWidget);
         MaxflatFIR->setObjectName(QStringLiteral("MaxflatFIR"));
         MaxflatFIR->setGeometry(QRect(10, 190, 181, 27));
@@ -119,7 +119,7 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "QCustomPlot simple demo", 0));
         label->setText(QApplication::translate("MainWindow", "Filter Type", 0));
         Hamming->setText(QApplication::translate("MainWindow", "Hamming", 0));
-        Blackmann->setText(QApplication::translate("MainWindow", "Blackmann", 0));
+        Blackman->setText(QApplication::translate("MainWindow", "Blackman", 0));
         MaxflatFIR->setText(QApplication::translate("MainWindow", "Maxflat FIR", 0));
         Kaiser->setText(QApplication::translate("MainWindow", "Kaiser", 0));
         RaisedCosine->setText(QApplication::translate("MainWindow", "RaisedCosine", 0));

@@ -36,8 +36,6 @@ class make_filter {
   double rc_alpha;
   double rrc_alpha;
 
-  bool hpf;
-
   int gauss_taps;
   int remez_taps;
   int maxflat_taps;

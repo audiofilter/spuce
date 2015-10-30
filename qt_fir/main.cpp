@@ -26,7 +26,6 @@
 
 int main(int argc, char *argv[])
 {
-  //  QGuiApplication::setGraphicsSystem("raster");
   QApplication a(argc, argv);
   MainWindow w;
   w.show();
