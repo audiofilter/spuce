@@ -12,10 +12,10 @@ int main(int argv, char* argc[]) {
 	const int N=256;
   int i;
   float_type imp;
-  int TAPS = 37;
-	float_type stop_weight = 1.0;
-  float_type pass_edge = 0.245;
-  float_type stop_edge = 0.30625;
+  int TAPS = 33;
+  float_type stop_weight = 50.0;
+  float_type pass_edge = 0.2;
+  float_type stop_edge = 0.3;
 
   bool ok = true;
   std::vector<float_type> e1(4);
@@ -24,14 +24,18 @@ int main(int argv, char* argc[]) {
   remez_fir Remz;
   w1[0] = 1.0;
   w1[1] = stop_weight;
+	w1[2] = 0;
+	w1[3] = 0;
   e1[0] = 0;
-  e1[1] = pass_edge / 2.0;
-  e1[2] = stop_edge / 2.0;
+  e1[1] = pass_edge;
+  e1[2] = stop_edge;
   e1[3] = 0.5;
   f1[0] = 1.0;
   f1[1] = 0.0;
+	f1[2] = 0.0;
+	f1[3] = 0.0;
   std::vector<float_type> fir_coef(TAPS);
-  ok = Remz.remez(fir_coef, TAPS, 2, e1, f1, w1, 1);
+  ok = Remz.remez(fir_coef, TAPS, 2, e1, f1, w1, remez_type::BANDPASS);
 
 	// Map from std::vector<> to fir_coeff<> and then to fir<>
   fir_coeff<float_type> RF(TAPS);

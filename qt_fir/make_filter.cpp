@@ -195,9 +195,9 @@ void make_filter::vertical_swipe(int len, bool in_passband, bool above_stop) {
 				remez_stop_weight = limit(ogain * remez_stop_weight, 100, 0.01);
 			} else {
 				remez_taps = limit(remez_taps + inc, MAX_FIR, MIN_FIR);
-				break;
 			}
 		}
+		break;
 	case RootRaisedCosine:
 		rrc_taps = limit(rrc_taps + 2 * inc, MAX_FIR, MIN_FIR);
 		break;
@@ -212,8 +212,6 @@ void make_filter::vertical_swipe(int len, bool in_passband, bool above_stop) {
   }
 }
 double make_filter::update(double *w) {
-	std::vector<double> taps;
-
   switch (shape) {
 	case RemezFIR:         taps = design_fir("remez", remez_taps, remez_pass_edge, remez_stop_edge, remez_stop_weight);		break;
 	case MaxflatFIR:       taps = design_fir("butterworth", maxflat_taps, 0, maxflat_fc, 0);		break;
@@ -231,5 +229,20 @@ double make_filter::update(double *w) {
 	fir_freq(taps, pts, w, 1.0);
   return (0);
 }
+double make_filter::get_mag(double w) {
+	std::complex<double> z_inc,z;
+	z_inc = std::complex<double>(cos(w),sin(w));
+	std::complex<double> nom = 0;
+	for (int j=0;j<taps.size();j++) {
+		nom += taps[j]*z;
+		z *= z_inc;
+	}
+	double t = sqrt(std::norm(nom));
+	if (t==0) t = 0.00001;
+	t = 20.0*log(t)/log(10.0);
+  return t;
+}
+
+
 
 }  // namespace spuce

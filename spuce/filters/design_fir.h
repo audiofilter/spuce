@@ -23,20 +23,20 @@ std::vector<double> design_fir(const std::string& fir_type,
 	}	else if (fir_type == "gaussian") {
 		gaussian_fir(filt,bt,spb);
 	}	else if (fir_type == "remez") {
-		std::vector<float_type> e1(4);
-		std::vector<float_type> f1(4);
-		std::vector<float_type> w1(4);
+		std::vector<float_type> bands(4);
+		std::vector<float_type> des(4);
+		std::vector<float_type> w(4);
 		taps.resize(order);
 		remez_fir Remz;
-		w1[0] = 1.0;
-		w1[1] = bt;
-		e1[0] = 0;
-		e1[1] = alpha / 2.0;
-		e1[2] = spb / 2.0;
-		e1[3] = 0.5;
-		f1[0] = 1.0;
-		f1[1] = 0.0;
-		Remz.remez(taps, order, 2, e1, f1, w1, 1);
+		w[0] = 1.0;
+		w[1] = bt;
+		bands[0] = 0;
+		bands[1] = alpha / 2.0;
+		bands[2] = spb / 2.0;
+		bands[3] = 0.5;
+		des[0] = 1.0;
+		des[1] = 0.0;
+		Remz.remez(taps, order, 2, bands, des, w, remez_type::BANDPASS);
 		//
 	}	else if (fir_type == "raisedcosine") {
 		raised_cosine(filt, alpha, spb);

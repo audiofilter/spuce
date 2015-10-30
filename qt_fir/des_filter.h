@@ -16,6 +16,7 @@ EXTERNC void vertical_swipe(int len, bool in_passband, bool above_stop);
 EXTERNC double update_w(double* w);
 EXTERNC void set_fs(float fs);
 EXTERNC void set_filter_type(int t);
+EXTERNC double get_mag(double w);
 
 EXTERNC bool is_bpf();
 EXTERNC int get_order();

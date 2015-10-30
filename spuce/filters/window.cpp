@@ -218,7 +218,6 @@ void chebc(float_type nf, float_type dp, float_type df, float_type n, float_type
 }
 std::vector<float_type> bartlett(long nf) {
   std::vector<float_type> w(nf);
-	float_type sum=0;
   for (int i = 0; i < nf / 2; i++) {
     float_type win = 2.0 * i / (nf - 1);
     w[i] = win;

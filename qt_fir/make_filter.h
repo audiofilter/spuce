@@ -24,6 +24,7 @@ class make_filter {
   enum fil_type { low, high, band };
 
  public:
+	std::vector<double> taps;
   double remez_pass_edge;
   double remez_stop_edge;
   double remez_stop_weight;
@@ -66,7 +67,7 @@ class make_filter {
   void sel_filter(const char *sel);
   void change_filter(fil_enum f);
   double limit(double x, double mx, double min);
-
+	double get_mag(double w);
   make_filter();
   ~make_filter();
   void init(int points);

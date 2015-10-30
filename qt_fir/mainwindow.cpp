@@ -305,10 +305,19 @@ void MainWindow::graphMoveEvent(QMouseEvent *event)
   double xdis = dis.x();
   double ydis = dis.y();
 
+	double y = event->pos().y()/400.0;
+	double x = M_PI*event->pos().x()/600.0;
+	
+	double m = get_mag(x);
+	bool in_passband = (m>-3);
+	
+	double y_db = -100.0*y + 10;
+	bool above_stop = (-y_db < m);
+
   if (fabs(xdis) > fabs(ydis)) {
-		horiz_swipe(xdis,true);
+		horiz_swipe(xdis,in_passband);
   } else {
-		vertical_swipe(-ydis,true,true);
+		vertical_swipe(-ydis,in_passband,above_stop);
   }
   QCPGraph* ptr = GetPtr();
   dragStartPosition = event->pos();

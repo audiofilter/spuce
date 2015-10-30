@@ -13,5 +13,5 @@ double horiz_swipe(int len, bool in_passband) {  return (pLPF->horiz_swipe(len, 
 int get_order() { return (pLPF->get_order()); }
 bool is_bpf() { return (pLPF->is_bpf()); }
 void vertical_swipe(int len, bool in_passband, bool above_stop) {  pLPF->vertical_swipe(len, in_passband, above_stop);}
-double update_w(double* w) {  double x = pLPF->update(w);   return (x);
-}
+double update_w(double* w) {  double x = pLPF->update(w);   return (x); }
+double get_mag(double w) {	return pLPF->get_mag(w);}
