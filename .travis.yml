@@ -1,7 +1,7 @@
 dist: trusty
 language:  cpp
 compiler : gcc
-install
+install:
   - sudo apt-get install -qq cmake
 before_script:
   - mkdir build
