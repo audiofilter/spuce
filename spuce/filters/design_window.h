@@ -10,17 +10,15 @@ std::vector<double> design_window(const std::string& fir_type,
 																	int order, float_type alpha, float_type beta=0.1) {
 
 	if (fir_type == "hamming") {
-		return hamming(order, alpha, beta);
+		return hamming(order, 0.54, 0.46);
 	}	else if (fir_type == "hanning") {
 		return hanning(order);
 	}	else if (fir_type == "blackman") {
 		return blackman(order);
 	}	else if (fir_type == "kaiser") {
-		return kaiser(order, beta);
+		return kaiser(order, 0.1);
   } else {
-    std::cout << "Unknown window type\n";
+		return bartlett(order);
   }
-
-  return filt;
 }
 }  // namespace spuce

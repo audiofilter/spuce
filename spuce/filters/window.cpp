@@ -4,10 +4,12 @@
 #include <cmath>
 #include <spuce/typedefs.h>
 #include <spuce/filters/window.h>
+#include <iostream>
 #define TWOPI 2*M_PI
 namespace spuce {
 
 inline std::complex<float> expj(float x) { return (std::complex<float>(std::cos(x), std::sin(x))); }
+inline float_type coshin(float_type x) { return (log(x + sqrt(x * x - 1.))); }
 
 //!  \author Tony Kirke,  Copyright(c) 2001
 //!
@@ -40,11 +42,16 @@ std::vector<float_type> hamming(long nf, float_type alpha, float_type beta) {
   std::vector<float_type> w(nf);
   long odd = nf % 2;
   float_type xi;
+	float_type sum=0;
   for (int i = 0; i < nf; i++) {
     xi = i;
     if (odd) xi += 0.5;
-    w[i] = alpha + beta * ::cos(TWOPI * xi / nf);
+    w[i] = alpha - beta*::cos(TWOPI * xi / nf);
+		sum += w[i];
   }
+  for (int i = 0; i < nf; i++) {
+		w[i] /= sum;
+	}
   return (w);
 }
 //
@@ -57,11 +64,14 @@ std::vector<float_type> hanning(long nf) {
   // beta = constant of window--generally beta=1-alpha
   long odd = nf % 2;
   float_type xi;
+	float_type sum=0;
   for (int i = 0; i < nf; i++) {
     xi = i;
     if (odd) xi += 0.5;
     w[i] = 0.5 * (1 - ::cos(TWOPI * xi / nf));
+		sum += w[i];
   }
+  for (int i = 0; i < nf; i++) w[i] /= sum;
   return (w);
 }
 //:
@@ -74,11 +84,14 @@ std::vector<float_type> blackman(long nf) {
   std::vector<float_type> w(nf);
   long odd = nf % 2;
   float_type xi;
+	float_type sum=0;
   for (int i = 0; i < nf; i++) {
     xi = i;
     if (odd) xi += 0.5;
     w[i] = 0.42 - 0.5 * ::cos(TWOPI * xi / nf) + 0.08 * ::cos(2 * TWOPI * xi / nf);
+		sum += w[i];
   }
+  for (int i = 0; i < nf; i++) w[i] /= sum;
   return (w);
 }
 //!  \ingroup fir
@@ -87,12 +100,12 @@ std::vector<float_type> kaiser(long nf, float_type beta) {
   // nf = filter length in samples
   // beta = parameter of kaiser window
   std::vector<float_type> w(nf);
-  float_type io(float_type b);
   float_type bes = 1.0 / io(beta);
   long i;
   long odd = nf % 2;
   float_type xi;
   float_type xind = (nf - 1) * (nf - 1);
+	float_type sum=0;
   for (i = 0; i < nf; i++) {
     if (odd)
       xi = i + 0.5;
@@ -100,7 +113,13 @@ std::vector<float_type> kaiser(long nf, float_type beta) {
       xi = i;
     xi = 4 * xi * xi;
     w[i] = io(beta * sqrt(1. - xi / xind)) * bes;
+		sum += w[i];
   }
+	for (int i = 0; i < nf; i++) {
+		//		w[i] /= sum;
+		//std::cout << "w[" << i << "] = " << w[i] << "\n";
+	}
+
   return (w);
 }
 
@@ -212,5 +231,22 @@ void chebc(float_type nf, float_type dp, float_type df, float_type n, float_type
   c1 = xn * coshin(1. / c0);
   dp = 1. / (cosh(c1) - 1.);
   x0 = (3. - ::cos(2. * M_PI * df)) / (1. + ::cos(2. * M_PI * df));
+}
+std::vector<float_type> bartlett(long nf) {
+  std::vector<float_type> w(nf);
+	float_type sum=0;
+  for (int i = 0; i < nf / 2; i++) {
+    float win = 2.0 * i / (nf - 1);
+    w[i] = win;
+		sum += w[i];
+    w[nf - 1 - i] = win;
+		sum += w[nf-1-i];
+  }
+  if (nf % 2 == 1) {
+		w[nf / 2] = 1.0;
+		sum += 1.0;
+	}
+	for (int i=0;i<nf;i++) w[i] /= sum;
+  return (w);
 }
 }  // namespace spuce

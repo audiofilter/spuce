@@ -1,11 +1,8 @@
 // Copyright (c) 2015 Tony Kirke. License MIT  (http://www.opensource.org/licenses/mit-license.php)
 #include "make_filter.h"
 #include "other_freq.h"
-#include <spuce/filters/butterworth_fir.h>
-#include <spuce/filters/gaussian_fir.h>
-#include <spuce/filters/create_remez_lpfir.h>
-#include <spuce/filters/raised_cosine.h>
-#include <spuce/filters/root_raised_cosine.h>
+#include <spuce/filters/design_window.h>
+#include <spuce/filters/design_fir.h>
 namespace spuce {
 
 void make_filter::sel_filter(const char *c_sel) {
@@ -246,60 +243,26 @@ void make_filter::vertical_swipe(int len, bool in_passband, bool above_stop) {
 }
 double make_filter::update(double *w) { return (update(w, 1.0)); }
 double make_filter::update(double *w, double inc) {
-  double fc;
-  int freq_off = 0;
+	double bt=1;
+	double spb=1;
+	double alpha = 0.1;
+	double beta = 0.1;
+	std::vector<double> taps;
 
   switch (shape) {
-	case MaxflatFIR: {
-		fir_coeff<double> Maxflat_Fir(maxflat_taps);
-		fc = maxflat_fc;
-		butterworth_fir(Maxflat_Fir, fc);
-		fir_coeff_freq(Maxflat_Fir, pts, w, freq_off, inc);
+	case RemezFIR: taps =design_fir("remez", remez_taps, remez_pass_edge, remez_stop_edge, remez_stop_weight);		break;
+	case MaxflatFIR: taps = design_fir("butterworth", maxflat_taps, 0, maxflat_fc);		break;
+	case GaussianFIR: taps = design_fir("gaussian", gauss_taps, 0, bt, spb);		break;
+	case RaisedCosine: taps = design_fir("rootraisedcosine", rc_taps, rc_alpha, 0, 0, 1.0/rc_fc);		break;
+	case RootRaisedCosine: taps = design_fir("rootraisedcosine", rrc_taps, rrc_alpha, 0, 0, 2); break;
+	case Hanning:		taps = design_window("hanning", hanning_taps, alpha,beta); break;
+	case Hamming:		taps = design_window("hamming", hamming_taps, alpha,beta); break;
+	case Blackman:	taps = design_window("blackman", blackman_taps, alpha,beta); break;
+	case Bartlett:		taps = design_window("bartlett", bartlett_taps, alpha,beta); break;
+	case Kaiser:		taps = design_window("kaiser", kaiser_taps, alpha,beta); break;
+	case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
 	}
-		return (maxflat_fc);
-		break;
-	case RemezFIR: {
-		fir_coeff<double> Remez_Fir(remez_taps);
-		double pass_edge = remez_pass_edge;
-		double stop_edge = remez_stop_edge;
-		create_remez_lpfir(Remez_Fir, pass_edge, stop_edge, remez_stop_weight);
-		fir_coeff_freq(Remez_Fir, pts, w, freq_off, inc);
-	}
-		return (remez_pass_edge);
-		break;
-	case GaussianFIR: {
-		fir_coeff<double> Gaussian_Fir(gauss_taps);
-		gaussian_fir(Gaussian_Fir, gauss_fc, 8);
-		fir_coeff_freq(Gaussian_Fir, pts, w, freq_off, inc);
-	}
-		return (gauss_fc);
-		break;
-	case RaisedCosine: {
-		fir_coeff<double> RaisedCosine_Fir(rc_taps);
-		fc = 1.0 / rc_fc;
-		raised_cosine(RaisedCosine_Fir, rc_alpha, fc);
-		fir_coeff_freq(RaisedCosine_Fir, pts, w, freq_off, inc);
-    }
-		return (rc_fc);
-		break;
-	case RootRaisedCosine: {
-		fir_coeff<double> RootRaisedCosine_Fir(rrc_taps);
-		root_raised_cosine(RootRaisedCosine_Fir, rrc_alpha, 2);
-		fir_coeff_freq(RootRaisedCosine_Fir, pts, w, freq_off, inc);
-	}
-		
-		return (0.5);
-		break;
-	case Hanning:
-	case Hamming:
-	case Blackman:
-	case Bartlett:
-	case Kaiser:
-	case None:
-		for (int i = 0; i < pts; i++) w[i] = 1.0;
-		break;
-
-  }
+	fir_freq(taps, pts, w,inc);
   return (0);
 }
 

@@ -12,11 +12,12 @@ namespace spuce {
 //! \ingroup functions fir
 std::vector<double> design_fir(const std::string& fir_type,
 															 int order, float_type alpha,
-															 float_type spb,
-															 float_type bt,
+															 float_type spb=0.14,
+															 float_type bt=1,
 															 float_type rate=4) {
 
 	fir_coeff<float_type> filt;
+	filt.set_size(order);
 	if (fir_type == "butterworth") {
 		butterworth_fir(filt, spb);
 	}	else if (fir_type == "gaussian") {
@@ -30,11 +31,8 @@ std::vector<double> design_fir(const std::string& fir_type,
   } else {
     std::cout << "Unknown window type\n";
   }
-  return filt;
 	std::vector<float_type> taps;
-	for (int i=0;i<order;i++) {
-		taps.push_back(filt.gettap(i));
-	}
+	for (int i=0;i<order;i++) taps.push_back(filt.gettap(i));
 	return taps;
 }
 }  // namespace spuce

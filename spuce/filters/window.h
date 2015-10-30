@@ -36,4 +36,6 @@ std::vector<float_type> cheby(long nf, long n, long ieo, float_type dp, float_ty
 //! \author Tony Kirke
 //!  \ingroup functions fir
 void chebc(float_type nf, float_type dp, float_type df, float_type n, float_type x0);
+	//! \brief bartlett window design
+std::vector<float_type> bartlett(long nf);
 }  // namespace spuce
