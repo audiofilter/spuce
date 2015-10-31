@@ -58,8 +58,8 @@ class iir_coeff {
   std::vector<std::complex<float_type> > poles;
   std::vector<std::complex<float_type> > zeros;
   float_type gain;
-	float_type c0;
-	float_type center_freq;
+  float_type c0;
+  float_type center_freq;
   float_type hpf_gain;
   long n2;
   long odd;
