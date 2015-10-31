@@ -18,12 +18,12 @@ LINK_DIRECTORIES("/usr/local/lib")
 set(EXECUTABLE_OUTPUT_PATH ..)
 
 set(SOURCES
-	make_filter.cpp 
+	make_filter.cpp 	
 	des_filter.cpp 
 )
 
-SET(iir_plot_SOURCES main.cpp mainwindow.cpp other_freq.cpp qcustomplot.cpp)
-SET(iir_plot_HEADERS mainwindow.h other_freq.h qcustomplot.h)
+SET(iir_plot_SOURCES main.cpp mainwindow.cpp qcustomplot.cpp)
+SET(iir_plot_HEADERS mainwindow.h qcustomplot.h)
 
 INCLUDE_DIRECTORIES(${QT5_INCLUDES})
 ADD_DEFINITIONS(${QT5Widgets_DEFINITIONS})
