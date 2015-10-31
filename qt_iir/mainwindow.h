@@ -21,7 +21,6 @@ public:
   void setup(QCustomPlot *customPlot);
   void plot2(QCustomPlot *customPlot);
   void plot3(QCustomPlot *customPlot);
-	void BoxChecked();
   
 private:
   Ui::MainWindow *ui;
@@ -29,12 +28,14 @@ private:
   QCPItemTracer *itemDemoPhaseTracer;
 
 public slots:
+  void BoxChecked(bool);
   void BChanged();
   void CChanged(); 
   void C2Changed(); 
   void EChanged(); 
   void graphPressEvent(QMouseEvent *event);
   void graphMoveEvent(QMouseEvent *event);
+  void updatePlot();
 
 private:
   int pts;
@@ -46,7 +47,7 @@ private:
   double* w;
 
   QCPGraph*  Butterworth_on;
-	QCPGraph*  Chebyshev2_on;
+  QCPGraph*  Chebyshev2_on;
   QCPGraph*  Chebyshev_on;
   QCPGraph*  Elliptic_on;
   int graph_counter;

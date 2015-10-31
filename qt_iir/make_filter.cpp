@@ -44,7 +44,7 @@ void make_filter::reset() {
   f_type = "LOW_PASS";
 	fil_type = 0;
 
-  elliptic_fc = butterworth_fc = chebyshev_fc = chebyshev2_fc = 0.25;
+  elliptic_fc = butterworth_fc = chebyshev_fc = chebyshev2_fc = 0.125;
   cut_fc = 0.125;
 
   elliptic_pass_edge = 0.2;
@@ -57,7 +57,7 @@ void make_filter::reset() {
   chebyshev_ripple = 1.0;
 
   elliptic_order = 4;
-  butterworth_order = 4;
+  butterworth_order = 2;
   chebyshev_order = 4;
   chebyshev2_order = 4;
 
@@ -134,8 +134,9 @@ double make_filter::stopdB() {
 
 void make_filter::set_center_freq(int len) {
   // Convert swipe to centre freq
-	float_type gain = -0.01*len;
-  center = limit(center + gain, 0.9, -0.9); 
+  double gain = pow(2, 0.002 * len);
+  center = limit(gain*center, 0.5, 0.0);
+	std::cout << " gain = " << gain << " cen = " << center << "\n";
 }
 
  double make_filter::horiz_swipe(int len, bool in_passband) {
@@ -241,7 +242,7 @@ double make_filter::update(double *w, double inc) {
 		cf = design_iir("butterworth",f_type,butterworth_order,fc, 0, 0, center);
 		break;
 	}
-    iir_freq(*cf, pts, w, inc);
+  iir_freq(*cf, pts, w, inc);
 	if (cf) delete cf;
     return (fc);
 }

@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
   Butterworth_on = NULL;
   Chebyshev_on = NULL;
-	Chebyshev2_on = NULL;
+  Chebyshev2_on = NULL;
   Elliptic_on = NULL;
 
   graph_counter = 0;
@@ -40,15 +40,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
   connect(ui->Butterworth, SIGNAL(released()), this, SLOT(BChanged()));
   connect(ui->Chebyshev, SIGNAL(released()), this, SLOT(CChanged()));
-	connect(ui->Chebyshev2, SIGNAL(released()), this, SLOT(C2Changed()));
+  connect(ui->Chebyshev2, SIGNAL(released()), this, SLOT(C2Changed()));
   connect(ui->Elliptic, SIGNAL(released()), this, SLOT(EChanged()));
 
-  connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)),		  this, SLOT(graphPressEvent(QMouseEvent*)));
-  connect(ui->customPlot, SIGNAL(mouseMove(QMouseEvent*)), 		  this, SLOT(graphMoveEvent(QMouseEvent*)));
-
+  connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)),	this, SLOT(graphPressEvent(QMouseEvent*)));
+  connect(ui->customPlot, SIGNAL(mouseMove(QMouseEvent*)), 	this, SLOT(graphMoveEvent(QMouseEvent*)));
   ui->customPlot->replot();
 }
-void MainWindow::BoxChecked() {
+void MainWindow::BoxChecked(bool t) {
 	if (ui->LowPass->isChecked()) {
 		set_filter_type(0);
 	} else if (ui->HighPass->isChecked()) {
@@ -58,6 +57,7 @@ void MainWindow::BoxChecked() {
 	}	else if (ui->BandStop->isChecked()) {
 		set_filter_type(3);
 	}
+	updatePlot();
 }
 
 void MainWindow::BChanged() {
@@ -139,15 +139,20 @@ void MainWindow::setup(QCustomPlot *customPlot)
 {
   demoName = "spuce : Low Pass Filter Demo";
 
-	ui->order->setText(QApplication::translate("MainWindow", "3", 0));
-
-	QVBoxLayout *vbox = new QVBoxLayout;
-	vbox->addWidget(ui->LowPass);
-	vbox->addWidget(ui->HighPass);
-	vbox->addWidget(ui->BandPass);
-	vbox->addWidget(ui->BandStop);
-	ui->groupBox->setLayout(vbox);
-	
+  ui->order->setText(QApplication::translate("MainWindow", "3", 0));
+  
+  QObject::connect(ui->LowPass,SIGNAL(clicked(bool)),this,SLOT(BoxChecked(bool)));
+  QObject::connect(ui->HighPass,SIGNAL(clicked(bool)),this,SLOT(BoxChecked(bool)));
+  QObject::connect(ui->BandPass,SIGNAL(clicked(bool)),this,SLOT(BoxChecked(bool)));
+  QObject::connect(ui->BandStop,SIGNAL(clicked(bool)),this,SLOT(BoxChecked(bool)));
+  
+  QVBoxLayout *vbox = new QVBoxLayout;
+  vbox->addWidget(ui->LowPass);
+  vbox->addWidget(ui->HighPass);
+  vbox->addWidget(ui->BandPass);
+  vbox->addWidget(ui->BandStop);
+  ui->groupBox->setLayout(vbox);
+  
   customPlot->legend->setVisible(false);
   customPlot->legend->setFont(QFont("Helvetica",9));
   // set locale to english, so we get english decimal separator:
@@ -173,11 +178,11 @@ void MainWindow::plot2(QCustomPlot *customPlot)
     x0[i] = (double)0.5*i/pts;
     y0[i] = y_inc*(w[i]);
   }
-	order = get_order();
-	ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
-	ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
-	ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
-	
+  order = get_order();
+  ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
+  ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
+  ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
+  
   customPlot->graph()->setData(x0, y0);
   customPlot->graph()->setLineStyle(QCPGraph::lsLine); //(QCPGraph::LineStyle)(rand()%5+1));
   customPlot->graph()->setScatterStyle(QCPScatterStyle::ssNone); // (QCP::ScatterStyle)(rand()%9+1));
@@ -208,11 +213,11 @@ void MainWindow::plot3(QCustomPlot *customPlot)
     x0[i] = (double)0.5*i/pts;
     y0[i] = y_inc*(w[i]);
   }
-	order = get_order();
-	ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
-	ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
-	ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
-
+  order = get_order();
+  ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
+  ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
+  ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
+  
   customPlot->graph()->setData(x0, y0);
   customPlot->graph()->setLineStyle(QCPGraph::lsLine); 
   customPlot->graph()->setScatterStyle(QCPScatterStyle::ssNone); // (QCP::ScatterStyle)(rand()%9+1));
@@ -250,41 +255,52 @@ void MainWindow::graphMoveEvent(QMouseEvent *event)
 
   if (((event->pos() - dragStartPosition).manhattanLength()) < QApplication::startDragDistance()) return;
 
-	BoxChecked();
-	
+  BoxChecked(true);
+  
   QPoint dis = (event->pos() - dragStartPosition);
   double xdis = dis.x();
   double ydis = dis.y();
-
-	double x = M_PI*event->pos().x()/600.0;
-	double y = event->pos().y()/400.0;
-
-	double m = get_mag(x);
-	bool in_passband = (m>-3);
+  
+  double x = M_PI*event->pos().x()/600.0;
+  double y = event->pos().y()/400.0;
+  
+  double m = get_mag(x);
+  bool in_passband = (m>-3);
 	
-	double y_db = -100.0*y + 10;
-	bool above_stop = (-y_db < m);
-	
+  double y_db = -100.0*y + 10;
+  bool above_stop = (-y_db < m);
+  
   if (fabs(xdis) > fabs(ydis)) {
-		// Bandpass or Bandstop
-		if (get_filter_type() > 1) {
-			set_center(xdis);
-		} else {
-			horiz_swipe(xdis,in_passband);
-		}
+	// Bandpass or Bandstop
+	if (get_filter_type() > 1) {
+	  set_center(xdis);
+	} else {
+	  horiz_swipe(xdis,in_passband);
+	}
   } else {
-		vertical_swipe(-ydis,in_passband,above_stop);
+	vertical_swipe(-ydis,in_passband,above_stop);
   }
 
-	order = get_order();
-	ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
-	ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
-	ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
-	
+  order = get_order();
+  ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
+  ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
+  ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
+  
   QCPGraph* ptr = GetPtr();
   dragStartPosition = event->pos();
   if (ptr != NULL) {
-		ui->customPlot->graph()->clearData();
-		plot3(ui->customPlot);
+	ui->customPlot->graph()->clearData();
+	plot3(ui->customPlot);
   }
+}
+
+void MainWindow::updatePlot()
+{
+  horiz_swipe(0,true);
+  order = get_order();
+  ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
+  ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
+  ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
+  ui->customPlot->graph()->clearData();
+  plot3(ui->customPlot);
 }
