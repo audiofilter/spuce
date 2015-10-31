@@ -119,14 +119,7 @@ int make_filter::get_order() {
 double make_filter::horiz_swipe(int len, bool in_passband) {
   // Convert swipe to dB inc/decrease
   const double min_fc = 0.0;
-
   double gain = pow(2, 0.002 * len);
-  double inc;
-
-  if (len < 0)
-    inc = 2;
-  else
-    inc = 0.5;
 
   switch (shape) {
 	case MaxflatFIR:
@@ -233,7 +226,7 @@ double make_filter::get_mag(double w) {
 	std::complex<double> z_inc,z;
 	z_inc = std::complex<double>(cos(w),sin(w));
 	std::complex<double> nom = 0;
-	for (int j=0;j<taps.size();j++) {
+	for (size_t j=0;j<taps.size();j++) {
 		nom += taps[j]*z;
 		z *= z_inc;
 	}
