@@ -23,7 +23,7 @@ notifications:
   - provider: Slack
     auth_token:	xoxp-13185284785-13181066693-13580482535-8e6bf7284b
     channel: github
-    template: "{{message}}, {{commitId}}, ...{{status}} by {{commitAuthor}} on {{commitDate}} _{{commitMessage}}_"
+    template: "{{commitId}}, {{status}} by {{commitAuthor}} _{{commitMessage}}_"
 
 # Operating system (build VM template)
 os: Windows Server 2012 R2
