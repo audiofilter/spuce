@@ -21,3 +21,6 @@ QT5 needed for test application
 ![Demo App](App.png "IIR Designer")
 
 ![Demo App](Fir.png "FIR Designer")
+
+
+![Demo App](Window.png "Window Designer")
