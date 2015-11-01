@@ -2,7 +2,6 @@
 #include "make_filter.h"
 #include <cmath>
 #include <complex>
-#include <spuce/filters/design_window.h>
 #include <spuce/filters/design_fir.h>
 namespace spuce {
 
@@ -29,12 +28,7 @@ void fir_freq(std::vector<double>& MF, int pts, double* w, double inc) {
 	
 void make_filter::sel_filter(const char *c_sel) {
   std::string sel(c_sel);
-  if (sel == "Hamming")    change_filter(Hamming);
-  else if (sel == "Hanning")    change_filter(Hanning);
-  else if (sel == "Blackman")    change_filter(Blackman);
-  else if (sel == "Bartlett")    change_filter(Bartlett);
-  else if (sel == "Kaiser")    change_filter(Kaiser);
-  else if (sel == "Maxflat FIR")    change_filter(MaxflatFIR);
+  if (sel == "Maxflat FIR")    change_filter(MaxflatFIR);
   else if (sel == "Gaussian FIR")    change_filter(GaussianFIR);
   else if (sel == "Remez FIR")    change_filter(RemezFIR);
   else if (sel == "Raised Cosine")    change_filter(RaisedCosine);
@@ -44,15 +38,8 @@ void make_filter::sel_filter(const char *c_sel) {
     std::cout << "Invalid filter selection\n";
 }
 
-void make_filter::change_filter(fil_enum f) {
-  last_shape = shape;
-  shape = f;
-}
-
-void make_filter::set_filter_type(int t) {
-	pass_type = low;
-}
-
+void make_filter::change_filter(fil_enum f) {  shape = f;}
+void make_filter::set_filter_type(int t) {	pass_type = low;}
 void make_filter::init(int points) { pts = points; }
 
 make_filter::~make_filter() {}
@@ -74,20 +61,11 @@ void make_filter::reset() {
 
   rc_alpha = rrc_alpha = 0.25;
 
-  hamming_taps = 23;
-  hanning_taps = 23;
-  bartlett_taps =23 ;
-  blackman_taps =23;
-  kaiser_taps=22;
-  kaiser_tw = 0.1;
-  kaiser_ripple = 0.04;
-	
   gauss_taps = 21;
   remez_taps = 33;
   maxflat_taps = 45;
   rc_taps = rrc_taps = 33;
   shape = RemezFIR;
-  last_shape = shape;
 }
 
 double make_filter::limit(double x, double mx, double mn) {
@@ -100,16 +78,11 @@ double make_filter::limit(double x, double mx, double mn) {
 
 int make_filter::get_order() {
   switch (shape) {
-	case Hamming:    return (hamming_taps);      break;
-	case Hanning:    return (hanning_taps);      break;
-	case Blackman:    return (blackman_taps);      break;
-	case Bartlett:    return (bartlett_taps);      break;
 	case MaxflatFIR:    return (maxflat_taps);      break;
 	case GaussianFIR:   return (gauss_taps);      break;
 	case RemezFIR:      return (remez_taps);      break;
 	case RaisedCosine:  return (rc_taps);      break;
 	case RootRaisedCosine:      return (rrc_taps);      break;
-	case Kaiser:
 	case None:      return (0);
   }
   return (0);
@@ -146,13 +119,6 @@ double make_filter::horiz_swipe(int len, bool in_passband) {
 	case RootRaisedCosine:
 		rrc_alpha = limit(gain * rrc_alpha, 1, 0.01);
 		break;
-	case Kaiser:
-		kaiser_tw = limit(gain * kaiser_tw, 0.95, 0.001);
-		break;
-	case Hanning:
-	case Hamming:
-	case Blackman:
-	case Bartlett:
 	case None:
       break;
   }
@@ -197,9 +163,6 @@ void make_filter::vertical_swipe(int len, bool in_passband, bool above_stop) {
 	case RaisedCosine:
 		rc_taps = limit(rc_taps + 2 * inc, MAX_FIR, MIN_FIR);
 		break;
-	case Kaiser:
-		kaiser_ripple = limit(gain * kaiser_ripple, 0.1, 0.01);
-		break;
 	default:
 		break;
   }
@@ -209,14 +172,8 @@ double make_filter::update(double *w) {
 	case RemezFIR:         taps = design_fir("remez", remez_taps, remez_pass_edge, remez_stop_edge, remez_stop_weight);		break;
 	case MaxflatFIR:       taps = design_fir("butterworth", maxflat_taps, 0, maxflat_fc, 0);		break;
 	case GaussianFIR:      taps = design_fir("gaussian", gauss_taps, 0, 0.4, gauss_fc);		break;
-	case RaisedCosine:     taps = design_fir("rootraisedcosine", rc_taps, rc_alpha, 1.0/rc_fc, 0);		break;
+	case RaisedCosine:     taps = design_fir("raisedcosine", rc_taps, rc_alpha, 1.0/rc_fc, 0);		break;
 	case RootRaisedCosine: taps = design_fir("rootraisedcosine", rrc_taps, rrc_alpha, 2, 0); break;
-	//
-	case Hanning:		       taps = design_window("hanning", hanning_taps); break;
-	case Hamming:		       taps = design_window("hamming", hamming_taps); break;
-	case Blackman:	       taps = design_window("blackman", blackman_taps); break;
-	case Bartlett:	       taps = design_window("bartlett", bartlett_taps); break;
-	case Kaiser:		       taps = design_window("kaiser", kaiser_taps, kaiser_tw, kaiser_ripple); break;
 	case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
 	}
 	fir_freq(taps, pts, w, 1.0);

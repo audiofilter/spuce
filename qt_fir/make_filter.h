@@ -8,11 +8,6 @@ namespace spuce {
 
 enum fil_enum {
   None,
-	Hanning,
-	Hamming,
-	Bartlett,
-	Blackman,
-	Kaiser,
   MaxflatFIR,
   GaussianFIR,
   RemezFIR,
@@ -32,7 +27,6 @@ class make_filter {
   double rrc_fc;
   double maxflat_fc;
   double gauss_fc;
-  double kaiser_ripple;
   double remez_trans;
   double rc_alpha;
   double rrc_alpha;
@@ -43,18 +37,12 @@ class make_filter {
   int maxflat_taps;
   int rc_taps;
   int rrc_taps;
-  int hamming_taps;
-  int hanning_taps;
-  int bartlett_taps;
-  int blackman_taps;
-  int kaiser_taps;
 
   int pts;
 	
   typedef double audio_data_type;
 
   fil_enum shape;
-  fil_enum last_shape;
   fil_type pass_type;
 
   double horiz_swipe(int len, bool in_passband);
