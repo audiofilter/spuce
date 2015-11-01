@@ -25,6 +25,7 @@ add_feature_info(ENABLE_GUI ENABLE_GUI "This enables the QT applications to be b
 if (ENABLE_GUI)
 	add_subdirectory(qt_iir)
 	add_subdirectory(qt_fir)
+	add_subdirectory(qt_window)
 endif()
 option(ENABLE_PYTHON "Enable python testing" ON)
 add_feature_info(ENABLE_PYTHON ENABLE_PYTHON "This enables python testing with matplotlib graphs")

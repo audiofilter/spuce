@@ -74,13 +74,13 @@ void make_filter::reset() {
 
   rc_alpha = rrc_alpha = 0.25;
 
-	hamming_taps = 23;
-	hanning_taps = 23;
-	bartlett_taps =23 ;
-	blackman_taps =23;
-	kaiser_taps=23;
-	kaiser_tw = 0.1;
-	kaiser_ripple = 0.04;
+  hamming_taps = 23;
+  hanning_taps = 23;
+  bartlett_taps =23 ;
+  blackman_taps =23;
+  kaiser_taps=22;
+  kaiser_tw = 0.1;
+  kaiser_ripple = 0.04;
 	
   gauss_taps = 21;
   remez_taps = 33;
