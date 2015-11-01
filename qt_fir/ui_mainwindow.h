@@ -29,16 +29,11 @@ public:
     QWidget *centralWidget;
     QCustomPlot *customPlot;
     QLabel *label;
-    QPushButton *Hamming;
-    QPushButton *Blackman;
     QPushButton *MaxflatFIR;
-    QPushButton *Kaiser;
     QPushButton *RaisedCosine;
     QPushButton *RootRaisedCosine;
-    QPushButton *Bartlett;
-    QPushButton *Remez;
     QPushButton *Gaussian;
-    QPushButton *Hanning;
+    QPushButton *Remez;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -69,46 +64,26 @@ public:
         label = new QLabel(centralWidget);
         label->setObjectName(QStringLiteral("label"));
         label->setGeometry(QRect(10, 10, 101, 21));
-        Hamming = new QPushButton(centralWidget);
-        Hamming->setObjectName(QStringLiteral("Hamming"));
-        Hamming->setGeometry(QRect(10, 70, 181, 27));
-        Hamming->setCheckable(true);
-        Blackman = new QPushButton(centralWidget);
-        Blackman->setObjectName(QStringLiteral("Blackman"));
-        Blackman->setGeometry(QRect(10, 100, 181, 27));
-        Blackman->setCheckable(true);
         MaxflatFIR = new QPushButton(centralWidget);
         MaxflatFIR->setObjectName(QStringLiteral("MaxflatFIR"));
-        MaxflatFIR->setGeometry(QRect(10, 190, 181, 27));
+        MaxflatFIR->setGeometry(QRect(10, 30, 181, 27));
         MaxflatFIR->setCheckable(true);
-        Kaiser = new QPushButton(centralWidget);
-        Kaiser->setObjectName(QStringLiteral("Kaiser"));
-        Kaiser->setGeometry(QRect(10, 160, 181, 27));
-        Kaiser->setCheckable(true);
         RaisedCosine = new QPushButton(centralWidget);
         RaisedCosine->setObjectName(QStringLiteral("RaisedCosine"));
-        RaisedCosine->setGeometry(QRect(10, 220, 181, 27));
+        RaisedCosine->setGeometry(QRect(10, 60, 181, 27));
         RaisedCosine->setCheckable(true);
         RootRaisedCosine = new QPushButton(centralWidget);
         RootRaisedCosine->setObjectName(QStringLiteral("RootRaisedCosine"));
-        RootRaisedCosine->setGeometry(QRect(10, 250, 181, 27));
+        RootRaisedCosine->setGeometry(QRect(10, 90, 181, 27));
         RootRaisedCosine->setCheckable(true);
-        Bartlett = new QPushButton(centralWidget);
-        Bartlett->setObjectName(QStringLiteral("Bartlett"));
-        Bartlett->setGeometry(QRect(10, 130, 181, 27));
-        Bartlett->setCheckable(true);
         Remez = new QPushButton(centralWidget);
         Remez->setObjectName(QStringLiteral("Remez"));
-        Remez->setGeometry(QRect(10, 280, 181, 27));
+        Remez->setGeometry(QRect(10, 120, 181, 27));
         Remez->setCheckable(true);
         Gaussian = new QPushButton(centralWidget);
         Gaussian->setObjectName(QStringLiteral("Gaussian"));
-        Gaussian->setGeometry(QRect(10, 310, 181, 27));
+        Gaussian->setGeometry(QRect(10, 150, 181, 27));
         Gaussian->setCheckable(true);
-        Hanning = new QPushButton(centralWidget);
-        Hanning->setObjectName(QStringLiteral("Hanning"));
-        Hanning->setGeometry(QRect(10, 40, 181, 27));
-        Hanning->setCheckable(true);
         MainWindow->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
@@ -123,16 +98,11 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "QCustomPlot simple demo", 0));
         label->setText(QApplication::translate("MainWindow", "Filter Type", 0));
-        Hamming->setText(QApplication::translate("MainWindow", "Hamming", 0));
-        Blackman->setText(QApplication::translate("MainWindow", "Blackman", 0));
         MaxflatFIR->setText(QApplication::translate("MainWindow", "Maxflat FIR", 0));
-        Kaiser->setText(QApplication::translate("MainWindow", "Kaiser", 0));
         RaisedCosine->setText(QApplication::translate("MainWindow", "RaisedCosine", 0));
         RootRaisedCosine->setText(QApplication::translate("MainWindow", "RootRaisedCosine", 0));
-        Bartlett->setText(QApplication::translate("MainWindow", "Bartlett", 0));
         Remez->setText(QApplication::translate("MainWindow", "Remez", 0));
         Gaussian->setText(QApplication::translate("MainWindow", "Gaussian", 0));
-        Hanning->setText(QApplication::translate("MainWindow", "Hanning", 0));
     } // retranslateUi
 
 };

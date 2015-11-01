@@ -27,16 +27,11 @@ MainWindow::MainWindow(QWidget *parent) :
   }
   lpf_init(pts);
 
-  Hanning_on = NULL;
-  Hamming_on = NULL;
-  Blackman_on = NULL;
   MaxflatFIR_on = NULL;
-  Bartlett_on = NULL;
   RaisedCosine_on = NULL;
   RootRaisedCosine_on = NULL;
   Remez_on = NULL;
   Gaussian_on = NULL;
-  Kaiser_on = NULL;
 
   graph_counter = 0;
 
@@ -47,16 +42,11 @@ MainWindow::MainWindow(QWidget *parent) :
   setWindowTitle("QCustomPlot: "+demoName);
   statusBar()->clearMessage();
 
-  connect(ui->Hanning, SIGNAL(released()), this, SLOT(BChanged()));
-  connect(ui->Hamming, SIGNAL(released()), this, SLOT(CChanged()));
-  connect(ui->Blackman, SIGNAL(released()), this, SLOT(EChanged()));
   connect(ui->MaxflatFIR, SIGNAL(released()), this, SLOT(FChanged()));
-  connect(ui->Bartlett, SIGNAL(released()), this, SLOT(FHChanged()));
   connect(ui->RaisedCosine, SIGNAL(released()), this, SLOT(RCChanged()));
   connect(ui->RootRaisedCosine, SIGNAL(released()), this, SLOT(RRCChanged()));
   connect(ui->Remez, SIGNAL(released()), this, SLOT(RChanged()));
   connect(ui->Gaussian, SIGNAL(released()), this, SLOT(GChanged()));
-  connect(ui->Kaiser, SIGNAL(released()), this, SLOT(CBChanged()));
 
   connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), 
 					this, SLOT(graphPressEvent(QMouseEvent*)));
@@ -66,42 +56,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
   ui->customPlot->replot();
 }
-void MainWindow::BChanged() {
-  if (Hanning_on==NULL) {
-		shape = "Hanning";
-		lpf_sel(shape.c_str());
-		Hanning_on = ui->customPlot->addGraph();
-		plot2(ui->customPlot);
-  } else {
-		ui->customPlot->removeGraph(Hanning_on);
-		Hanning_on = NULL;
-		ui->customPlot->replot();
-  }
-}
-void MainWindow::CChanged() {
-  if (Hamming_on==NULL) {
-		shape = "Hamming";
-		lpf_sel(shape.c_str());
-		Hamming_on = ui->customPlot->addGraph();
-		plot2(ui->customPlot);
-  } else {
-		ui->customPlot->removeGraph(Hamming_on);
-		Hamming_on = NULL;
-		ui->customPlot->replot();
-  }
-}
-void MainWindow::EChanged() {
-  if (Blackman_on==NULL) {
-		shape = "Blackman";
-		lpf_sel(shape.c_str());
-		Blackman_on = ui->customPlot->addGraph();
-		plot2(ui->customPlot);
-  } else {
-		ui->customPlot->removeGraph(Blackman_on);
-		Blackman_on = NULL;
-		ui->customPlot->replot();
-  }
-}
+void MainWindow::CBChanged() {}
+void MainWindow::BChanged() {}
+void MainWindow::CChanged() {}
+void MainWindow::EChanged() {}
+void MainWindow::FHChanged() {}
 void MainWindow::FChanged() {
   if (MaxflatFIR_on==NULL) {
 		shape = "Maxflat FIR";
@@ -111,18 +70,6 @@ void MainWindow::FChanged() {
   } else {
 		ui->customPlot->removeGraph(MaxflatFIR_on);
 		MaxflatFIR_on = NULL;
-		ui->customPlot->replot();
-  }
-}
-void MainWindow::FHChanged() {
-  if (Bartlett_on==NULL) {
-		shape = "Bartlett";
-		lpf_sel(shape.c_str());
-		Bartlett_on = ui->customPlot->addGraph();
-		plot2(ui->customPlot);
-  } else {
-		ui->customPlot->removeGraph(Bartlett_on);
-		Bartlett_on = NULL;
 		ui->customPlot->replot();
   }
 }
@@ -174,33 +121,16 @@ void MainWindow::GChanged() {
 		ui->customPlot->replot();
   }
 }
-void MainWindow::CBChanged() {
-  if (Kaiser_on==NULL) {
-		shape = "Kaiser";
-		lpf_sel(shape.c_str());
-		Kaiser_on = ui->customPlot->addGraph();
-		plot2(ui->customPlot);
-  } else {
-		ui->customPlot->removeGraph(Kaiser_on);
-		Kaiser_on = NULL;
-		ui->customPlot->replot();
-  }
-}
 /////////////////////////////
 QCPGraph* MainWindow::GetPtr() {
   //  std::cout << " shape was = " << shape << "\n";
-	if (shape == "Hamming") return(Hamming_on);
-	else if (shape=="Bartlett") return(Bartlett_on);
-	else if (shape=="Hanning")	return(Hanning_on);
-	else if (shape=="Blackman") return(Blackman_on);
-	else if (shape=="Maxflat FIR") return(MaxflatFIR_on);
-	else if (shape=="Gaussian FIR") return(Gaussian_on);
-	else if (shape=="Remez FIR") return(Remez_on);
-	else if (shape=="Raised Cosine") return(RaisedCosine_on);
-	else if (shape=="Kaiser") return(Kaiser_on);
-	else if (shape=="Root Raised Cosine") return(RootRaisedCosine_on);
-	else std::cout << "Invalid filter selection\n";
-	return(Hanning_on);
+  if (shape=="Maxflat FIR") return(MaxflatFIR_on);
+  else if (shape=="Gaussian FIR") return(Gaussian_on);
+  else if (shape=="Remez FIR") return(Remez_on);
+  else if (shape=="Raised Cosine") return(RaisedCosine_on);
+  else if (shape=="Root Raised Cosine") return(RootRaisedCosine_on);
+  else std::cout << "Invalid filter selection\n";
+  return(Gaussian_on);
 }
 ////////////////////////////////////
 void MainWindow::setup(QCustomPlot *customPlot)

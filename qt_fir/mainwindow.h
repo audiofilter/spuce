@@ -54,16 +54,11 @@ private:
   std::string shape;
   double* w;
 
-  QCPGraph*  Hanning_on;
-  QCPGraph*  Hamming_on;
-  QCPGraph*  Blackman_on;
   QCPGraph*  MaxflatFIR_on;
-  QCPGraph*  Bartlett_on;
   QCPGraph*  RaisedCosine_on;
   QCPGraph*  RootRaisedCosine_on;
   QCPGraph*  Remez_on;
   QCPGraph*  Gaussian_on;
-  QCPGraph*  Kaiser_on;
   int graph_counter;
 
   QPoint dragStartPosition;
