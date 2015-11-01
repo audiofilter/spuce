@@ -15,7 +15,7 @@ void fir_freq(std::vector<double>& MF, int pts, double* w, double inc) {
     std::complex<double> z(1,0);
 		z_inc = std::complex<double>(cos(wf),sin(wf));
 		nom = 0;
-		for (int j=0;j<MF.size();j++) {
+		for (size_t j=0;j<MF.size();j++) {
 			nom += z*(std::complex<double>(MF[j]));
 			z *= z_inc;
 		}
