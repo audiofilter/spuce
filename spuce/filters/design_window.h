@@ -20,15 +20,17 @@ std::vector<float_type> design_window(const std::string& fir_type, int order, fl
 	} else if (fir_type == "kaiser") {
 		win =  kaiser(order, beta);
 	} else if (fir_type == "bartlett") {
-        win = bartlett(order);
+		win = bartlett(order);
 	} else if (fir_type == "chebyshev") {
-        win = cheby(order, beta);
-    }
+		win = cheby(order, beta);
+	} else {
+		std::cout << "Invalid type " << fir_type << "\n";
+	}
 
 	// Normalize DC response to 1.0
-	//float_type sum = 0;
-	//for (size_t i=0;i<win.size();i++) sum += win[i];
-	//for (size_t i=0;i<win.size();i++) win[i] /= sum;
+	float_type sum = 0;
+	for (size_t i=0;i<win.size();i++) sum += win[i];
+	for (size_t i=0;i<win.size();i++) win[i] /= sum;
 	return win;
 }
 }  // namespace spuce

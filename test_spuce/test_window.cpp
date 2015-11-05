@@ -7,7 +7,7 @@ int main(int argv, char* argc[]) {
 
     // hanning,hann,hamming,blackman,bartlett,kaiser,
     std::string win_type = "chebyshev";
-    float_type beta = 8;
+    float_type beta = 60.0;
     
     std::vector<float_type> taps = design_window(win_type, order, beta);
     std::cout << "Taps[] = {";

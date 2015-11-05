@@ -104,7 +104,7 @@ void MainWindow::FHChanged() {
 }
 void MainWindow::GChanged() {
   if (Chebyshev_on==NULL) {
-	shape = "Chebyhsev";
+	shape = "Chebyshev";
 	LPF.change_filter(spuce::Chebyshev);
 	Chebyshev_on = ui->customPlot->addGraph();
 	plot2(ui->customPlot);
@@ -134,7 +134,7 @@ QCPGraph* MainWindow::GetPtr() {
   else if (shape=="Blackman") return(Blackman_on);
   else if (shape=="Chebyshev") return(Chebyshev_on);
   else if (shape=="Kaiser") return(Kaiser_on);
-  else std::cout << "Invalid filter selection\n";
+  else std::cout << "Invalid filter selection " << shape << "\n";
   return(Hanning_on);
 }
 ////////////////////////////////////

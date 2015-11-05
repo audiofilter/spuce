@@ -12,6 +12,27 @@ namespace spuce {
 inline std::complex<float_type> expj(float_type x) { return (std::complex<float_type>(std::cos(x), std::sin(x))); }
 inline float_type coshin(float_type x) { return (log(x + sqrt(x * x - 1.))); }
 
+void real_idft(std::vector<float_type>& y, int n) {
+  int j, l;
+  /*  n inverse dft length */
+  std::vector<float_type> x(n + 1);
+	float_type mult;
+
+  /*  calculate the w values recursively */
+  for (j = 0; j < n; j++) { x[j] = y[j]; }
+
+  /*  start inverse fft */
+  for (l = 0; l < n; l++) {
+    y[l] = 0;
+    for (j = 0; j < n; j++) {
+      mult = x[j] * cos(TWOPI * l * j / (n));
+      y[l] += mult;
+    }
+  }
+
+  /*  scale all results by 1/n */
+  for (int i = 0; i < n; i++) y[i] /= n;
+}
 //!  \author Tony Kirke,  Copyright(c) 2001
 //!
 //! \ingroup fir
@@ -104,21 +125,39 @@ std::vector<float_type> kaiser(long nf, float_type beta) {
     }
     return (w);
 }
+float_type cheby_poly(int m, float_type a) {
+	float_type x;
+	int odd = (m%2) ? -1:1;
+	if (fabs(a) > 1.0) {
+		x = odd*cosh(m * acosh(a));
+	} else {
+		x = odd*cos(m * acos(a));
+	}
+	return x;
+}
 //!  \ingroup fir
-//!  \brief dolph chebyshev window design
-std::vector<float_type> cheby(long nf, float_type alpha) {
-    /*! parameters
-      - nf = filter length in samples
-      - alpha = Sidelobe level  = -20*alpha
-    */
-    std::vector<float_type> w(nf);
-    float_type beta = cosh( acosh(pow(10,alpha)) / nf );
-
-    for (int i = 0; i < nf; i++) {
-        w[i] = cos(nf * acos(beta * cos(M_PI*i/nf)))/cosh(nf*acosh(beta));
-    }
-    inv_dft(w, nf);
-    return (w);
+//!  \brief dolph chebyshev window design - for odd nf
+std::vector<float_type> cheby(int nf, float_type r_db) {
+	/*! parameters
+		- nf = filter length in samples
+		- r_db = Sidelobe level attenuation
+	*/
+	float_type r = pow(10.0,r_db/20.0);
+	float_type x0 = cosh(acosh(r)/(nf-1.0));
+	std::vector<float_type> w(nf);
+	for (int i = 0; i < nf-1; i++) {
+		float_type a = fabs(x0*cos(i*M_PI/(nf-1.0)));
+		w[i] = cheby_poly(nf-1,a);
+		if (i%2 == 1) w[i] *= -1;
+	}
+	real_idft(w,nf-1);
+	w[0] = 0.5*w[0];
+	w[nf-1] = w[0];
+	float_type max_v=0;
+	// normalize
+	for (int i = 0; i < nf; i++) if (fabs(w[i]) > max_v) max_v = fabs(w[i]);
+	for (int i = 0; i < nf; i++) w[i] /= max_v;
+	return (w);
 }
 std::vector<float_type> bartlett(long nf) {
   std::vector<float_type> w(nf);

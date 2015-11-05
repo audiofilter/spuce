@@ -85,7 +85,7 @@ void make_filter::horiz_swipe(int len) {
 }
 double make_filter::update(double *w) {
   switch (shape) {
-  case Chebyshev:          taps = design_window("chebyshev", cheby_taps, cheby_fc);		break;
+  case Chebyshev:        taps = design_window("chebyshev", cheby_taps, cheby_fc);		break;
   case Hanning:		       taps = design_window("hanning", hanning_taps); break;
   case Hamming:		       taps = design_window("hamming", hamming_taps); break;
   case Blackman:	       taps = design_window("blackman", blackman_taps); break;
@@ -93,9 +93,11 @@ double make_filter::update(double *w) {
   case Kaiser:		       taps = design_window("kaiser", kaiser_taps, kaiser_beta); break;
   case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
   }
+	/*
   std::cout << "Taps[] = {";
   for (size_t i=0;i<taps.size();i++) std::cout << taps[i] << " ";
   std::cout << "}\n";
+	*/
   fir_freq(taps, pts, w, 1.0);
   return (0);
 }

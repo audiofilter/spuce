@@ -32,7 +32,7 @@ float_type kaiser_beta(float_type beta);
 //!  \brief dolph chebyshev window design
 //! \author Tony Kirke
 //!  \ingroup functions fir
-std::vector<float_type> cheby(long nf, float_type alpha);
+std::vector<float_type> cheby(int nf, float_type alpha);
 //
 //! \brief bartlett window design
 std::vector<float_type> bartlett(long nf);
