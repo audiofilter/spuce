@@ -35,12 +35,11 @@ void make_filter::reset() {
   cheby_fc = 0.06;
   hamming_taps  =23;
   hanning_taps  =23;
-  bartlett_taps =23 ;
+  bartlett_taps =23;
   blackman_taps =23;
   kaiser_taps   =23;
   cheby_taps    =23;
-  kaiser_tw = 0.1;
-  kaiser_ripple = 0.04;
+  kaiser_beta = 8;
   
   shape = Blackman;
 }
@@ -58,8 +57,8 @@ void make_filter::vertical_swipe(int len) {
   double gain = pow(2, 0.002 * len);
 
   switch (shape) {
-	case Chebyshev:		cheby_fc = limit(gain * cheby_fc, 0.4, 0.0);		break;
-	case Kaiser:		kaiser_tw = limit(gain * kaiser_tw, 0.95, 0.001);	break;
+	case Chebyshev:		cheby_fc = limit(gain * cheby_fc, 0.4, 0.0);	break;
+    case Kaiser:		kaiser_beta= limit(gain * kaiser_beta, 100, 1);	break;
 	case Hanning:
 	case Hamming:
 	case Blackman:
@@ -70,7 +69,7 @@ void make_filter::vertical_swipe(int len) {
 }
 void make_filter::horiz_swipe(int len) {
   const int MAX_FIR = 99;
-  const int MIN_FIR = 15;
+  const int MIN_FIR = 5;
   int inc = (len < 0) ? 1 : -1;
 
   switch (shape) {
@@ -81,7 +80,6 @@ void make_filter::horiz_swipe(int len) {
   case Chebyshev:	cheby_taps = limit(cheby_taps + inc, MAX_FIR, MIN_FIR);		break;
   case Kaiser:	    kaiser_taps = limit(kaiser_taps + inc, MAX_FIR, MIN_FIR);	break;
   case None:	break;
-	//  case Kaiser:	kaiser_ripple = limit(gain * kaiser_ripple, 0.1, 0.01);		break;
   default:		break;
   }
 }
@@ -92,9 +90,12 @@ double make_filter::update(double *w) {
   case Hamming:		       taps = design_window("hamming", hamming_taps); break;
   case Blackman:	       taps = design_window("blackman", blackman_taps); break;
   case Bartlett:	       taps = design_window("bartlett", bartlett_taps); break;
-  case Kaiser:		       taps = design_window("kaiser", kaiser_taps, kaiser_tw, kaiser_ripple); break;
+  case Kaiser:		       taps = design_window("kaiser", kaiser_taps, kaiser_beta); break;
   case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
   }
+  std::cout << "Taps[] = {";
+  for (size_t i=0;i<taps.size();i++) std::cout << taps[i] << " ";
+  std::cout << "}\n";
   fir_freq(taps, pts, w, 1.0);
   return (0);
 }
