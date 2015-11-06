@@ -18,7 +18,7 @@ class make_filter {
 
 public:
   std::vector<double> taps;
-  double cheby_fc;
+  double cheby_atten;
   double kaiser_beta;
   
   int cheby_taps;

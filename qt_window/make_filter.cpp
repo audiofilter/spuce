@@ -32,7 +32,7 @@ make_filter::~make_filter() {}
 make_filter::make_filter() {  reset();}
 
 void make_filter::reset() {
-  cheby_fc = 0.06;
+  cheby_atten = 60.0;
   hamming_taps  =23;
   hanning_taps  =23;
   bartlett_taps =23;
@@ -57,7 +57,7 @@ void make_filter::vertical_swipe(int len) {
   double gain = pow(2, 0.002 * len);
 
   switch (shape) {
-	case Chebyshev:		cheby_fc = limit(gain * cheby_fc, 0.4, 0.0);	break;
+	case Chebyshev:		cheby_atten = limit(gain * cheby_atten, 100, 1.0);	break;
     case Kaiser:		kaiser_beta= limit(gain * kaiser_beta, 100, 1);	break;
 	case Hanning:
 	case Hamming:
@@ -85,7 +85,7 @@ void make_filter::horiz_swipe(int len) {
 }
 double make_filter::update(double *w) {
   switch (shape) {
-  case Chebyshev:        taps = design_window("chebyshev", cheby_taps, cheby_fc);		break;
+  case Chebyshev:        taps = design_window("chebyshev", cheby_taps, cheby_atten);		break;
   case Hanning:		       taps = design_window("hanning", hanning_taps); break;
   case Hamming:		       taps = design_window("hamming", hamming_taps); break;
   case Blackman:	       taps = design_window("blackman", blackman_taps); break;
