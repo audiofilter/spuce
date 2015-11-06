@@ -12,11 +12,10 @@ namespace spuce {
 inline std::complex<float_type> expj(float_type x) { return (std::complex<float_type>(std::cos(x), std::sin(x))); }
 inline float_type coshin(float_type x) { return (log(x + sqrt(x * x - 1.))); }
 
-void real_idft(std::vector<float_type>& y, int n) {
+void real_dft(std::vector<float_type>& y, int n) {
   int j, l;
   /*  n inverse dft length */
-  std::vector<float_type> x(n + 1);
-	float_type mult;
+  std::vector<float_type> x(n);
 
   /*  calculate the w values recursively */
   for (j = 0; j < n; j++) { x[j] = y[j]; }
@@ -25,16 +24,33 @@ void real_idft(std::vector<float_type>& y, int n) {
   for (l = 0; l < n; l++) {
     y[l] = 0;
     for (j = 0; j < n; j++) {
-      mult = x[j] * cos(TWOPI * l * j / (n));
+      y[l] += x[j] * cos(TWOPI * l * j / (n));
+    }
+  }
+}
+
+void real_dft(std::vector<std::complex<float_type>>& y, int n) {
+  int j, l;
+  /*  n inverse dft length */
+  std::vector<std::complex<float_type> > x(n + 1);
+	std::complex<float_type> mult;
+
+  /*  calculate the w values recursively */
+  for (j = 0; j < n; j++) {
+		x[j] = y[j];
+	}
+
+  /*  start inverse fft */
+  for (l = 0; l < n; l++) {
+    y[l] = 0;
+    for (j = 0; j < n; j++) {
+      mult = x[j] * std::complex<float_type>(cos(TWOPI*l*j/n),sin(TWOPI*l*j/n));
       y[l] += mult;
     }
   }
 
-  /*  scale all results by 1/n */
-  for (int i = 0; i < n; i++) y[i] /= n;
 }
-//!  \author Tony Kirke,  Copyright(c) 2001
-//!
+	
 //! \ingroup fir
 //! function:  io
 //! \brief bessel function for kaiser window
@@ -136,7 +152,7 @@ float_type cheby_poly(int m, float_type a) {
 	return x;
 }
 //!  \ingroup fir
-//!  \brief dolph chebyshev window design - for odd nf
+//!  \brief dolph chebyshev window design
 std::vector<float_type> cheby(int nf, float_type r_db) {
 	/*! parameters
 		- nf = filter length in samples
@@ -145,14 +161,32 @@ std::vector<float_type> cheby(int nf, float_type r_db) {
 	float_type r = pow(10.0,r_db/20.0);
 	float_type x0 = cosh(acosh(r)/(nf-1.0));
 	std::vector<float_type> w(nf);
-	for (int i = 0; i < nf-1; i++) {
-		float_type a = fabs(x0*cos(i*M_PI/(nf-1.0)));
+
+	for (int i = 0; i < nf; i++) {
+		float_type a = fabs(x0*cos(i*M_PI/nf));
 		w[i] = cheby_poly(nf-1,a);
-		if (i%2 == 1) w[i] *= -1;
+		if (nf%2 == 0) {
+			if (i>nf/2) w[i] *= -1;
+		}
 	}
-	real_idft(w,nf-1);
-	w[0] = 0.5*w[0];
-	w[nf-1] = w[0];
+	
+	if (nf%2 == 0) {
+		// For even, need complex input to fft
+		std::vector<std::complex<float_type>> cw(nf);
+		for (int j = 0; j < nf; j++) cw[j] = w[j] * std::complex<float_type>(cos(M_PI*j/nf),sin(M_PI*j/nf));
+		real_dft(cw,nf);
+		for (int i = 0; i < nf; i++) w[i] = real(cw[i]);
+	} else {
+		real_dft(w,nf);
+	}
+	
+	if (nf%2 == 0) {
+		for (int i=0;i<nf/2;i++) w[i+nf/2] = w[i];
+		for (int i=0;i<nf/2;i++) w[nf/2-1-i] = w[i+nf/2];
+	} else {
+		for (int i=0;i<nf/2+1;i++) w[nf-1-i] = w[nf/2-i];
+		for (int i=0;i<nf/2;i++) w[nf/2-1-i] = w[nf/2+1+i];
+	}
 	float_type max_v=0;
 	// normalize
 	for (int i = 0; i < nf; i++) if (fabs(w[i]) > max_v) max_v = fabs(w[i]);
