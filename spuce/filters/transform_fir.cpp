@@ -1,6 +1,6 @@
-#include <spuce/filters/transform_fir.h>
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <spuce/filters/transform_fir.h>
 #include <iostream>
 // Copyright (c) 2015 Tony Kirke.  Boost Software License - Version 1.0  (http://www.opensource.org/licenses/BSL-1.0)
 namespace spuce {
