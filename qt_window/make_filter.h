@@ -11,6 +11,7 @@ enum fil_enum {
   Bartlett,
   Blackman,
   Kaiser,
+	Flattop,
   Chebyshev
 };
 
@@ -26,6 +27,7 @@ public:
   int hamming_taps;
   int hanning_taps;
   int bartlett_taps;
+  int flattop_taps;
   int blackman_taps;
   int kaiser_taps;
 

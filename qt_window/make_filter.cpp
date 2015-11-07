@@ -36,6 +36,7 @@ void make_filter::reset() {
   hamming_taps  =23;
   hanning_taps  =23;
   bartlett_taps =23;
+  flattop_taps =23;
   blackman_taps =23;
   kaiser_taps   =23;
   cheby_taps    =23;
@@ -63,6 +64,7 @@ void make_filter::vertical_swipe(int len) {
 	case Hamming:
 	case Blackman:
 	case Bartlett:
+	case Flattop:
 	case None:
       break;
   }
@@ -76,6 +78,7 @@ void make_filter::horiz_swipe(int len) {
   case Hanning:		hanning_taps = limit(hanning_taps + inc, MAX_FIR,MIN_FIR); break;
   case Hamming:		hamming_taps = limit(hamming_taps + inc, MAX_FIR,MIN_FIR); break;
   case Blackman:	blackman_taps = limit(blackman_taps + inc, MAX_FIR,MIN_FIR); break;
+  case Flattop:	  flattop_taps = limit(flattop_taps + inc, MAX_FIR,MIN_FIR); break;
   case Bartlett:	bartlett_taps = limit(bartlett_taps + inc, MAX_FIR,MIN_FIR); break;
   case Chebyshev:	cheby_taps = limit(cheby_taps + inc, MAX_FIR, MIN_FIR);		break;
   case Kaiser:	    kaiser_taps = limit(kaiser_taps + inc, MAX_FIR, MIN_FIR);	break;
@@ -91,8 +94,10 @@ double make_filter::update(double *w) {
   case Blackman:	       taps = design_window("blackman", blackman_taps); break;
   case Bartlett:	       taps = design_window("bartlett", bartlett_taps); break;
   case Kaiser:		       taps = design_window("kaiser", kaiser_taps, kaiser_beta); break;
+  case Flattop:		       taps = design_window("flattop", flattop_taps); break;
   case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
   }
+
 	// Normalize for Frequency plots
 	float_type sum = 0;
 	for (size_t i=0;i<taps.size();i++) sum += taps[i];

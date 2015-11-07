@@ -23,6 +23,8 @@ std::vector<float_type> design_window(const std::string& fir_type, int order, fl
 		win = bartlett(order);
 	} else if (fir_type == "chebyshev") {
 		win = cheby(order, beta);
+	} else if (fir_type == "flattop") {
+		win = flattop(order);
 	} else {
 		win = rectangular(order);
 	}

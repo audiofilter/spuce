@@ -33,6 +33,7 @@ public slots:
   void GChanged(); 
   void EChanged(); 
   void FHChanged(); 
+  void FTChanged(); 
   void CBChanged(); 
   void graphPressEvent(QMouseEvent *event);
   void graphMoveEvent(QMouseEvent *event);
@@ -51,6 +52,7 @@ private:
   QCPGraph*  Blackman_on;
   QCPGraph*  Bartlett_on;
   QCPGraph*  Chebyshev_on;
+  QCPGraph*  Flattop_on;
   QCPGraph*  Kaiser_on;
   int graph_counter;
 

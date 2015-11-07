@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
   Blackman_on = NULL;
   Bartlett_on = NULL;
   Chebyshev_on = NULL;
+  Flattop_on = NULL;
   Kaiser_on = NULL;
 
   graph_counter = 0;
@@ -44,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->Blackman, SIGNAL(released()), this, SLOT(EChanged()));
   connect(ui->Bartlett, SIGNAL(released()), this, SLOT(FHChanged()));
   connect(ui->Chebyshev, SIGNAL(released()), this, SLOT(GChanged()));
+  connect(ui->Flattop, SIGNAL(released()), this, SLOT(FTChanged()));
   connect(ui->Kaiser, SIGNAL(released()), this, SLOT(CBChanged()));
 
   connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), 
@@ -57,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::BChanged() {
   if (Hanning_on==NULL) {
 	shape = "Hanning";
-	LPF.change_filter(spuce::Hamming);
+	LPF.change_filter(spuce::Hanning);
 	Hanning_on = ui->customPlot->addGraph();
 	plot2(ui->customPlot);
   } else {
@@ -114,6 +116,18 @@ void MainWindow::GChanged() {
 	ui->customPlot->replot();
   }
 }
+void MainWindow::FTChanged() {
+  if (Flattop_on==NULL) {
+	shape = "Flattop";
+	LPF.change_filter(spuce::Flattop);
+	Flattop_on = ui->customPlot->addGraph();
+	plot2(ui->customPlot);
+  } else {
+	ui->customPlot->removeGraph(Flattop_on);
+	Flattop_on = NULL;
+	ui->customPlot->replot();
+  }
+}
 void MainWindow::CBChanged() {
   if (Kaiser_on==NULL) {
 	shape = "Kaiser";
@@ -133,6 +147,7 @@ QCPGraph* MainWindow::GetPtr() {
   else if (shape=="Hanning")	return(Hanning_on);
   else if (shape=="Blackman") return(Blackman_on);
   else if (shape=="Chebyshev") return(Chebyshev_on);
+  else if (shape=="Flattop") return(Flattop_on);
   else if (shape=="Kaiser") return(Kaiser_on);
   else std::cout << "Invalid filter selection " << shape << "\n";
   return(Hanning_on);

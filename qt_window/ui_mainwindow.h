@@ -34,6 +34,7 @@ public:
     QPushButton *Kaiser;
     QPushButton *Bartlett;
     QPushButton *Chebyshev;
+    QPushButton *Flattop;
     QPushButton *Hanning;
     QStatusBar *statusBar;
 
@@ -85,6 +86,10 @@ public:
         Chebyshev->setObjectName(QStringLiteral("Chebyshev"));
         Chebyshev->setGeometry(QRect(10, 190, 181, 27));
         Chebyshev->setCheckable(true);
+        Flattop = new QPushButton(centralWidget);
+        Flattop->setObjectName(QStringLiteral("Flattop"));
+        Flattop->setGeometry(QRect(10, 220, 181, 27));
+        Flattop->setCheckable(true);
         Hanning = new QPushButton(centralWidget);
         Hanning->setObjectName(QStringLiteral("Hanning"));
         Hanning->setGeometry(QRect(10, 40, 181, 27));
@@ -108,6 +113,7 @@ public:
         Kaiser->setText(QApplication::translate("MainWindow", "Kaiser", 0));
         Bartlett->setText(QApplication::translate("MainWindow", "Bartlett", 0));
         Chebyshev->setText(QApplication::translate("MainWindow", "Chebyshev", 0));
+        Flattop->setText(QApplication::translate("MainWindow", "Flattop", 0));
         Hanning->setText(QApplication::translate("MainWindow", "Hanning", 0));
     } // retranslateUi
 

@@ -9,6 +9,8 @@ namespace spuce {
 //! \brief rectangular window \f$ w(n) = 1;\f$
 //!  \ingroup functions fir
 std::vector<float_type> rectangular(long nf);
+//!  \ingroup functions fir
+std::vector<float_type> flattop(long nf);
 //! \brief hamming window \f$ w(n) = 0.54 - 0.46*cos( 2*\pi*n/(nf-1) )\f$
 //!  \ingroup functions fir
 std::vector<float_type> hamming(long nf);
