@@ -71,6 +71,11 @@ float_type io(float_type x) {
   }
   return (e);
 }
+std::vector<float_type> rectangular(long nf) {
+    std::vector<float_type> w(nf);
+    for (int i = 0; i < nf; i++) w[i] = 1.0;
+    return (w);
+}
 //!  \ingroup fir
 //! \brief hamming window \f$ w(n) = 0.54 - 0.46*cos( 2*\pi*n/(nf-1) )\f$
 std::vector<float_type> hamming(long nf) {

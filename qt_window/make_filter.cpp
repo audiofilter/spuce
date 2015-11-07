@@ -93,11 +93,11 @@ double make_filter::update(double *w) {
   case Kaiser:		       taps = design_window("kaiser", kaiser_taps, kaiser_beta); break;
   case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
   }
-	/*
-  std::cout << "Taps[] = {";
-  for (size_t i=0;i<taps.size();i++) std::cout << taps[i] << " ";
-  std::cout << "}\n";
-	*/
+	// Normalize for Frequency plots
+	float_type sum = 0;
+	for (size_t i=0;i<taps.size();i++) sum += taps[i];
+	for (size_t i=0;i<taps.size();i++) taps[i] /= sum;
+	
   fir_freq(taps, pts, w, 1.0);
   return (0);
 }
