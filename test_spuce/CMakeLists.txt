@@ -24,6 +24,8 @@ SET(TARGETS
 	kaiser
 	sinc
   window
+	transform_bpf	transform_hpf transform_bsf
+	transform_complex_bpf	transform_complex_bsf
 	)
 
 FOREACH(mod ${TARGETS})

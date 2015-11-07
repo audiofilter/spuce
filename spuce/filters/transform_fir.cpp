@@ -23,8 +23,14 @@ std::vector<float_type> transform_fir(const std::string& band_type, const std::v
   } else if (band_type == "BAND_PASS") {
 		// Modulate taps up to band center frequency
 		for (size_t i=0;i<taps.size();i++) {
-			out[i] = cos(2.0*M_PI*f*i) * taps[i];
+			// Scale to restore center tap value & by 0.5 due to cosine multiplication
+			out[i] = cos(2.0*M_PI*f*i) * taps[i] / (0.5*cos(M_PI*f*(taps.size()-1)));
 		}
+  } else if (band_type == "BAND_STOP") {
+		// First transform to band_pass, then subtract 1 from center tap
+		out = transform_fir("BAND_PASS", taps, f);
+		int mid_tap = (taps.size()-1)/2;
+		out[mid_tap] -= 1;
   } else {
     std::cout << "Unsupported band type :" << band_type << "\n";
   }
@@ -35,8 +41,13 @@ std::vector<std::complex<float_type>> transform_complex_fir(const std::string& b
   if (band_type == "COMPLEX_BAND_PASS") {
 		// Modulate taps up to band center frequency
 		for (size_t i=0;i<taps.size();i++) {
-			out[i] = std::polar(taps[i], 2.0*M_PI*f*i);
+			double phase = -2.0*M_PI*f*i;
+			out[i] = taps[i]*std::polar(1.0, phase);
 		}
+  } else if (band_type == "COMPLEX_BAND_STOP") {
+		out = transform_complex_fir("COMPLEX_BAND_PASS", taps, f);
+		int mid_tap = (taps.size()-1)/2;
+		out[mid_tap] -= 1;
   } else {
     std::cout << "Unsupported band type :" << band_type << "\n";
   }

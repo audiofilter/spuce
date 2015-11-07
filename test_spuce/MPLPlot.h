@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 #include <vector>
-
+#include <iostream>
 std::string format(const char *fmt, ...) {
   int size = 512;
   char *buffer = 0;
@@ -29,7 +29,7 @@ std::string vector2string(std::vector<double> x) {
   int i = 0;
   for (std::vector<double>::iterator it = x.begin(); it != x.end(); it++) {
     if (i != 0) s += ", ";
-    s += format("%0.16g", *it);
+    s += std::to_string(*it);
     i++;
   }
   return s;
@@ -153,8 +153,8 @@ class PyPlotter {
   std::vector<PlotCallOne> PlotCallsOne;
 
  public:
-  void plot(std::vector<double> x, std::vector<double> y, Dictionary *dict = NULL) {
-    PlotCalls.push_back(PlotCall(x, y, dict));
+  void plot(std::vector<double>& x, std::vector<double>& y, Dictionary *dict = NULL) {
+		PlotCalls.push_back(PlotCall(x, y, dict));
   };
   void plot_data(std::vector<double> data, Dictionary *dict = NULL) {
     PlotCallsOne.push_back(PlotCallOne(data, dict));
@@ -206,7 +206,7 @@ class PyPlotter {
     PyRun_SimpleString("import sys");
     PyRun_SimpleString("print sys.path");
     PyRun_SimpleString("import matplotlib");
-    PyRun_SimpleString("matplotlib.use('qt4agg')");
+    PyRun_SimpleString("matplotlib.use('qt5agg')");
     PyRun_SimpleString("import matplotlib.pyplot as plt");
     std::string s = this->print_calls();
     s += "plt.show()\n";
@@ -219,7 +219,7 @@ class PyPlotter {
     PyRun_SimpleString("import sys");
     PyRun_SimpleString("print sys.path");
     PyRun_SimpleString("import matplotlib");
-    PyRun_SimpleString("matplotlib.use('qt4agg')");
+    PyRun_SimpleString("matplotlib.use('qt5agg')");
     PyRun_SimpleString("import matplotlib.pyplot as plt");
     std::string s = this->print_one_calls();
     s += "plt.grid(True)\n";
