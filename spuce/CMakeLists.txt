@@ -20,6 +20,8 @@ SET(FILT_SRCS
 	filters/sinc_fir.cpp
 	filters/create_remez_lpfir.cpp
 	filters/fir_inv_dft.cpp
+	filters/transform_fir.cpp
+	# Windows
 	filters/window.cpp
 )
 
