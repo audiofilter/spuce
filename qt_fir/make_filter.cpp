@@ -31,6 +31,7 @@ void make_filter::sel_filter(const char *c_sel) {
   if (sel == "Maxflat FIR")    change_filter(MaxflatFIR);
   else if (sel == "Gaussian FIR")    change_filter(GaussianFIR);
   else if (sel == "Remez FIR")    change_filter(RemezFIR);
+  else if (sel == "Sinc FIR")    change_filter(SincFIR);
   else if (sel == "Raised Cosine")    change_filter(RaisedCosine);
   else if (sel == "Root Raised Cosine")    change_filter(RootRaisedCosine);
   else if (sel == "None")    change_filter(None);
@@ -60,9 +61,11 @@ void make_filter::reset() {
   remez_stop_weight = 50;
 
   rc_alpha = rrc_alpha = 0.25;
+	sinc_fc = 0.125;
 
   gauss_taps = 21;
   remez_taps = 33;
+	sinc_taps = 33;
   maxflat_taps = 45;
   rc_taps = rrc_taps = 33;
   shape = RemezFIR;
@@ -80,6 +83,7 @@ int make_filter::get_order() {
   switch (shape) {
 	case MaxflatFIR:    return (maxflat_taps);      break;
 	case GaussianFIR:   return (gauss_taps);      break;
+	case SincFIR:   return (sinc_taps);      break;
 	case RemezFIR:      return (remez_taps);      break;
 	case RaisedCosine:  return (rc_taps);      break;
 	case RootRaisedCosine:      return (rrc_taps);      break;
@@ -100,6 +104,9 @@ double make_filter::horiz_swipe(int len, bool in_passband) {
 		break;
 	case GaussianFIR:
 		gauss_fc = limit(gain * gauss_fc, 0.4, min_fc);
+		break;
+	case SincFIR:
+		sinc_fc = limit(gain * sinc_fc, 0.4, min_fc);
 		break;
 	case RemezFIR:
 		if (in_passband) {
@@ -142,6 +149,8 @@ void make_filter::vertical_swipe(int len, bool in_passband, bool above_stop) {
 	case MaxflatFIR:
 		maxflat_taps = limit(maxflat_taps + 8 * inc, MAX_FIR, MIN_FIR);
 		break;
+	case SincFIR:
+		sinc_taps = limit(sinc_taps + inc, MAX_FIR, MIN_FIR); break;
 	case GaussianFIR:
 		gauss_taps = limit(gauss_taps + inc, MAX_FIR, MIN_FIR);
 		break;
@@ -172,6 +181,7 @@ double make_filter::update(double *w) {
 	case RemezFIR:         taps = design_fir("remez", remez_taps, remez_pass_edge, remez_stop_edge, remez_stop_weight);		break;
 	case MaxflatFIR:       taps = design_fir("butterworth", maxflat_taps, 0, maxflat_fc, 0);		break;
 	case GaussianFIR:      taps = design_fir("gaussian", gauss_taps, 0, 0.4, gauss_fc);		break;
+	case SincFIR:          taps = design_fir("sinc", sinc_taps, 0, 0.4, sinc_fc);		break;
 	case RaisedCosine:     taps = design_fir("raisedcosine", rc_taps, rc_alpha, 1.0/rc_fc, 0);		break;
 	case RootRaisedCosine: taps = design_fir("rootraisedcosine", rrc_taps, rrc_alpha, 2, 0); break;
 	case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;

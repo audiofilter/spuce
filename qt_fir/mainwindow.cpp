@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
   RootRaisedCosine_on = NULL;
   Remez_on = NULL;
   Gaussian_on = NULL;
+  Sinc_on = NULL;
 
   graph_counter = 0;
 
@@ -47,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->RootRaisedCosine, SIGNAL(released()), this, SLOT(RRCChanged()));
   connect(ui->Remez, SIGNAL(released()), this, SLOT(RChanged()));
   connect(ui->Gaussian, SIGNAL(released()), this, SLOT(GChanged()));
+  connect(ui->Sinc, SIGNAL(released()), this, SLOT(SChanged()));
 
   connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), 
 					this, SLOT(graphPressEvent(QMouseEvent*)));
@@ -121,12 +123,25 @@ void MainWindow::GChanged() {
 		ui->customPlot->replot();
   }
 }
+void MainWindow::SChanged() {
+  if (Sinc_on==NULL) {
+		shape = "Sinc FIR";
+		lpf_sel(shape.c_str());
+		Sinc_on = ui->customPlot->addGraph();
+		plot2(ui->customPlot);
+  } else {
+		ui->customPlot->removeGraph(Sinc_on);
+		Sinc_on = NULL;
+		ui->customPlot->replot();
+  }
+}
 /////////////////////////////
 QCPGraph* MainWindow::GetPtr() {
   //  std::cout << " shape was = " << shape << "\n";
   if (shape=="Maxflat FIR") return(MaxflatFIR_on);
   else if (shape=="Gaussian FIR") return(Gaussian_on);
   else if (shape=="Remez FIR") return(Remez_on);
+  else if (shape=="Sinc FIR") return(Sinc_on);
   else if (shape=="Raised Cosine") return(RaisedCosine_on);
   else if (shape=="Root Raised Cosine") return(RootRaisedCosine_on);
   else std::cout << "Invalid filter selection\n";

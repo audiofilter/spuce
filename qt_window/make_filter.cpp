@@ -59,7 +59,7 @@ void make_filter::vertical_swipe(int len) {
 
   switch (shape) {
 	case Chebyshev:		cheby_atten = limit(gain * cheby_atten, 100, 1.0);	break;
-    case Kaiser:		kaiser_beta= limit(gain * kaiser_beta, 100, 1);	break;
+  case Kaiser:		kaiser_beta= limit(gain * kaiser_beta, 100, 1);	break;
 	case Hanning:
 	case Hamming:
 	case Blackman:
@@ -87,6 +87,8 @@ void make_filter::horiz_swipe(int len) {
   }
 }
 double make_filter::update(double *w) {
+
+	
   switch (shape) {
   case Chebyshev:        taps = design_window("chebyshev", cheby_taps, cheby_atten);		break;
   case Hanning:		       taps = design_window("hanning", hanning_taps); break;
@@ -98,6 +100,7 @@ double make_filter::update(double *w) {
   case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
   }
 
+	std::cout << "Kaiser beta = " << kaiser_beta << " " << 20.0*log(kaiser_beta)/log(10.0) << "\n";
 	// Normalize for Frequency plots
 	float_type sum = 0;
 	for (size_t i=0;i<taps.size();i++) sum += taps[i];

@@ -5,7 +5,7 @@
 #include <QtWidgets/QMainWindow>
 #include "qcustomplot.h" 
 
-enum shape_enum {None, MaxflatFIR, GaussianFIR, RemezFIR, 
+enum shape_enum {None, MaxflatFIR, GaussianFIR, RemezFIR, SincFIR,
 								 RaisedCosine, RootRaisedCosine};
 
 namespace Ui {
@@ -39,6 +39,7 @@ public slots:
   void RCChanged(); 
   void RRCChanged(); 
   void RChanged(); 
+  void SChanged(); 
   void CBChanged(); 
   void graphPressEvent(QMouseEvent *event);
   void graphMoveEvent(QMouseEvent *event);
@@ -59,6 +60,7 @@ private:
   QCPGraph*  RootRaisedCosine_on;
   QCPGraph*  Remez_on;
   QCPGraph*  Gaussian_on;
+  QCPGraph*  Sinc_on;
   int graph_counter;
 
   QPoint dragStartPosition;

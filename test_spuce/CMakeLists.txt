@@ -21,7 +21,9 @@ SET(TARGETS
 	elliptic_iir_bp
 	iir iir_df iir_df2
 	remez
-    window
+	kaiser
+	sinc
+  window
 	)
 
 FOREACH(mod ${TARGETS})

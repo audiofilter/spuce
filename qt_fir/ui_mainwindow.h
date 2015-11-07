@@ -33,6 +33,7 @@ public:
     QPushButton *RaisedCosine;
     QPushButton *RootRaisedCosine;
     QPushButton *Gaussian;
+    QPushButton *Sinc;
     QPushButton *Remez;
     QStatusBar *statusBar;
 
@@ -84,6 +85,10 @@ public:
         Gaussian->setObjectName(QStringLiteral("Gaussian"));
         Gaussian->setGeometry(QRect(10, 150, 181, 27));
         Gaussian->setCheckable(true);
+        Sinc = new QPushButton(centralWidget);
+        Sinc->setObjectName(QStringLiteral("Sinc"));
+        Sinc->setGeometry(QRect(10, 180, 181, 27));
+        Sinc->setCheckable(true);
         MainWindow->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
@@ -103,6 +108,7 @@ public:
         RootRaisedCosine->setText(QApplication::translate("MainWindow", "RootRaisedCosine", 0));
         Remez->setText(QApplication::translate("MainWindow", "Remez", 0));
         Gaussian->setText(QApplication::translate("MainWindow", "Gaussian", 0));
+        Sinc->setText(QApplication::translate("MainWindow", "Sinc", 0));
     } // retranslateUi
 
 };

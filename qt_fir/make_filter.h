@@ -11,6 +11,7 @@ enum fil_enum {
   MaxflatFIR,
   GaussianFIR,
   RemezFIR,
+	SincFIR,
   RaisedCosine,
   RootRaisedCosine
 };
@@ -31,12 +32,14 @@ class make_filter {
   double rc_alpha;
   double rrc_alpha;
 	double kaiser_tw;
-
+	double sinc_fc;
+	
   int gauss_taps;
   int remez_taps;
   int maxflat_taps;
   int rc_taps;
   int rrc_taps;
+	int sinc_taps;
 
   int pts;
 	
