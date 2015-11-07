@@ -20,12 +20,13 @@ SET(TARGETS
 	butterworth_iir_bp butterworth_iir_bs
 	elliptic_iir_bp
 	iir iir_df iir_df2
-	remez
-	kaiser
-	sinc
+	remez	kaiser sinc
   window
 	transform_bpf	transform_hpf transform_bsf
 	transform_complex_bpf	transform_complex_bsf
+	# special filters
+	iir_allpass1
+	notch
 	)
 
 FOREACH(mod ${TARGETS})

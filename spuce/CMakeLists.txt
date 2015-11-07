@@ -23,6 +23,9 @@ SET(FILT_SRCS
 	filters/transform_fir.cpp
 	# Windows
 	filters/window.cpp
+	# Other filters
+	filters/butterworth_allpass.cpp
+	filters/elliptic_allpass.cpp
 )
 
 add_library(spucelib ${FILT_SRCS})
