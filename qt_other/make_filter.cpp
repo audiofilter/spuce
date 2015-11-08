@@ -38,7 +38,7 @@ namespace spuce {
 	void make_filter::change_filter(fil_enum f) {  shape = f;}
 	void make_filter::init(int points) { pts = points; }
 	make_filter::~make_filter() {}
-	make_filter::make_filter() : maxflat(0,2), elliptic(0.3,2) {
+	make_filter::make_filter() : maxflat(0,3,2), elliptic(0.3,3,2) {
 		reset();
 	}
 

@@ -14,7 +14,7 @@ int main(int argv, char* argc[]) {
   int i;
   float_type imp;
   int TAPS = 33;
-  float_type stop_weight = 50.0;
+  float_type stop_weight = 1.0;
   float_type pass_edge = 0.05;
   float_type stop_edge = 0.1;
 

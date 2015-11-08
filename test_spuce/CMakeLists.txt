@@ -18,9 +18,8 @@ SET(TARGETS
 	elliptic_iir elliptic_iir_hpf
 	butterworth_iir butterworth_iir_hpf
 	butterworth_iir_bp butterworth_iir_bs
-	elliptic_iir_bp
-	iir iir_df iir_df2
-	remez	kaiser sinc
+	elliptic_iir_bp iir iir_df iir_df2
+  fir maxflat remez kaiser sinc rc_bsf
   window
 	transform_bpf	transform_hpf transform_bsf
 	transform_complex_bpf	transform_complex_bsf

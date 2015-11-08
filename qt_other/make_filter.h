@@ -3,6 +3,7 @@
 #include <spuce/typedefs.h>
 #include <spuce/filters/notch_allpass.h>
 #include <spuce/filters/iir_allpass1_sections.h>
+#include <spuce/filters/iir_allpass1_sections_variable_delay.h>
 namespace spuce {
 
 enum fil_enum {
@@ -30,8 +31,8 @@ public:
 	//cutboost<audio_data_type, double > CUT_B;
   notch_allpass<double,double> notch;
 
-  iir_allpass1_sections<double,double> maxflat;
-  iir_allpass1_sections<double,double> elliptic;
+  iir_allpass1_sections_variable_delay<double,double> maxflat;
+  iir_allpass1_sections_variable_delay<double,double> elliptic;
 
   void horiz_swipe(int len);
   void vertical_swipe(int len);
