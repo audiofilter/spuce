@@ -27,9 +27,9 @@ ADD_DEFINITIONS(${QT5Widgets_DEFINITIONS})
 
 ADD_LIBRARY(otherlib ${SOURCES})
 ADD_EXECUTABLE(other_plot ${other_plot_SOURCES} ${other_plot_HEADERS_MOC})
-set_property(TARGET winlib PROPERTY CXX_STANDARD 11)
+set_property(TARGET otherlib PROPERTY CXX_STANDARD 11)
 
-TARGET_LINK_LIBRARIES(other_plot winlib ${QT_LIBRARIES} spucelib)
+TARGET_LINK_LIBRARIES(other_plot otherlib ${QT_LIBRARIES} spucelib)
 set_property(TARGET other_plot PROPERTY CXX_STANDARD 11)
 QT5_USE_Modules(other_plot Gui)
 QT5_USE_Modules(other_plot Core)

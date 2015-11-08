@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->MaxflatSubband, SIGNAL(released()), this, SLOT(MChanged()));
   connect(ui->EllipticSubband, SIGNAL(released()), this, SLOT(EChanged()));
   connect(ui->CutBoost, SIGNAL(released()), this, SLOT(CChanged()));
-  connect(ui->NotchIIR, SIGNAL(released()), this, SLOT(NHChanged()));
+  connect(ui->NotchIIR, SIGNAL(released()), this, SLOT(NChanged()));
 
   connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), 
 					this, SLOT(graphPressEvent(QMouseEvent*)));
@@ -203,9 +203,9 @@ void MainWindow::graphMoveEvent(QMouseEvent *event)
   double ydis = dis.y();
   
   if (fabs(xdis) > fabs(ydis)) {
-	LPF.horiz_swipe(xdis);
+		LPF.horiz_swipe(xdis);
   } else {
-	LPF.vertical_swipe(ydis);
+		LPF.vertical_swipe(ydis);
   }
   QCPGraph* ptr = GetPtr();
   dragStartPosition = event->pos();
