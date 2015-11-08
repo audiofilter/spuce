@@ -110,7 +110,7 @@ QCPGraph* MainWindow::GetPtr() {
 ////////////////////////////////////
 void MainWindow::setup(QCustomPlot *customPlot)
 {
-  demoName = "spuce : Windowing Demo";
+  demoName = "spuce : Other Filters Demo";
   customPlot->legend->setVisible(false);
   customPlot->legend->setFont(QFont("Helvetica",9));
   // set locale to english, so we get english decimal separator:

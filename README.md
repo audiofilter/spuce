@@ -24,3 +24,6 @@ QT5 needed for test application
 
 
 ![Demo App](Window.png "Window Designer")
+
+
+![Demo App](Other.png "Other Filter Designer")
