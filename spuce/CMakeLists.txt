@@ -26,6 +26,7 @@ SET(FILT_SRCS
 	# Other filters
 	filters/butterworth_allpass.cpp
 	filters/elliptic_allpass.cpp
+  filters/shelf_allpass1.cpp
 )
 
 add_library(spucelib ${FILT_SRCS})

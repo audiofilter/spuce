@@ -41,7 +41,7 @@ class iir_coeff {
   float_type getGain(void) const;
   int getOrder(void) const;
   int getN2(void) const;
-  //  int getState(void) const;
+  int getState(void) const;
   int isOdd(void) const;
   std::vector<float_type> get_a() const;
   std::vector<float_type> get_b() const;

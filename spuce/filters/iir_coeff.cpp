@@ -40,7 +40,14 @@ void iir_coeff::print_pz() const {
 
 int iir_coeff::isOdd(void) const { return odd; }
 int iir_coeff::getOrder(void) const { return order; }
-// int iir_coeff::getState(void) const { return state; }
+int iir_coeff::getState(void) const {
+  if (state == filter_state::s0) return 0;
+  else if (state == filter_state::s1) return 1;
+  else if (state == filter_state::s2) return 2;
+  else if (state == filter_state::s3) return 3;
+  else if (state == filter_state::s4) return 4;
+  else return -1;
+}
 int iir_coeff::getN2(void) const { return n2; }
 float_type iir_coeff::getGain(void) const { return gain; }
 void iir_coeff::apply_gain(float_type g) {
