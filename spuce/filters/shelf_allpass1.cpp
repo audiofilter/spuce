@@ -1,11 +1,11 @@
 // Copyright (c) 2015 Tony Kirke. License MIT  (http://www.opensource.org/licenses/mit-license.php)
 //! \author Tony Kirke
+#define _USE_MATH_DEFINES
 #include <spuce/typedefs.h>
 #include <spuce/filters/shelf_allpass1.h>
 using std::polar;
 
 namespace spuce {
-
 double z_freqz_db(bool hpf, double f, double a, double h, double l) {
   double wf = f * M_PI;
   std::complex<double> hf;

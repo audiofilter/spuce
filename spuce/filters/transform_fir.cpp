@@ -29,7 +29,7 @@ std::vector<float_type> transform_fir(const std::string& band_type, const std::v
   } else if (band_type == "BAND_STOP") {
 		// First transform to band_pass, then subtract 1 from center tap
 		out = transform_fir("BAND_PASS", taps, f);
-		int mid_tap = (taps.size()-1)/2;
+		size_t mid_tap = (taps.size()-1)/2;
     out[mid_tap] -= 1;
   } else {
     std::cout << "Unsupported band type :" << band_type << "\n";
@@ -46,7 +46,7 @@ std::vector<std::complex<float_type>> transform_complex_fir(const std::string& b
 		}
   } else if (band_type == "COMPLEX_BAND_STOP") {
 		out = transform_complex_fir("COMPLEX_BAND_PASS", taps, f);
-		int mid_tap = (taps.size()-1)/2;
+		size_t mid_tap = (taps.size()-1)/2;
 		out[mid_tap] -= 1;
   } else {
     std::cout << "Unsupported band type :" << band_type << "\n";
