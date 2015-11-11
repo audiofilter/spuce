@@ -7,7 +7,6 @@
 namespace spuce {
 //! \file
 //! \brief  Template Class for shelf filter
-//
 //!   Template for shelving filter
 //!   <p>The filter is assumed of the form
 //!   \f$ H(s) = \frac{s+A}{s+B} \f$

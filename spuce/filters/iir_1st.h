@@ -7,12 +7,8 @@
 namespace spuce {
 //! \file
 //! \brief  Template Class for 1st Order iir filter
-//
-//! \brief  Template Class for 1st Order iir filter
-//
 //!   The filter is the first order low pass digital filter given by
 //!   \f$ G(z) =  \frac{1+z^-1}{1-az^-1} \f$ <p>where a is real and |a| < 1
-//!   Note: Not std::normalized
 //! \author Tony Kirke
 //! \ingroup double_templates iir
 template <class Numeric, class Coeff = float_type> class iir_1st {

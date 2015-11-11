@@ -14,7 +14,7 @@ namespace spuce {
 //! \author Tony Kirke
 //! \ingroup double_templates iir
 template <class Numeric, class Coeff = float_type> class iir {
- public:
+ private:
   long order;
   long odd;
   long n2;
@@ -61,39 +61,23 @@ template <class Numeric, class Coeff = float_type> class iir {
     if (odd) fos.reset();
   }
   //! Set 2nd order IIR coefficients
- void set_coeffs(iir_coeff& design) {
-     if (design.getState() == 2) design.convert_to_ab();
-     if (design.getState() == 3) {
-         if (odd) {
-             if (lpf)
-                 fos.set_coeffs(-real(design.get_pole(0)), 1.0);
-             else
-                 fos.set_coeffs(-real(design.get_pole(0)), -1.0);
-         }
-         for (int j = odd; j < n2; j++) {
-             sos[j - odd].set_a(real(design.get_pole(j)), imag(design.get_pole(j)));
-             sos[j - odd].set_b(real(design.get_zero(j)), imag(design.get_zero(j)));
-         }
-         gain = (Coeff)design.getGain();
-     } else {
-         std::cout << "Error can not set coefficients";
-         std::cout << "Design.getState() = " << design.getState() << "\n";
-     }
- }
-  //! Set 2nd order IIR coefficients
-  void set_round_bits(int stage, int bits) {
-    if (stage <= n2 && stage >= 0) {
-      if (stage == n2) {
-        if (odd)
-          fos.set_round_bits(bits);
-        else {
-          std::cout << "Error non-existent stage\n";
-        }
-      } else {
-        sos[stage].set_round_bits(bits);
+  void set_coeffs(iir_coeff& design) {
+    if (design.getState() == 2) design.convert_to_ab();
+    if (design.getState() == 3) {
+      if (odd) {
+        if (lpf)
+          fos.set_coeffs(-real(design.get_pole(0)), 1.0);
+        else
+          fos.set_coeffs(-real(design.get_pole(0)), -1.0);
       }
+      for (int j = odd; j < n2; j++) {
+        sos[j - odd].set_a(real(design.get_pole(j)), imag(design.get_pole(j)));
+        sos[j - odd].set_b(real(design.get_zero(j)), imag(design.get_zero(j)));
+      }
+      gain = (Coeff)design.getGain();
     } else {
-      std::cout << "Error non-existent stage\n";
+      std::cout << "Error can not set coefficients";
+      std::cout << "Design.getState() = " << design.getState() << "\n";
     }
   }
   //! print coefficients
