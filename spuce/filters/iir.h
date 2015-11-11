@@ -2,7 +2,7 @@
 // Copyright (c) 2015 Tony Kirke. License MIT  (http://www.opensource.org/licenses/mit-license.php)
 #include <spuce/typedefs.h>
 #include <spuce/filters/iir_1st.h>
-#include <spuce/filters/iir_2nd.h>
+#include <spuce/filters/biquad.h>
 #include <spuce/filters/iir_coeff.h>
 #include <iostream>
 #include <vector>
@@ -19,7 +19,7 @@ template <class Numeric, class Coeff = float_type> class iir {
   long odd;
   long n2;
   bool lpf;
-  std::vector<iir_2nd<Numeric, Coeff>> sos;
+  std::vector<biquad<Numeric, Coeff>> sos;
   iir_1st<Numeric, Coeff> fos;
   Coeff gain;
   typedef typename mixed_type<Numeric, Coeff>::dtype mult_type;
