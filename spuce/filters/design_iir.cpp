@@ -1,4 +1,5 @@
 // Copyright (c) 2015 Tony Kirke.  Boost Software License - Version 1.0  (http://www.opensource.org/licenses/BSL-1.0)
+#define _USE_MATH_DEFINES
 #include <spuce/filters/design_iir.h>
 #include <spuce/filters/butterworth_iir.h>
 #include <spuce/filters/chebyshev_iir.h>
