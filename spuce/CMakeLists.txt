@@ -29,7 +29,7 @@ SET(FILT_SRCS
   filters/shelf_allpass1.cpp
 )
 
-add_library(spucelib ${FILT_SRCS})
-set_property(TARGET spucelib PROPERTY CXX_STANDARD 11)
+add_library(spuce ${FILT_SRCS})
+set_property(TARGET spuce PROPERTY CXX_STANDARD 11)
 
 	

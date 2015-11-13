@@ -8,9 +8,7 @@
 #include <vector>
 namespace spuce {
 //! \file
-//! \brief Tempate Class for iir filter
-//
-//! consisting of first and second order filter sections
+//! \brief Tempate Class for iir filter consisting of first and second order filter sections
 //! \author Tony Kirke
 //! \ingroup double_templates iir
 template <class Numeric, class Coeff = float_type> class iir {
@@ -62,8 +60,8 @@ template <class Numeric, class Coeff = float_type> class iir {
   }
   //! Set 2nd order IIR coefficients
   void set_coeffs(iir_coeff& design) {
-    if (design.getState() == 2) design.convert_to_ab();
-    if (design.getState() == 3) {
+    bool ok = design.calculate_biquad_coefficents();
+    if (ok) {
       if (odd) {
         if (lpf)
           fos.set_coeffs(-real(design.get_pole(0)), 1.0);
@@ -77,7 +75,6 @@ template <class Numeric, class Coeff = float_type> class iir {
       gain = (Coeff)design.getGain();
     } else {
       std::cout << "Error can not set coefficients";
-      std::cout << "Design.getState() = " << design.getState() << "\n";
     }
   }
   //! print coefficients

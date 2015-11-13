@@ -32,7 +32,7 @@ ADD_LIBRARY(filtlib ${SOURCES})
 ADD_EXECUTABLE(iir_plot ${iir_plot_SOURCES} ${iir_plot_HEADERS_MOC})
 set_property(TARGET filtlib PROPERTY CXX_STANDARD 11)
 
-TARGET_LINK_LIBRARIES(iir_plot filtlib ${QT_LIBRARIES} spucelib)
+TARGET_LINK_LIBRARIES(iir_plot filtlib ${QT_LIBRARIES} spuce)
 set_property(TARGET iir_plot PROPERTY CXX_STANDARD 11)
 QT5_USE_Modules(iir_plot Gui)
 QT5_USE_Modules(iir_plot Core)

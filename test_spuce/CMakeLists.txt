@@ -31,7 +31,7 @@ SET(TARGETS
 FOREACH(mod ${TARGETS})
 	SET(SRC test_${mod}.cpp)
 	ADD_EXECUTABLE(plot_${mod} ${SRC})
-  TARGET_LINK_LIBRARIES(plot_${mod} spucelib spuce_debug ${PYTHON_LIBRARY})
+  TARGET_LINK_LIBRARIES(plot_${mod} spuce spuce_debug ${PYTHON_LIBRARY})
 	set_property(TARGET plot_${mod} PROPERTY CXX_STANDARD 11)
 	set_property(TARGET plot_${mod} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 ENDFOREACH(mod ${EXTS})

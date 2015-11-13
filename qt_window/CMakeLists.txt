@@ -29,7 +29,7 @@ ADD_LIBRARY(winlib ${SOURCES})
 ADD_EXECUTABLE(window_plot ${window_plot_SOURCES} ${window_plot_HEADERS_MOC})
 set_property(TARGET winlib PROPERTY CXX_STANDARD 11)
 
-TARGET_LINK_LIBRARIES(window_plot winlib ${QT_LIBRARIES} spucelib)
+TARGET_LINK_LIBRARIES(window_plot winlib ${QT_LIBRARIES} spuce)
 set_property(TARGET window_plot PROPERTY CXX_STANDARD 11)
 QT5_USE_Modules(window_plot Gui)
 QT5_USE_Modules(window_plot Core)

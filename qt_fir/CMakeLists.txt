@@ -32,7 +32,7 @@ ADD_LIBRARY(firlib ${SOURCES})
 ADD_EXECUTABLE(fir_plot ${fir_plot_SOURCES} ${fir_plot_HEADERS_MOC})
 set_property(TARGET firlib PROPERTY CXX_STANDARD 11)
 
-TARGET_LINK_LIBRARIES(fir_plot firlib ${QT_LIBRARIES} spucelib)
+TARGET_LINK_LIBRARIES(fir_plot firlib ${QT_LIBRARIES} spuce)
 set_property(TARGET fir_plot PROPERTY CXX_STANDARD 11)
 QT5_USE_Modules(fir_plot Gui)
 QT5_USE_Modules(fir_plot Core)

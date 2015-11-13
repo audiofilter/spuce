@@ -6,7 +6,6 @@
 namespace spuce {
 //! \file
 //! \brief   class for CIC digital filter
-//
 //!  Implementation for cascaded integrator comb filters
 //!  This implementation provides for both decimation and
 //!  interpolation filtering. Registers are signed long and

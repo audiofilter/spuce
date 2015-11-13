@@ -4,6 +4,7 @@
 namespace spuce {
 //! \file
 //! \brief IIR notch filter based on 2nd order biquad
+//! Independent frequency and depth control  
 //! \author Tony Kirke
 //! \ingroup double_templates iir
 template <class Numeric, class Coeff = float_type> class notch_iir {

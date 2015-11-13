@@ -5,6 +5,7 @@
 namespace spuce {
 //! \file
 //! \brief IIR structure that can cut or boost signals at a programmed frequency
+//! This has independent controls for notch frequency and depth of notch
 //! \author Tony Kirke
 //! \image html cutboost.png
 //! \ingroup double_templates iir
