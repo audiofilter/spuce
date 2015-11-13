@@ -13,7 +13,25 @@ There will be less concern for fixed-point code initially.
 
 Currently there is some code for IIR Filter Design & Implementation
 
+* Butterworth
+* Chebyshev
+* Inverse Chebyshev
+* Elliptic
+* Maximally flat FIR
+* Remez Equiripple
+* Raised Cosine FIR
+* Gaussian FIR
+* Sinc FIR
+* Cascaded Integrate Comb filters (or CIC filters)
+* Notch filter
+* Cut/Boost Filter
+* Halfband/Subband IIR filters
+* Irrational resampling with Farrow & Lagrange based filters
+	   
 For testing, python + matplotlib is used.
+
+* Most of the test involve using python's matplotlib to show a frequency response of the filter, sometimes impulse responses are used
+
 QT5 needed for test application
 
 - Travis: [![Build Status](https://travis-ci.org/audiofilter/spuce.png)](https://travis-ci.org/audiofilter/spuce)
