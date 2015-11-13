@@ -11,7 +11,9 @@ SET(FILT_SRCS
 	filters/find_roots.cpp
 	filters/fir_coeff.cpp
 	filters/iir_coeff.cpp
+  filters/design_iir.cpp
 	# FIR stuff
+  filters/design_fir.cpp
 	filters/gaussian_fir.cpp
 	filters/butterworth_fir.cpp
 	filters/raised_cosine_imp.cpp
@@ -23,6 +25,7 @@ SET(FILT_SRCS
 	filters/transform_fir.cpp
 	# Windows
 	filters/window.cpp
+  filters/design_window.cpp
 	# Other filters
 	filters/butterworth_allpass.cpp
 	filters/elliptic_allpass.cpp

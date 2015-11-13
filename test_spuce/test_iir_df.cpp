@@ -2,7 +2,7 @@
 #include <fstream>
 #include <iomanip>
 using namespace std;
-#include <spuce/filters/design_iir.h>
+#include <spuce/filters/butterworth_iir.h>
 #include <spuce/filters/iir_df.h>
 #include "cfft.h"
 using namespace spuce;

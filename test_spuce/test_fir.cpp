@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <cmath>
 #include <spuce/filters/fir_coeff.h>
-#include <spuce/filters/design_fir.h>
+#include <spuce/filters/raised_cosine.h>
 #include <spuce/filters/fir.h>
 using namespace std;
 using namespace spuce;
