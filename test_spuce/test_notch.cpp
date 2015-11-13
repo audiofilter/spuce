@@ -6,20 +6,17 @@
 using namespace std;
 using namespace spuce;
 //! \brief testing of notch filter based on allpass section
-//
 //! \ingroup examples
 #include "plot_fft.h"
 
 int main(int argv, char* argc[]) {
-
 	const int N=256;
-  int i;
-  double imp;
 	std::vector<double> y(N);
-  notch_allpass<double,double> Notch(0.42822);
+  // Notch is at frequency 0.1
+  notch_allpass<double,double> Notch(0.1);
 
-  imp = 1.0;
-  for (i=0;i<N;i++) {
+  double imp = 1.0;
+  for (int i=0;i<N;i++) {
 		y[i] = Notch.clock(imp);
 		imp = 0;
   }

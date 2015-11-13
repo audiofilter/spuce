@@ -30,6 +30,7 @@ SET(FILT_SRCS
 	filters/butterworth_allpass.cpp
 	filters/elliptic_allpass.cpp
   filters/shelf_allpass1.cpp
+  filters/farrow_upsampler.cpp
 )
 
 add_library(spuce ${FILT_SRCS})

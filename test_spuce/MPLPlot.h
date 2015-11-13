@@ -217,7 +217,6 @@ class PyPlotter {
   void show_data() {
     Py_Initialize();
     PyRun_SimpleString("import sys");
-    PyRun_SimpleString("print sys.path");
     PyRun_SimpleString("import matplotlib");
     PyRun_SimpleString("matplotlib.use('qt5agg')");
     PyRun_SimpleString("import matplotlib.pyplot as plt");

@@ -66,5 +66,5 @@ void plot_data(std::vector<double>& data) {
   plt.init();
   plt.plot_data(data, &d);
   plt.load_data();
-  plt.show();
+  plt.show_data();
 }

@@ -26,6 +26,8 @@ SET(TARGETS
 	# special filters
 	iir_allpass1
 	notch
+  cic
+  interp
 	)
 
 FOREACH(mod ${TARGETS})
