@@ -20,6 +20,7 @@ SET(FILT_SRCS
 	filters/root_raised_cosine_imp.cpp
 	filters/remez_fir.cpp
 	filters/sinc_fir.cpp
+	filters/sinc_helper.cpp
 	filters/create_remez_lpfir.cpp
 	filters/fir_inv_dft.cpp
 	filters/transform_fir.cpp

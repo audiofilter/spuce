@@ -178,12 +178,12 @@ void make_filter::vertical_swipe(int len, bool in_passband, bool above_stop) {
 }
 double make_filter::update(double *w) {
   switch (shape) {
-	case RemezFIR:         taps = design_fir("remez", remez_taps, remez_pass_edge, remez_stop_edge, remez_stop_weight);		break;
-	case MaxflatFIR:       taps = design_fir("butterworth", maxflat_taps, maxflat_fc);		break;
-	case GaussianFIR:      taps = design_fir("gaussian", gauss_taps, gauss_fc);		break;
-	case SincFIR:          taps = design_fir("sinc", sinc_taps, sinc_fc);		break;
-	case RaisedCosine:     taps = design_fir("raisedcosine", rc_taps, rc_fc, rc_alpha);		break;
-	case RootRaisedCosine: taps = design_fir("rootraisedcosine", rrc_taps, 0.5, rrc_alpha); break;
+	case RemezFIR:         taps = design_fir("remez", "LOW_PASS", remez_taps, remez_pass_edge, 0, remez_stop_edge, remez_stop_weight);		break;
+	case MaxflatFIR:       taps = design_fir("butterworth", "LOW_PASS",  maxflat_taps, maxflat_fc, 0);		break;
+	case GaussianFIR:      taps = design_fir("gaussian",  "LOW_PASS", gauss_taps, gauss_fc, 0);		break;
+	case SincFIR:          taps = design_fir("sinc",  "LOW_PASS", sinc_taps, sinc_fc, 0);		break;
+	case RaisedCosine:     taps = design_fir("raisedcosine",  "LOW_PASS", rc_taps, rc_fc, 0, rc_alpha);		break;
+	case RootRaisedCosine: taps = design_fir("rootraisedcosine",  "LOW_PASS", rrc_taps, 0.5, 0, rrc_alpha); break;
 	case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
 	}
 	fir_freq(taps, pts, w, 1.0);
