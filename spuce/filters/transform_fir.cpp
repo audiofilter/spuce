@@ -32,6 +32,10 @@ std::vector<float_type> transform_fir(const std::string& band_type, const std::v
     for (size_t i=0;i<taps.size();i++) out[i] *= -1;
     size_t mid_tap = (taps.size()-1)/2;
     out[mid_tap] += 1;
+  } else if (band_type == "INVERSE") {
+    for (size_t i=0;i<taps.size();i++) out[i] = -taps[i];
+    size_t mid_tap = (taps.size()-1)/2;
+    out[mid_tap] += 1;
   } else {
     std::cout << "Unsupported band type in transform_fir :" << band_type << "\n";
   }

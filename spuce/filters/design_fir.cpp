@@ -27,90 +27,113 @@ std::vector<double> design_fir(const std::string& fir_type,
   filt.set_size(order);
 
   float_type filt_bw;
-  float_type center_frequency = 0;
-  
-  if ((band_type == "BAND_PASS") ||
-      (band_type == "BAND_STOP") ||
-      (band_type == "COMPLEX_BAND_PASS") ||
-      (band_type == "COMPLEX_BAND_STOP")) {
-    center_frequency = 0.5*(fu+fl);
-    // Since bandpass/stop, 1/2 the band-pass filter bandwidth since double sided
-    // Also bandwidth is absolute value
-    filt_bw = std::abs(0.5*(fu-fl));
-  } else if (band_type == "HIGH_PASS") {
-    filt_bw = 0.5 - fl;
-  } else {
-    filt_bw = fl;
-  }
+  float_type irate;
+  float_type center_frequency = 0.5*(fu+fl);
 
-  if (fir_type == "maxflat") {
-    filt_bw = std::max(filt_bw,0.02);
-    butterworth_fir(filt, filt_bw);
-    taps = get_taps(filt);
-  } else if (fir_type == "gaussian") {
-    gaussian_fir(filt,filt_bw);
-    taps = get_taps(filt);
-  } else if (fir_type == "remez") {
+  // Handle Remez separately
+  if (fir_type == "remez") {
     std::vector<float_type> bands(4);
     std::vector<float_type> des(4);
     std::vector<float_type> w(4);
     taps.resize(order);
     remez_fir Remz;
-    float_type stop_freq = alpha_beta_stop_edge;
-    w[0] = 1.0;
-    if (band_type == "BAND_STOP") {
-      w[1] = 1.0/weight;
-    } else {
-      w[1] = weight;
+
+    if ((band_type == "BAND_PASS") || (band_type == "BAND_STOP")) {
+      fl = (fu - fl);
     }
-    if (band_type == "HIGH_PASS") {
-      filt_bw = 0.5 - stop_freq;
-      stop_freq = filt_bw + fl;
-    }
+    // For Remez keep bw = fl
+    filt_bw = fl;
+    float_type stop_freq = alpha_beta_stop_edge + filt_bw;
     bands[0] = 0;
     bands[1] = filt_bw;
     bands[2] = stop_freq;
     bands[3] = 0.5;
-    des[0] = 1.0;
-    des[1] = 0.0;
-    std::cout << "Remez : " << filt_bw << " " << stop_freq << "\n";
-    Remz.remez(taps, order, 2, bands, des, w, remez_type::BANDPASS);
-  } else if (fir_type == "raised_cosine") {
-    raised_cosine(filt, alpha_beta_stop_edge, 1.0/filt_bw);
-    taps = get_taps(filt);
-  } else if (fir_type == "root_raised_cosine") {
-    root_raised_cosine(filt, alpha_beta_stop_edge, 1.0/filt_bw);
-    taps = get_taps(filt);
-  } else if (fir_type == "sinc") {
-    sinc_fir(filt,filt_bw);
-    taps = get_taps(filt);
-  } else {
-    std::string err = "Unknown fir type : " + fir_type;
-		throw std::runtime_error(err);
-  }
-
-  if (taps.size() > 0) {
-    // Transform Taps!!
-    if (band_type == "HIGH_PASS") taps = transform_fir("HIGH_PASS", taps, center_frequency); 
-    else if (band_type == "BAND_PASS") taps = transform_fir("BAND_PASS", taps, center_frequency);
-    else if (band_type == "BAND_STOP") {
-      // Handle Sinc as a high-pass filter that is later transformed up in frequency
-      if (fir_type == "sinc") {
-        /*
-          filt_bw = 0.5 - fl;
-          sinc_fir(filt,filt_bw);
-          taps = get_taps(filt);
-          taps = transform_fir("HIGH_PASS", taps, center_frequency);
-        */
-        taps = sincBSF(order, fl, fu);
-      } else if (fir_type == "maxflat") {
-        std::cout << "maxflat FIR as Band stop not supported \n";
+    if (band_type == "HIGH_PASS") {
+      des[0] = 0.0;
+      des[1] = 1.0;
+      w[0] = weight;
+      w[1] = 1.0;
+    } else {
+      des[0] = 1.0;
+      des[1] = 0.0;
+      if (band_type == "BAND_STOP") { 
+        w[0] = weight;
+        w[1] = 1.0;
       } else {
-        taps = transform_fir("BAND_STOP", taps, center_frequency);
+        w[0] = 1.0;
+        w[1] = weight;
+      }
+    }
+    std::cout << "Remez : " << bands[1] << " " << bands[2] << " ";
+    std::cout << " des : " << des[0] << " " << des[1] << " ";
+    std::cout << " weight : " << w[0] << " " << w[1] << "\n";
+    Remz.remez(taps, order, 2, bands, des, w, remez_type::BANDPASS);
+
+    if ((band_type == "BAND_PASS") || (band_type == "BAND_STOP")) {
+      taps = transform_fir(band_type, taps, center_frequency);
+    }
+  } else {
+    irate   = 1.0/fl;
+    if ((band_type == "BAND_PASS") ||
+        (band_type == "BAND_STOP") ||
+        (band_type == "COMPLEX_BAND_PASS") ||
+        (band_type == "COMPLEX_BAND_STOP")) {
+      // Since bandpass/stop, 1/2 the band-pass filter bandwidth since double sided
+      // Also bandwidth is absolute value
+      filt_bw = std::abs(0.5*(fu-fl));
+      irate   = 1.0/std::abs(0.5*(fu-fl));
+    } else if (band_type == "HIGH_PASS") {
+      filt_bw = 0.5 - fl;
+    } else {
+      filt_bw = fl;
+    }
+
+    if (fir_type == "maxflat") {
+      filt_bw = std::max(filt_bw,0.02);
+      butterworth_fir(filt, filt_bw);
+      taps = get_taps(filt);
+    } else if (fir_type == "gaussian") {
+      if (band_type == "HIGH_PASS") filt_bw = fl;
+      gaussian_fir(filt,filt_bw);
+      taps = get_taps(filt);
+    } else if (fir_type == "raised_cosine") {
+      raised_cosine(filt, alpha_beta_stop_edge, irate);
+      taps = get_taps(filt);
+    } else if (fir_type == "root_raised_cosine") {
+      root_raised_cosine(filt, alpha_beta_stop_edge, irate);
+      taps = get_taps(filt);
+    } else if (fir_type == "sinc") {
+      sinc_fir(filt,filt_bw);
+      taps = get_taps(filt);
+    } else {
+      std::string err = "Unknown fir type : " + fir_type;
+      throw std::runtime_error(err);
+    }
+
+    if (taps.size() > 0) {
+      // Transform Taps!!
+      if (band_type == "HIGH_PASS") {
+        // Treat these filters differently for high pass since not quite possible to use high-pass transform
+        if ((fir_type == "raised_cosine") || (fir_type == "root_raised_cosine")
+            || (fir_type == "gaussian"))  {
+          taps = transform_fir("INVERSE", taps, center_frequency);
+        } else {
+          taps = transform_fir("HIGH_PASS", taps, center_frequency);
+        }
+      } else if (band_type == "BAND_PASS") {
+        taps = transform_fir("BAND_PASS", taps, center_frequency);
+      } else if (band_type == "BAND_STOP") {
+        // Handle Sinc as a high-pass filter that is later transformed up in frequency
+        if (fir_type == "sinc") {
+          taps = sincBSF(order, fl, fu);
+        } else if (fir_type == "maxflat") {
+          std::cout << "maxflat FIR as Band stop not supported \n";
+        } else {
+          taps = transform_fir("BAND_STOP", taps, center_frequency);
+        }
       }
     }
   }
- 
   return taps;
 }
 

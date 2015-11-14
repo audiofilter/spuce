@@ -75,8 +75,11 @@ void MainWindow::updatePlot()
   ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
   ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
   */
-  ui->customPlot->graph()->clearData();
-  plot3(ui->customPlot);
+    if (MaxflatFIR_on || RaisedCosine_on || RootRaisedCosine_on
+        || Remez_on || Gaussian_on || Sinc_on) {
+        ui->customPlot->graph()->clearData();
+        plot3(ui->customPlot);
+    }
 }
 
 void MainWindow::CBChanged() {}

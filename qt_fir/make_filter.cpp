@@ -80,8 +80,8 @@ void make_filter::reset() {
   gauss_fc = 0.06;
   rc_fc = rrc_fc = 0.125;
 
-  remez_pass_edge = 0.05;
-  remez_trans = 0.05;
+  remez_pass_edge = 0.0625;
+  remez_trans = 0.1;
   remez_stop_weight = 50;
 
   rc_alpha = rrc_alpha = 0.25;
@@ -144,7 +144,7 @@ double make_filter::horiz_swipe(int len, bool in_passband) {
 		break;
 	case RaisedCosine:
 		if (in_passband) {
-			rc_fc = limit(gain * rc_fc, 0.5, 0.001);
+			rc_fc = limit(gain * rc_fc, 1.0, 0.001);
 		} else {
 			rc_alpha = limit(gain * rc_alpha, 1, 0.01);
 		}
@@ -248,13 +248,10 @@ double make_filter::update(double *w) {
   
   fu = center + fc/2.0;
 
-  double remez_stop_edge = fl + remez_trans;
-  std::cout << "About to des fir\n";  
-  
   try {
     switch (shape) {
     case RemezFIR:
-      taps = design_fir("remez", band_type, remez_taps, fl, fu, remez_stop_edge, remez_stop_weight);		break;
+      taps = design_fir("remez", band_type, remez_taps, fl, fu, remez_trans, remez_stop_weight);		break;
     case MaxflatFIR:
       taps = design_fir("maxflat", band_type,  maxflat_taps, fl, fu);		break;
     case GaussianFIR:
@@ -262,6 +259,7 @@ double make_filter::update(double *w) {
     case SincFIR:
       taps = design_fir("sinc",  band_type, sinc_taps, fl , fu);		break;
     case RaisedCosine:
+      std::cout << "RC fl = " << fl << "\n";
       taps = design_fir("raised_cosine",  band_type, rc_taps, fl, fu, rc_alpha);		break;
     case RootRaisedCosine:
       taps = design_fir("root_raised_cosine",  band_type, rrc_taps, fl, fu, rrc_alpha); break;
@@ -280,7 +278,7 @@ double make_filter::update(double *w) {
     try {
       switch (shape) {
       case RemezFIR:
-        complex_taps = design_complex_fir("remez", band_type, remez_taps, fl, fu, remez_stop_edge, remez_stop_weight);		break;
+        complex_taps = design_complex_fir("remez", band_type, remez_taps, fl, fu, remez_trans, remez_stop_weight);		break;
       case MaxflatFIR:
         complex_taps = design_complex_fir("maxflat", band_type,  maxflat_taps, fl, fu);		break;
       case GaussianFIR:
