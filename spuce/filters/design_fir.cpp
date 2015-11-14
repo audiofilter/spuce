@@ -83,20 +83,26 @@ std::vector<double> design_fir(const std::string& fir_type,
     std::cout << "Unknown window type\n";
   }
 
-  // Transform Taps!!
-  if (band_type == "HIGH_PASS") taps = transform_fir("HIGH_PASS", taps, center_frequency); 
-  else if (band_type == "BAND_PASS") taps = transform_fir("BAND_PASS", taps, center_frequency);
-  else if (band_type == "BAND_STOP") {
-    // Handle Sinc as a high-pass filter that is later transformed up in frequency
-    if (fir_type == "sinc") {
-      filt_bw = 0.5 - fl;
-      sinc_fir(filt,filt_bw);
-      taps = get_taps(filt);
-      taps = transform_fir("HIGH_PASS", taps, center_frequency);
-      // OR ?
-      //taps = sincBSF(order, fl, fu);
-    } else {
-      taps = transform_fir("BAND_STOP", taps, center_frequency);
+  if (taps.size() > 0) {
+    // Transform Taps!!
+    if (band_type == "HIGH_PASS") taps = transform_fir("HIGH_PASS", taps, center_frequency); 
+    else if (band_type == "BAND_PASS") taps = transform_fir("BAND_PASS", taps, center_frequency);
+    else if (band_type == "BAND_STOP") {
+      // Handle Sinc as a high-pass filter that is later transformed up in frequency
+      if (fir_type == "sinc") {
+        filt_bw = 0.5 - fl;
+        sinc_fir(filt,filt_bw);
+        taps = get_taps(filt);
+        taps = transform_fir("HIGH_PASS", taps, center_frequency);
+        // OR ?
+        taps = sincBSF(order, fl, fu);
+      } else {
+        if (fir_type == "butterworth") {
+          std::cout << "Butterworth FIR as Band stop not supported \n";
+        } else {
+          taps = transform_fir("BAND_STOP", taps, center_frequency);
+        }
+      }
     }
   }
  

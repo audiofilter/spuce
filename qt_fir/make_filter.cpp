@@ -131,7 +131,11 @@ double make_filter::horiz_swipe(int len, bool in_passband) {
 		}
 		break;
 	case RootRaisedCosine:
-		rrc_alpha = limit(gain * rrc_alpha, 1, 0.01);
+		if (in_passband) {
+			rrc_fc = limit(gain * rrc_fc, 0.5, 0.001);
+    } else {
+      rrc_alpha = limit(gain * rrc_alpha, 1, 0.01);
+    }
 		break;
 	case None:
       break;
@@ -209,7 +213,7 @@ double make_filter::update(double *w) {
 	case GaussianFIR:    fc = gauss_fc;break;
 	case SincFIR:    fc = sinc_fc;break;
 	case RaisedCosine:    fc = rc_fc;break;
-	case RootRaisedCosine:    fc = 0.5;break;
+	case RootRaisedCosine:    fc = rrc_fc;break;
   case None: fc = 0.5; break;
 	}
 
@@ -218,9 +222,9 @@ double make_filter::update(double *w) {
   } else if (band_type == "HIGH_PASS") {
     fl = fc;
   } else if ((band_type == "BAND_PASS") || (band_type == "BAND_STOP")) {
-    if (center > fc) {
-      fl = center - fc;
-      fu = center + fc;
+    if (center > fc/2) {
+      fl = center - fc/2.0;
+      fu = center + fc/2.0;
     } else {
       fl = fc;
       fu = fc;
@@ -246,7 +250,8 @@ double make_filter::update(double *w) {
   return (0);
 }
 double make_filter::get_mag(double w) {
-	std::complex<double> z_inc,z;
+	std::complex<double> z_inc;
+	std::complex<double> z = 1.0;
 	z_inc = std::complex<double>(cos(w),sin(w));
 	std::complex<double> nom = 0;
 	for (size_t j=0;j<taps.size();j++) {
