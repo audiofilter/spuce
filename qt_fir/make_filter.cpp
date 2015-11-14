@@ -1,5 +1,6 @@
 // Copyright (c) 2015 Tony Kirke. License MIT  (http://www.opensource.org/licenses/mit-license.php)
 #include "make_filter.h"
+#include <stdexcept>
 #include <cmath>
 #include <complex>
 #include <spuce/filters/design_fir.h>
@@ -264,7 +265,7 @@ double make_filter::update(double *w) {
     case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
     }
   }
-  catch (const std::runtime_error& error) {
+  catch (const std::runtime_error error) {
     std::cout << "Problem in design_fir("+band_type+"):"+error.what();
     for (int i = 0; i < pts; i++) w[i] = 1.0;
   }
@@ -297,7 +298,7 @@ double make_filter::update(double *w) {
       case None: break;
       }
     }
-    catch (const std::runtime_error& error) {
+    catch (const std::runtime_error error) {
       std::cout << "Problem in design_complex_fir("+band_type+"):"+error.what();
       for (int i = 0; i < pts; i++) w[i] = 1.0;
     }
