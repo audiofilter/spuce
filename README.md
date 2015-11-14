@@ -1,8 +1,9 @@
 # spuce - SPUC enhanced
-A rewrite of spuc with more testing, better code design and c++11 features.
 
 - Travis: [![Build Status](https://travis-ci.org/audiofilter/spuce.png)](https://travis-ci.org/audiofilter/spuce)
 - AppVeyor: [![Build status](https://ci.appveyor.com/api/projects/status/vmjw8ie1ag7wdfne?svg=true)](https://ci.appveyor.com/project/audiofilter/spuce)
+
+A rewrite of spuc with more testing, better code design and c++11 features.
 
 * Uses std::complex instead of custom complex class
 * Will focus of floating point instead of fixed-point modules
