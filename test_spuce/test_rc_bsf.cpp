@@ -16,7 +16,7 @@ int main(int argv, char* argc[]) {
   float_type alpha = 0.125;
   float_type spb = 0.125;
 
-  auto filt = design_fir("raisedcosine", "LOW_PASS", TAPS, spb, alpha);
+  auto filt = design_fir("raised_cosine", "LOW_PASS", TAPS, spb, alpha);
   auto tf_taps = transform_fir("BAND_STOP", filt, 0.125);
   fir<double> BSFIR(tf_taps);
 	std::vector<double> y(N);

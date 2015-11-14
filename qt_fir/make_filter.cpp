@@ -235,15 +235,15 @@ double make_filter::update(double *w) {
 	case RemezFIR:
     taps = design_fir("remez", band_type, remez_taps, remez_pass_edge/2.0, 0, remez_stop_edge/2.0, remez_stop_weight);		break;
 	case MaxflatFIR:
-    taps = design_fir("butterworth", band_type,  maxflat_taps, fl, fu);		break;
+    taps = design_fir("maxflat", band_type,  maxflat_taps, fl, fu);		break;
 	case GaussianFIR:
     taps = design_fir("gaussian",  band_type, gauss_taps, fl, fu);		break;
 	case SincFIR:
     taps = design_fir("sinc",  band_type, sinc_taps, fl , fu);		break;
 	case RaisedCosine:
-    taps = design_fir("raisedcosine",  band_type, rc_taps, fl, fu, rc_alpha);		break;
+    taps = design_fir("raised_cosine",  band_type, rc_taps, fl, fu, rc_alpha);		break;
 	case RootRaisedCosine:
-    taps = design_fir("rootraisedcosine",  band_type, rrc_taps, fl, fu, rrc_alpha); break;
+    taps = design_fir("root_raised_cosine",  band_type, rrc_taps, fl, fu, rrc_alpha); break;
 	case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
 	}
 	fir_freq(taps, pts, w, 1.0);

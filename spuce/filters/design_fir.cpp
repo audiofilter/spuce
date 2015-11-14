@@ -43,7 +43,7 @@ std::vector<double> design_fir(const std::string& fir_type,
     filt_bw = fl;
   }
   
-  if (fir_type == "butterworth") {
+  if (fir_type == "maxflat") {
     filt_bw = std::max(filt_bw,0.02);
     butterworth_fir(filt, filt_bw);
     taps = get_taps(filt);
@@ -70,10 +70,10 @@ std::vector<double> design_fir(const std::string& fir_type,
     des[0] = 1.0;
     des[1] = 0.0;
     Remz.remez(taps, order, 2, bands, des, w, remez_type::BANDPASS);
-  } else if (fir_type == "raisedcosine") {
+  } else if (fir_type == "raised_cosine") {
     raised_cosine(filt, alpha_beta_stop_edge, 1.0/filt_bw);
     taps = get_taps(filt);
-  } else if (fir_type == "rootraisedcosine") {
+  } else if (fir_type == "root_raised_cosine") {
     root_raised_cosine(filt, alpha_beta_stop_edge, 1.0/filt_bw);
     taps = get_taps(filt);
   } else if (fir_type == "sinc") {
@@ -90,18 +90,17 @@ std::vector<double> design_fir(const std::string& fir_type,
     else if (band_type == "BAND_STOP") {
       // Handle Sinc as a high-pass filter that is later transformed up in frequency
       if (fir_type == "sinc") {
-        filt_bw = 0.5 - fl;
-        sinc_fir(filt,filt_bw);
-        taps = get_taps(filt);
-        taps = transform_fir("HIGH_PASS", taps, center_frequency);
-        // OR ?
+        /*
+          filt_bw = 0.5 - fl;
+          sinc_fir(filt,filt_bw);
+          taps = get_taps(filt);
+          taps = transform_fir("HIGH_PASS", taps, center_frequency);
+        */
         taps = sincBSF(order, fl, fu);
+      } else if (fir_type == "maxflat") {
+        std::cout << "maxflat FIR as Band stop not supported \n";
       } else {
-        if (fir_type == "butterworth") {
-          std::cout << "Butterworth FIR as Band stop not supported \n";
-        } else {
-          taps = transform_fir("BAND_STOP", taps, center_frequency);
-        }
+        taps = transform_fir("BAND_STOP", taps, center_frequency);
       }
     }
   }
