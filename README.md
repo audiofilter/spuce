@@ -1,10 +1,14 @@
 # spuce - SPUC enhanced
 A rewrite of spuc with more testing, better code design and c++11 features.
 
+- Travis: [![Build Status](https://travis-ci.org/audiofilter/spuce.png)](https://travis-ci.org/audiofilter/spuce)
+- AppVeyor: [![Build status](https://ci.appveyor.com/api/projects/status/vmjw8ie1ag7wdfne?svg=true)](https://ci.appveyor.com/project/audiofilter/spuce)
+
 * Uses std::complex instead of custom complex class
 * Will focus of floating point instead of fixed-point modules
 * Includes Chebyshev2 filter
-* Adding support for Bandpass and Bandstop designs
+* Bug fixes for odd order IIR filters
+* Adding support for Bandpass and Bandstop designs for both IIR and FIR filters
 
 Most of spuc was written many years ago before C++ compilers had good template support and was primarily written for fixed-point hardware design and simulation.
 
@@ -34,8 +38,6 @@ For testing, python + matplotlib is used.
 
 QT5 needed for test application
 
-- Travis: [![Build Status](https://travis-ci.org/audiofilter/spuce.png)](https://travis-ci.org/audiofilter/spuce)
-- AppVeyor: [![Build status](https://ci.appveyor.com/api/projects/status/vmjw8ie1ag7wdfne?svg=true)](https://ci.appveyor.com/project/audiofilter/spuce)
 ![Demo App](App.png "IIR Designer")
 
 ![Demo App](Fir.png "FIR Designer")
