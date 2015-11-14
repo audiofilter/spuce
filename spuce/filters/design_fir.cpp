@@ -125,7 +125,8 @@ std::vector<double> design_fir(const std::string& fir_type,
         if (fir_type == "sinc") {
           taps = sincBSF(order, fl, fu);
         } else if (fir_type == "maxflat") {
-          std::cout << "maxflat FIR as Band stop not supported \n";
+          std::string err = "maxflat FIR as BAND_STOP not supported\n";
+          throw std::runtime_error(err);
         } else {
           taps = transform_fir("BAND_STOP", taps, center_frequency);
         }
@@ -155,7 +156,8 @@ std::vector<std::complex<double> > design_complex_fir(const std::string& fir_typ
     taps = design_fir(fir_type, "LOW_PASS", order, filt_bw, fu, alpha_beta_stop_edge, weight);
     auto complex_taps = transform_complex_fir(band_type, taps, center_frequency);
     if ((fir_type == "maxflat") && (band_type == "COMPLEX_BAND_STOP")) {
-      std::cout << "maxflat FIR as COMPLEX_BAND_STOP not supported \n";
+      std::string err = "maxflat FIR as COMPLEX_BAND_STOP not supported\n";
+      throw std::runtime_error(err);
     }
     // Override
     //for (int i=0;i<taps.size();i++) complex_taps[i] = taps[i];
