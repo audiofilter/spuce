@@ -292,7 +292,7 @@ void MainWindow::graphMoveEvent(QMouseEvent *event)
 	double x = M_PI*event->pos().x()/600.0;
 	
 	double m = get_mag(x);
-	bool in_passband = (m>-3);
+	bool in_passband = (m>-10);
   
 	double y_db = -100.0*y + 10;
 	bool above_stop = (-y_db < m);

@@ -57,7 +57,7 @@ void make_filter::reset() {
 
   maxflat_fc = 0.16;
   gauss_fc = 0.06;
-  rc_fc = rrc_fc = 0.5;
+  rc_fc = rrc_fc = 0.125;
 
   remez_pass_edge = 0.4;
   remez_trans = 0.2;
