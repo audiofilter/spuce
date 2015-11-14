@@ -28,13 +28,13 @@ void fir_freq(std::vector<double>& MF, int pts, double* w) {
 
 void fir_freq(std::vector<std::complex<double>>& MF, int pts, double* w) {
   double t;
-  double w_inc = M_PI/(float)pts; 
+  double w_inc = 2.0*M_PI/(float)pts; 
   std::complex<double> z_inc, nom;
 	
   for (int i=0;i<pts;i++) {
     double wf = w_inc*i;
     std::complex<double> z(1,0);
-		z_inc = std::complex<double>(cos(wf),sin(wf));
+		z_inc = std::polar(1.0,wf);
 		nom = 0;
 		for (size_t j=0;j<MF.size();j++) {
 			nom += z*MF[j];
@@ -211,7 +211,6 @@ void make_filter::set_center_freq(int len) {
 	// Convert swipe to centre freq
 	double gain = pow(2, 0.002 * len);
 	center = limit(gain*center, 0.5, 0.01);
-  //	std::cout << " gain = " << gain << " cen = " << center << "\n";
 }
 int make_filter::get_filter_type() {
   if ((band_type == "BAND_PASS") || (band_type == "BAND_STOP")) {
@@ -259,7 +258,6 @@ double make_filter::update(double *w) {
     case SincFIR:
       taps = design_fir("sinc",  band_type, sinc_taps, fl , fu);		break;
     case RaisedCosine:
-      std::cout << "RC fl = " << fl << "\n";
       taps = design_fir("raised_cosine",  band_type, rc_taps, fl, fu, rc_alpha);		break;
     case RootRaisedCosine:
       taps = design_fir("root_raised_cosine",  band_type, rrc_taps, fl, fu, rrc_alpha); break;
@@ -270,9 +268,16 @@ double make_filter::update(double *w) {
     std::cout << "Problem in design_fir("+band_type+"):"+error.what();
     for (int i = 0; i < pts; i++) w[i] = 1.0;
   }
+
+  /* Define TEST_COMPLEX_FIRS To see frequency responses of complex fir, note the frequency plot
+     shows -0.5 to 0.5 but labels are still 0 to 0.5 */
+
+  //#define TEST_COMPLEX_FIRS
+#ifdef TEST_COMPLEX_FIRS
+  if (band_type == "BAND_PASS") band_type = "COMPLEX_BAND_PASS";
+  if (band_type == "BAND_STOP") band_type = "COMPLEX_BAND_STOP";
+#endif
   
-  //if (band_type == "BAND_PASS") band_type = "COMPLEX_BAND_PASS";
-  //if (band_type == "BAND_STOP") band_type = "COMPLEX_BAND_STOP";
   if ((band_type == "COMPLEX_BAND_PASS") || (band_type == "COMPLEX_BAND_STOP")) {
     std::vector<std::complex<double>> complex_taps;
     try {
