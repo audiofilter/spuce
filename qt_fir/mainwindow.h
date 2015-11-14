@@ -48,12 +48,6 @@ public slots:
 
 private:
   int pts;
-  double pass_edge;
-  double trans;
-  double stop_dBs;
-  double alpha;
-  int taps;
-  int order;
   std::string shape;
   double* w;
 

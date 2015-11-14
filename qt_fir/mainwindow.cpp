@@ -14,12 +14,6 @@ MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow)
 {
-  pass_edge = 0;
-  order = 13;
-  taps = 25;
-  alpha = 0.25;
-  trans = 0.1;
-  stop_dBs = 40;
   pts = 250;
   w = new double[pts];
   for (int i=0;i<pts;i++) {
@@ -34,10 +28,12 @@ MainWindow::MainWindow(QWidget *parent) :
   Gaussian_on = NULL;
   Sinc_on = NULL;
 
+  shape = "Maxflat FIR";
+  lpf_sel(shape.c_str());
+  band_sel("LOW_PASS");
   graph_counter = 0;
 
   ui->setupUi(this);
-  //  setGeometry(400, 250, 542, 390);
   setup(ui->customPlot); 
 
   setWindowTitle("QCustomPlot: "+demoName);
@@ -175,7 +171,7 @@ QCPGraph* MainWindow::GetPtr() {
 ////////////////////////////////////
 void MainWindow::setup(QCustomPlot *customPlot)
 {
-  demoName = "spuce : Low Pass Filter Demo";
+  demoName = "spuce : FIR Filter Demo";
   customPlot->legend->setVisible(false);
   customPlot->legend->setFont(QFont("Helvetica",9));
   // set locale to english, so we get english decimal separator:
@@ -270,11 +266,6 @@ MainWindow::~MainWindow()
 void MainWindow::graphPressEvent(QMouseEvent *event)
 {
   if (event->button() == Qt::LeftButton) dragStartPosition = event->pos();
-  /*
-  std::cout << "Drag from (" << dragStartPosition.x()
-			<< "," << dragStartPosition.y()
-			<< ")\n";
-  */
 }
 
 void MainWindow::graphMoveEvent(QMouseEvent *event)

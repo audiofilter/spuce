@@ -33,7 +33,7 @@ std::vector<float_type> transform_fir(const std::string& band_type, const std::v
     size_t mid_tap = (taps.size()-1)/2;
     out[mid_tap] += 1;
   } else {
-    std::cout << "Unsupported band type :" << band_type << "\n";
+    std::cout << "Unsupported band type in transform_fir :" << band_type << "\n";
   }
   return out;
 }
@@ -51,7 +51,7 @@ std::vector<std::complex<float_type>> transform_complex_fir(const std::string& b
     size_t mid_tap = (taps.size()-1)/2;
     out[mid_tap] += 1;
   } else {
-    std::cout << "Unsupported band type :" << band_type << "\n";
+    std::cout << "Unsupported band type in transform_complex_fir :" << band_type << "\n";
   }
   return out;
 }

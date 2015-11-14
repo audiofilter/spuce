@@ -42,7 +42,7 @@ std::vector<double> design_fir(const std::string& fir_type,
   } else {
     filt_bw = fl;
   }
-  
+
   if (fir_type == "maxflat") {
     filt_bw = std::max(filt_bw,0.02);
     butterworth_fir(filt, filt_bw);
@@ -63,12 +63,17 @@ std::vector<double> design_fir(const std::string& fir_type,
     } else {
       w[1] = weight;
     }
+    if (band_type == "HIGH_PASS") {
+      filt_bw = 0.5 - stop_freq;
+      stop_freq = filt_bw + fl;
+    }
     bands[0] = 0;
     bands[1] = filt_bw;
     bands[2] = stop_freq;
     bands[3] = 0.5;
     des[0] = 1.0;
     des[1] = 0.0;
+    std::cout << "Remez : " << filt_bw << " " << stop_freq << "\n";
     Remz.remez(taps, order, 2, bands, des, w, remez_type::BANDPASS);
   } else if (fir_type == "raised_cosine") {
     raised_cosine(filt, alpha_beta_stop_edge, 1.0/filt_bw);
@@ -80,7 +85,8 @@ std::vector<double> design_fir(const std::string& fir_type,
     sinc_fir(filt,filt_bw);
     taps = get_taps(filt);
   } else {
-    std::cout << "Unknown window type\n";
+    std::string err = "Unknown fir type : " + fir_type;
+		throw std::runtime_error(err);
   }
 
   if (taps.size() > 0) {
@@ -106,5 +112,25 @@ std::vector<double> design_fir(const std::string& fir_type,
   }
  
   return taps;
+}
+
+std::vector<std::complex<double> > design_complex_fir(const std::string& fir_type,
+                                                      const std::string& band_type,                               
+                                                      int order, float_type fl, float_type fu,
+                                                      float_type alpha_beta_stop_edge,
+                                                      float_type weight) {
+  
+  std::vector<float_type> taps;
+  float_type center_frequency = 0.5*(fu+fl);
+  // Since bandpass/stop, 1/2 the band-pass filter bandwidth since double sided
+  // Also bandwidth is absolute value
+  float_type filt_bw = std::abs(0.5*(fu-fl));
+
+  taps = design_fir(fir_type, "LOW_PASS", order, filt_bw, fu, alpha_beta_stop_edge, weight);
+  auto complex_taps = transform_complex_fir(band_type, taps, center_frequency);
+  if ((fir_type == "maxflat") && (band_type == "COMPLEX_BAND_STOP")) {
+    std::cout << "maxflat FIR as COMPLEX_BAND_STOP not supported \n";
+  }
+  return complex_taps;
 }
 }  // namespace spuce

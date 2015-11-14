@@ -5,9 +5,9 @@
 #include <spuce/filters/design_fir.h>
 namespace spuce {
 
-void fir_freq(std::vector<double>& MF, int pts, double* w, double inc) {
+void fir_freq(std::vector<double>& MF, int pts, double* w) {
   double t;
-  double w_inc = inc*M_PI/(float)pts; 
+  double w_inc = M_PI/(float)pts; 
   std::complex<double> z_inc, nom;
 	
   for (int i=0;i<pts;i++) {
@@ -17,6 +17,27 @@ void fir_freq(std::vector<double>& MF, int pts, double* w, double inc) {
 		nom = 0;
 		for (size_t j=0;j<MF.size();j++) {
 			nom += z*(std::complex<double>(MF[j]));
+			z *= z_inc;
+		}
+		t = sqrt(norm(nom));
+    if (t==0) t = 0.00001;
+    t = 20.0*log(t)/log(10.0);
+    w[i] = t;
+  }
+}
+
+void fir_freq(std::vector<std::complex<double>>& MF, int pts, double* w) {
+  double t;
+  double w_inc = M_PI/(float)pts; 
+  std::complex<double> z_inc, nom;
+	
+  for (int i=0;i<pts;i++) {
+    double wf = w_inc*i;
+    std::complex<double> z(1,0);
+		z_inc = std::complex<double>(cos(wf),sin(wf));
+		nom = 0;
+		for (size_t j=0;j<MF.size();j++) {
+			nom += z*MF[j];
 			z *= z_inc;
 		}
 		t = sqrt(norm(nom));
@@ -59,9 +80,8 @@ void make_filter::reset() {
   gauss_fc = 0.06;
   rc_fc = rrc_fc = 0.125;
 
-  remez_pass_edge = 0.4;
-  remez_trans = 0.2;
-  remez_stop_edge = remez_pass_edge + remez_trans;
+  remez_pass_edge = 0.05;
+  remez_trans = 0.05;
   remez_stop_weight = 50;
 
   rc_alpha = rrc_alpha = 0.25;
@@ -117,11 +137,10 @@ double make_filter::horiz_swipe(int len, bool in_passband) {
 		break;
 	case RemezFIR:
 		if (in_passband) {
-			remez_pass_edge = limit(gain * remez_pass_edge, 0.95 - remez_trans, 0.001);
+			remez_pass_edge = limit(gain * remez_pass_edge, 0.49 - remez_trans, 0.001);
 		} else {
-			remez_trans = limit(gain * remez_trans, 0.95 - remez_pass_edge, 0.001);
+			remez_trans = limit(gain * remez_trans, 0.49 - remez_pass_edge, 0.001);
 		}
-		remez_stop_edge = remez_pass_edge + remez_trans;
 		break;
 	case RaisedCosine:
 		if (in_passband) {
@@ -138,7 +157,7 @@ double make_filter::horiz_swipe(int len, bool in_passband) {
     }
 		break;
 	case None:
-      break;
+    break;
   }
   return (0.0);
 }
@@ -208,7 +227,7 @@ double make_filter::update(double *w) {
   double fc;
   
   switch (shape) {
-	case RemezFIR: fc = 0.1; break;
+	case RemezFIR: fc = remez_pass_edge; break;
 	case MaxflatFIR:    fc = maxflat_fc; break;
 	case GaussianFIR:    fc = gauss_fc;break;
 	case SincFIR:    fc = sinc_fc;break;
@@ -217,36 +236,74 @@ double make_filter::update(double *w) {
   case None: fc = 0.5; break;
 	}
 
-  if (band_type == "LOW_PASS") {
+  if ((band_type == "LOW_PASS") || (band_type == "HIGH_PASS")) {
     fl = fc;
-  } else if (band_type == "HIGH_PASS") {
-    fl = fc;
-  } else if ((band_type == "BAND_PASS") || (band_type == "BAND_STOP")) {
+  } else { // Band_pass/stop
     if (center > fc/2) {
       fl = center - fc/2.0;
-      fu = center + fc/2.0;
     } else {
       fl = fc;
-      fu = fc;
     }
   }
   
-  switch (shape) {
-	case RemezFIR:
-    taps = design_fir("remez", band_type, remez_taps, remez_pass_edge/2.0, 0, remez_stop_edge/2.0, remez_stop_weight);		break;
-	case MaxflatFIR:
-    taps = design_fir("maxflat", band_type,  maxflat_taps, fl, fu);		break;
-	case GaussianFIR:
-    taps = design_fir("gaussian",  band_type, gauss_taps, fl, fu);		break;
-	case SincFIR:
-    taps = design_fir("sinc",  band_type, sinc_taps, fl , fu);		break;
-	case RaisedCosine:
-    taps = design_fir("raised_cosine",  band_type, rc_taps, fl, fu, rc_alpha);		break;
-	case RootRaisedCosine:
-    taps = design_fir("root_raised_cosine",  band_type, rrc_taps, fl, fu, rrc_alpha); break;
-	case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
-	}
-	fir_freq(taps, pts, w, 1.0);
+  fu = center + fc/2.0;
+
+  double remez_stop_edge = fl + remez_trans;
+  std::cout << "About to des fir\n";  
+  
+  try {
+    switch (shape) {
+    case RemezFIR:
+      taps = design_fir("remez", band_type, remez_taps, fl, fu, remez_stop_edge, remez_stop_weight);		break;
+    case MaxflatFIR:
+      taps = design_fir("maxflat", band_type,  maxflat_taps, fl, fu);		break;
+    case GaussianFIR:
+      taps = design_fir("gaussian",  band_type, gauss_taps, fl, fu);		break;
+    case SincFIR:
+      taps = design_fir("sinc",  band_type, sinc_taps, fl , fu);		break;
+    case RaisedCosine:
+      taps = design_fir("raised_cosine",  band_type, rc_taps, fl, fu, rc_alpha);		break;
+    case RootRaisedCosine:
+      taps = design_fir("root_raised_cosine",  band_type, rrc_taps, fl, fu, rrc_alpha); break;
+    case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
+    }
+  }
+  catch (const std::runtime_error& error) {
+    std::cout << "Problem in design_fir("+band_type+"):"+error.what();
+    for (int i = 0; i < pts; i++) w[i] = 1.0;
+  }
+  
+  //if (band_type == "BAND_PASS") band_type = "COMPLEX_BAND_PASS";
+  //if (band_type == "BAND_STOP") band_type = "COMPLEX_BAND_STOP";
+  if ((band_type == "COMPLEX_BAND_PASS") || (band_type == "COMPLEX_BAND_STOP")) {
+    std::vector<std::complex<double>> complex_taps;
+    try {
+      switch (shape) {
+      case RemezFIR:
+        complex_taps = design_complex_fir("remez", band_type, remez_taps, fl, fu, remez_stop_edge, remez_stop_weight);		break;
+      case MaxflatFIR:
+        complex_taps = design_complex_fir("maxflat", band_type,  maxflat_taps, fl, fu);		break;
+      case GaussianFIR:
+        complex_taps = design_complex_fir("gaussian",  band_type, gauss_taps, fl, fu);		break;
+      case SincFIR:
+        complex_taps = design_complex_fir("sinc",  band_type, sinc_taps, fl , fu);		break;
+      case RaisedCosine:
+        complex_taps = design_complex_fir("raised_cosine",  band_type, rc_taps, fl, fu, rc_alpha);		break;
+      case RootRaisedCosine:
+        complex_taps = design_complex_fir("root_raised_cosine",  band_type, rrc_taps, fl, fu, rrc_alpha); break;
+      case None: break;
+      }
+    }
+    catch (const std::runtime_error& error) {
+      std::cout << "Problem in design_complex_fir("+band_type+"):"+error.what();
+      for (int i = 0; i < pts; i++) w[i] = 1.0;
+    }
+    if (complex_taps.size() > 0) 
+      fir_freq(complex_taps, pts, w);
+  } else {
+    if (taps.size() > 0) 
+      fir_freq(taps, pts, w);
+  }
   return (0);
 }
 double make_filter::get_mag(double w) {
@@ -254,14 +311,18 @@ double make_filter::get_mag(double w) {
 	std::complex<double> z = 1.0;
 	z_inc = std::complex<double>(cos(w),sin(w));
 	std::complex<double> nom = 0;
-	for (size_t j=0;j<taps.size();j++) {
-		nom += taps[j]*z;
-		z *= z_inc;
-	}
-	double t = sqrt(std::norm(nom));
-	if (t==0) t = 0.00001;
-	t = 20.0*log(t)/log(10.0);
-  return t;
+  if (taps.size() > 0) {
+    for (size_t j=0;j<taps.size();j++) {
+      nom += taps[j]*z;
+      z *= z_inc;
+    }
+    double t = sqrt(std::norm(nom));
+    if (t==0) t = 0.00001;
+    t = 20.0*log(t)/log(10.0);
+    return t;
+  } else {
+    return 0;
+  }
 }
 
 

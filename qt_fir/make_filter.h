@@ -22,13 +22,12 @@ class make_filter {
  public:
 	std::vector<double> taps;
   double remez_pass_edge;
-  double remez_stop_edge;
+  double remez_trans;
   double remez_stop_weight;
   double rc_fc;
   double rrc_fc;
   double maxflat_fc;
   double gauss_fc;
-  double remez_trans;
   double rc_alpha;
   double rrc_alpha;
 	double kaiser_tw;
