@@ -28,10 +28,10 @@ std::vector<double> design_fir(const std::string& fir_type,
   float_type filt_bw;
   float_type center_frequency = 0;
   
-  if (band_type == "BAND_PASS" or
-      band_type == "BAND_STOP" or
-      band_type == "COMPLEX_BAND_PASS" or
-      band_type == "COMPLEX_BAND_STOP") {
+  if ((band_type == "BAND_PASS") ||
+      (band_type == "BAND_STOP") ||
+      (band_type == "COMPLEX_BAND_PASS") ||
+      (band_type == "COMPLEX_BAND_STOP")) {
     center_frequency = 0.5*(fu+fl);
     // Since bandpass/stop, 1/2 the band-pass filter bandwidth since double sided
     // Also bandwidth is absolute value
