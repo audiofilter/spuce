@@ -30,6 +30,7 @@ private:
   QCPItemTracer *itemDemoPhaseTracer;
 
 public slots:
+  void BoxChecked(bool);
   void BChanged();
   void CChanged(); 
   void GChanged(); 
@@ -43,6 +44,7 @@ public slots:
   void CBChanged(); 
   void graphPressEvent(QMouseEvent *event);
   void graphMoveEvent(QMouseEvent *event);
+  void updatePlot();
 
 private:
   int pts;

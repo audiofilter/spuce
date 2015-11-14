@@ -41,6 +41,8 @@ class make_filter {
   int rrc_taps;
 	int sinc_taps;
 
+  double center;
+  std::string band_type;
   int pts;
 	
   typedef double audio_data_type;
@@ -56,6 +58,7 @@ class make_filter {
   double update(double *w);
 
   void sel_filter(const char *sel);
+  void sel_band(const char *sel);
   void change_filter(fil_enum f);
   double limit(double x, double mx, double min);
 	double get_mag(double w);
@@ -64,5 +67,7 @@ class make_filter {
   void init(int points);
   void reset();
   void set_filter_type(int h);
+	void set_center_freq(int l);
+  int get_filter_type();
 };
 }  // namespace spuce

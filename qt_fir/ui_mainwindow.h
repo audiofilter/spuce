@@ -35,6 +35,11 @@ public:
     QPushButton *Gaussian;
     QPushButton *Sinc;
     QPushButton *Remez;
+    QGroupBox *groupBox;
+    QRadioButton *LowPass;
+    QRadioButton *HighPass;
+    QRadioButton *BandPass;
+    QRadioButton *BandStop;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -93,6 +98,20 @@ public:
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);
+        groupBox = new QGroupBox(centralWidget);
+        groupBox->setObjectName(QString::fromUtf8("groupBox"));
+        groupBox->setGeometry(QRect(20, 240, 120, 180));
+
+				LowPass = new QRadioButton(groupBox);
+        HighPass = new QRadioButton(groupBox);
+        BandPass = new QRadioButton(groupBox);
+        BandStop = new QRadioButton(groupBox);
+
+        LowPass->setObjectName(QString::fromUtf8("LowPass"));
+        HighPass->setObjectName(QString::fromUtf8("HighPass"));
+        BandPass->setObjectName(QString::fromUtf8("BandPass"));
+        BandStop->setObjectName(QString::fromUtf8("BandStop"));
+        LowPass->setChecked(true);
 
         retranslateUi(MainWindow);
 
@@ -109,6 +128,12 @@ public:
         Remez->setText(QApplication::translate("MainWindow", "Remez", 0));
         Gaussian->setText(QApplication::translate("MainWindow", "Gaussian", 0));
         Sinc->setText(QApplication::translate("MainWindow", "Sinc", 0));
+        groupBox->setTitle(QApplication::translate("MainWindow", "Filter Type", 0));
+        LowPass->setText(QApplication::translate("MainWindow", "LowPass", 0));
+        HighPass->setText(QApplication::translate("MainWindow", "HighPass", 0));
+        BandPass->setText(QApplication::translate("MainWindow", "BandPass", 0));
+        BandStop->setText(QApplication::translate("MainWindow", "BandStop", 0));
+
     } // retranslateUi
 
 };

@@ -58,6 +58,31 @@ MainWindow::MainWindow(QWidget *parent) :
 
   ui->customPlot->replot();
 }
+void MainWindow::BoxChecked(bool t) {
+	if (ui->LowPass->isChecked()) {
+		band_sel("LOW_PASS");
+	} else if (ui->HighPass->isChecked()) {
+		band_sel("HIGH_PASS");
+	}	else if (ui->BandPass->isChecked()) {
+		band_sel("BAND_PASS");
+	}	else if (ui->BandStop->isChecked()) {
+		band_sel("BAND_STOP");
+	}
+	updatePlot();
+}
+void MainWindow::updatePlot()
+{
+  horiz_swipe(0,true);
+  /*
+  order = get_order();
+  ui->order->setText(QApplication::translate("MainWindow", std::to_string(order).c_str(), 0));
+  ui->ripple->setText(QApplication::translate("MainWindow", std::to_string(ripple()).c_str(), 0));
+  ui->fc->setText(QApplication::translate("MainWindow", std::to_string(fc()).c_str(), 0));
+  */
+  ui->customPlot->graph()->clearData();
+  plot3(ui->customPlot);
+}
+
 void MainWindow::CBChanged() {}
 void MainWindow::BChanged() {}
 void MainWindow::CChanged() {}
@@ -164,6 +189,19 @@ void MainWindow::setup(QCustomPlot *customPlot)
   customPlot->xAxis->setRange(0,0.5);
   customPlot->yAxis->setRange(-90,10);
   customPlot->axisRect()->setupFullAxesBox();
+
+  QObject::connect(ui->LowPass,SIGNAL(clicked(bool)),this,SLOT(BoxChecked(bool)));
+  QObject::connect(ui->HighPass,SIGNAL(clicked(bool)),this,SLOT(BoxChecked(bool)));
+  QObject::connect(ui->BandPass,SIGNAL(clicked(bool)),this,SLOT(BoxChecked(bool)));
+  QObject::connect(ui->BandStop,SIGNAL(clicked(bool)),this,SLOT(BoxChecked(bool)));
+  
+  QVBoxLayout *vbox = new QVBoxLayout;
+  vbox->addWidget(ui->LowPass);
+  vbox->addWidget(ui->HighPass);
+  vbox->addWidget(ui->BandPass);
+  vbox->addWidget(ui->BandStop);
+  ui->groupBox->setLayout(vbox);
+  
 }
 
 void MainWindow::plot2(QCustomPlot *customPlot)
@@ -260,7 +298,11 @@ void MainWindow::graphMoveEvent(QMouseEvent *event)
 	bool above_stop = (-y_db < m);
 
   if (fabs(xdis) > fabs(ydis)) {
-		horiz_swipe(xdis,in_passband);
+    if (get_filter_type()) {
+      set_center(xdis);
+    } else {
+      horiz_swipe(xdis,in_passband);
+    }
   } else {
 		vertical_swipe(-ydis,in_passband,above_stop);
   }

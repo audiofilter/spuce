@@ -11,11 +11,14 @@ EXTERNC void lpf_init(int pts);
 EXTERNC void reset();
 EXTERNC void set_gain(float g);
 EXTERNC void lpf_sel(const char* sel);
+EXTERNC void band_sel(const char* sel);
 EXTERNC double horiz_swipe(int len, bool in_passband);
 EXTERNC void vertical_swipe(int len, bool in_passband, bool above_stop);
 EXTERNC double update_w(double* w);
 EXTERNC void set_fs(float fs);
+EXTERNC void set_center(int len);
 EXTERNC void set_filter_type(int t);
+EXTERNC int  get_filter_type();
 EXTERNC double get_mag(double w);
 
 EXTERNC bool is_bpf();

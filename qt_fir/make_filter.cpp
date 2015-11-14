@@ -38,6 +38,10 @@ void make_filter::sel_filter(const char *c_sel) {
   else
     std::cout << "Invalid filter selection\n";
 }
+void make_filter::sel_band(const char *c_sel) {
+  std::string sel(c_sel);
+  band_type = sel;
+}
 
 void make_filter::change_filter(fil_enum f) {  shape = f;}
 void make_filter::set_filter_type(int t) {	pass_type = low;}
@@ -69,6 +73,9 @@ void make_filter::reset() {
   maxflat_taps = 45;
   rc_taps = rrc_taps = 33;
   shape = RemezFIR;
+  band_type = "LOW_PASS";
+  center = 0.25;
+
 }
 
 double make_filter::limit(double x, double mx, double mn) {
@@ -176,14 +183,63 @@ void make_filter::vertical_swipe(int len, bool in_passband, bool above_stop) {
 		break;
   }
 }
+
+void make_filter::set_center_freq(int len) {
+	// Convert swipe to centre freq
+	double gain = pow(2, 0.002 * len);
+	center = limit(gain*center, 0.5, 0.01);
+  //	std::cout << " gain = " << gain << " cen = " << center << "\n";
+}
+int make_filter::get_filter_type() {
+  if ((band_type == "BAND_PASS") || (band_type == "BAND_STOP")) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
 double make_filter::update(double *w) {
+  double fl;
+  double fu;
+  double fc;
+  
   switch (shape) {
-	case RemezFIR:         taps = design_fir("remez", "LOW_PASS", remez_taps, remez_pass_edge, 0, remez_stop_edge, remez_stop_weight);		break;
-	case MaxflatFIR:       taps = design_fir("butterworth", "LOW_PASS",  maxflat_taps, maxflat_fc, 0);		break;
-	case GaussianFIR:      taps = design_fir("gaussian",  "LOW_PASS", gauss_taps, gauss_fc, 0);		break;
-	case SincFIR:          taps = design_fir("sinc",  "LOW_PASS", sinc_taps, sinc_fc, 0);		break;
-	case RaisedCosine:     taps = design_fir("raisedcosine",  "LOW_PASS", rc_taps, rc_fc, 0, rc_alpha);		break;
-	case RootRaisedCosine: taps = design_fir("rootraisedcosine",  "LOW_PASS", rrc_taps, 0.5, 0, rrc_alpha); break;
+	case RemezFIR: fc = 0.1; break;
+	case MaxflatFIR:    fc = maxflat_fc; break;
+	case GaussianFIR:    fc = gauss_fc;break;
+	case SincFIR:    fc = sinc_fc;break;
+	case RaisedCosine:    fc = rc_fc;break;
+	case RootRaisedCosine:    fc = 0.5;break;
+  case None: fc = 0.5; break;
+	}
+
+  if (band_type == "LOW_PASS") {
+    fl = fc;
+  } else if (band_type == "HIGH_PASS") {
+    fl = fc;
+  } else if ((band_type == "BAND_PASS") || (band_type == "BAND_STOP")) {
+    if (center > fc) {
+      fl = center - fc;
+      fu = center + fc;
+    } else {
+      fl = fc;
+      fu = fc;
+    }
+  }
+  
+  switch (shape) {
+	case RemezFIR:
+    taps = design_fir("remez", band_type, remez_taps, remez_pass_edge/2.0, 0, remez_stop_edge/2.0, remez_stop_weight);		break;
+	case MaxflatFIR:
+    taps = design_fir("butterworth", band_type,  maxflat_taps, fl, fu);		break;
+	case GaussianFIR:
+    taps = design_fir("gaussian",  band_type, gauss_taps, fl, fu);		break;
+	case SincFIR:
+    taps = design_fir("sinc",  band_type, sinc_taps, fl , fu);		break;
+	case RaisedCosine:
+    taps = design_fir("raisedcosine",  band_type, rc_taps, fl, fu, rc_alpha);		break;
+	case RootRaisedCosine:
+    taps = design_fir("rootraisedcosine",  band_type, rrc_taps, fl, fu, rrc_alpha); break;
 	case None:			for (int i = 0; i < pts; i++) w[i] = 1.0;			break;
 	}
 	fir_freq(taps, pts, w, 1.0);
