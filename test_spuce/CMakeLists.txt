@@ -28,7 +28,6 @@ SET(TARGETS
 	transform_bpf	transform_hpf transform_bsf
 	transform_complex_bpf	transform_complex_bsf
   sinc_bsf
-  sinc_bsf2
 	# special filters
 	iir_allpass1
 	notch
