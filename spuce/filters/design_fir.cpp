@@ -64,8 +64,8 @@ std::vector<double> design_fir(const std::string& fir_type,
       w[1] = weight;
     }
     bands[0] = 0;
-    bands[1] = filt_bw / 2.0;
-    bands[2] = stop_freq / 2.0;
+    bands[1] = filt_bw;
+    bands[2] = stop_freq;
     bands[3] = 0.5;
     des[0] = 1.0;
     des[1] = 0.0;
