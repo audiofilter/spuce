@@ -1,0 +1,24 @@
+
+
+Release 0.2 (2015-11-14)
+==========================
+-  Stable version for FIR filter design + Window design
+-  Handle high pass, bandpass & bandstop transformations for FIR filters
+   Some cases handled differently than others
+   e.g raised cosine filters as high pass = 1 - low pass. So not highpass raised cosine
+   Cut-off scaling changed for raised cosine and root raised cosine filters
+-  Added fir_plot to demonstration FIR filtering capability   
+-  Added window_plot to demonstration window capability
+-  Added some allpass and interpolation filters to be tested in future release
+-  Main interfaces supported for filter designs
+   design_fir / design_complex_fir for FIR filters
+   design_iir for IIR filters
+   design_window for windows
+==========================
+
+
+Release 0.1 (2015-11-06)
+==========================
+-  First release. Stable version for IIR filter design
+==========================
+
