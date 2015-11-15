@@ -29,7 +29,11 @@ Currently there is some code for IIR Filter Design & Implementation
 * Cut/Boost Filter
 * Halfband/Subband IIR filters consisting of allpass sections
 * Irrational resampling with Farrow & Lagrange based filters
-	   
+
+**To install via Homebrew**
+* brew tap audiofilter/spuce
+* brew install spuce  (or brew install -HEAD spuce for latest sources)
+
 For testing, python + matplotlib is used.
 
 * Most of the test involve using python's matplotlib to show a frequency response of the filter, sometimes impulse responses are used
