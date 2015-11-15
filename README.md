@@ -3,7 +3,7 @@
 - Travis: [![Build Status](https://travis-ci.org/audiofilter/spuce.png)](https://travis-ci.org/audiofilter/spuce)
 - AppVeyor: [![Build status](https://ci.appveyor.com/api/projects/status/vmjw8ie1ag7wdfne?svg=true)](https://ci.appveyor.com/project/audiofilter/spuce)
 
-A rewrite of spuc with more testing, better code design and c++11 features.
+A rewrite of the digital filter components of SPUC with more testing, better code design and c++11 features.
 
 * Uses std::complex instead of custom complex class
 * Will focus of floating point instead of fixed-point modules
@@ -13,9 +13,6 @@ A rewrite of spuc with more testing, better code design and c++11 features.
 
 Most of spuc was written many years ago before C++ compilers had good template support and was primarily written for fixed-point hardware design and simulation.
 
-The rewrite will occur gradually, adding code and features as they are developed.
-There will be less concern for fixed-point code initially.
-
 Currently there is some code for IIR Filter Design & Implementation
 
 * Butterworth
@@ -24,13 +21,13 @@ Currently there is some code for IIR Filter Design & Implementation
 * Elliptic
 * Maximally flat FIR
 * Remez Equiripple
-* Raised Cosine FIR
+* Raised Cosine FIR/Root Raised Cosine FIR
 * Gaussian FIR
 * Sinc FIR
 * Cascaded Integrate Comb filters (or CIC filters)
 * Notch filter
 * Cut/Boost Filter
-* Halfband/Subband IIR filters
+* Halfband/Subband IIR filters consisting of allpass sections
 * Irrational resampling with Farrow & Lagrange based filters
 	   
 For testing, python + matplotlib is used.
@@ -43,8 +40,6 @@ QT5 needed for test application
 
 ![Demo App](Fir.png "FIR Designer")
 
-
 ![Demo App](Window.png "Window Designer")
-
 
 ![Demo App](Other.png "Other Filter Designer")
