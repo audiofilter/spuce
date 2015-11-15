@@ -18,7 +18,6 @@ endif()
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
-
 add_subdirectory(spuce)
 option(ENABLE_GUI "Enable QT application" ON)
 add_feature_info(ENABLE_GUI ENABLE_GUI "This enables the QT applications to be built")
@@ -33,7 +32,22 @@ add_feature_info(ENABLE_PYTHON ENABLE_PYTHON "This enables python testing with m
 if (ENABLE_PYTHON)
 	add_subdirectory(test_spuce)
 endif()
-	
+
+
+
+
+########################################################################
+# install include files
+########################################################################
+install(
+    DIRECTORY spuc
+    DESTINATION include
+    COMPONENT spuce_dev
+    PATTERN "*.cpp" EXCLUDE
+)
+
+
+
 #########################################################################
 # print features summary
 #########################################################################

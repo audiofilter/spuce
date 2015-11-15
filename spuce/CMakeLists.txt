@@ -36,5 +36,5 @@ SET(FILT_SRCS
 
 add_library(spuce ${FILT_SRCS})
 set_property(TARGET spuce PROPERTY CXX_STANDARD 11)
-
+install(TARGETS spuce DESTINATION ./lib)
 	
