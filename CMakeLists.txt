@@ -40,7 +40,7 @@ endif()
 # install include files
 ########################################################################
 install(
-    DIRECTORY spuc
+    DIRECTORY spuce
     DESTINATION include
     COMPONENT spuce_dev
     PATTERN "*.cpp" EXCLUDE
