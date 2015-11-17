@@ -149,9 +149,9 @@ double make_filter::horiz_swipe(int len, bool in_passband) {
 			remez_trans = limit(gain * remez_trans, 0.49 - remez_pass_edge, 0.001);
       
       size_t est_num_taps = remez_estimate_num_taps(remez_trans, remez_pass_ripple, remez_stop_atten);
-      if ((est_num_taps > remez_taps) && (len < 0)) {
+      if ((est_num_taps > (size_t)remez_taps) && (len < 0)) {
         remez_taps++;
-      } else if ((est_num_taps < (remez_taps - 4)) && (len > 0)) {
+      } else if ((est_num_taps < size_t(remez_taps - 4)) && (len > 0)) {
         remez_taps--;
       }
 		}
@@ -266,7 +266,7 @@ double make_filter::update(double *w) {
     case RemezFIR:
       {
         size_t est_num_taps = remez_estimate_num_taps(remez_trans, remez_pass_ripple, remez_stop_atten);
-        if (est_num_taps > remez_taps) {
+        if (est_num_taps > (size_t)remez_taps) {
           //  std::cout << "Remez needs more taps for this specifiction : need " << est_num_taps << " taps, have " << remez_taps << " taps\n";
           remez_taps = est_num_taps;
         }
