@@ -289,7 +289,7 @@ void MainWindow::graphMoveEvent(QMouseEvent *event)
 	bool in_passband = (m>-10);
   
 	double y_db = -100.0*y + 10;
-	bool above_stop = (-y_db < m);
+	bool above_stop = (y_db > m);
 
   if (fabs(xdis) > fabs(ydis)) {
     if (get_filter_type()) {

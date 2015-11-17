@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <complex>
+#include <spuce/filters/remez_estimate.h>
 #include <spuce/filters/design_fir.h>
 namespace spuce {
 
@@ -81,15 +82,17 @@ void make_filter::reset() {
   gauss_fc = 0.06;
   rc_fc = rrc_fc = 0.125;
 
-  remez_pass_edge = 0.0625;
-  remez_trans = 0.1;
-  remez_stop_weight = 50;
-
+  remez_pass_edge = 0.05;
+  remez_trans = 0.05;
+  remez_stop_atten = 50;
+  remez_pass_ripple = 0.1;
+  remez_weight = 1.0;
+  
   rc_alpha = rrc_alpha = 0.25;
 	sinc_fc = 0.125;
 
   gauss_taps = 21;
-  remez_taps = 33;
+  remez_taps = 51;
 	sinc_taps = 33;
   maxflat_taps = 45;
   rc_taps = rrc_taps = 33;
@@ -140,7 +143,17 @@ double make_filter::horiz_swipe(int len, bool in_passband) {
 		if (in_passband) {
 			remez_pass_edge = limit(gain * remez_pass_edge, 0.49 - remez_trans, 0.001);
 		} else {
+      float_type min_trans = remez_estimate_bw(remez_taps, remez_pass_ripple, remez_stop_atten);
+      std::cout << "For this param set transition bw should be > " << min_trans
+                << " (currently = " << remez_trans << ")\n";
 			remez_trans = limit(gain * remez_trans, 0.49 - remez_pass_edge, 0.001);
+      
+      size_t est_num_taps = remez_estimate_num_taps(remez_trans, remez_pass_ripple, remez_stop_atten);
+      if ((est_num_taps > remez_taps) && (len < 0)) {
+        remez_taps++;
+      } else if ((est_num_taps < (remez_taps - 4)) && (len > 0)) {
+        remez_taps--;
+      }
 		}
 		break;
 	case RaisedCosine:
@@ -185,17 +198,17 @@ void make_filter::vertical_swipe(int len, bool in_passband, bool above_stop) {
 	case GaussianFIR:
 		gauss_taps = limit(gauss_taps + inc, MAX_FIR, MIN_FIR);
 		break;
-    // FIX ME - should change to passband ripple while in passband
 	case RemezFIR:
 		if (in_passband) {
-			remez_stop_weight = limit(ogain * remez_stop_weight, 100, 0.01);
+			remez_pass_ripple = limit(ogain * remez_pass_ripple, 10, 0.001);
 		} else {
 			if (above_stop) {
-				remez_stop_weight = limit(ogain * remez_stop_weight, 100, 0.01);
+				remez_stop_atten = limit(ogain * remez_stop_atten, 100, 1.0);
 			} else {
 				remez_taps = limit(remez_taps + inc, MAX_FIR, MIN_FIR);
 			}
 		}
+    remez_weight = remez_estimate_weight(remez_pass_ripple, remez_stop_atten);
 		break;
 	case RootRaisedCosine:
 		rrc_taps = limit(rrc_taps + 2 * inc, MAX_FIR, MIN_FIR);
@@ -251,7 +264,15 @@ double make_filter::update(double *w) {
   try {
     switch (shape) {
     case RemezFIR:
-      taps = design_fir("remez", band_type, remez_taps, fl, fu, remez_trans, remez_stop_weight);		break;
+      {
+        size_t est_num_taps = remez_estimate_num_taps(remez_trans, remez_pass_ripple, remez_stop_atten);
+        if (est_num_taps > remez_taps) {
+          //  std::cout << "Remez needs more taps for this specifiction : need " << est_num_taps << " taps, have " << remez_taps << " taps\n";
+          remez_taps = est_num_taps;
+        }
+        taps = design_fir("remez", band_type, remez_taps, fl, fu, remez_trans, remez_weight);
+      }
+      break;
     case MaxflatFIR:
       taps = design_fir("maxflat", band_type,  maxflat_taps, fl, fu);		break;
     case GaussianFIR:
@@ -266,7 +287,7 @@ double make_filter::update(double *w) {
     }
   }
   catch (const std::runtime_error error) {
-    std::cout << "Problem in design_fir("+band_type+"):"+error.what();
+    std::cout << "Problem in design_fir("+band_type+"):"+error.what() << "\n";
     for (int i = 0; i < pts; i++) w[i] = 1.0;
   }
 
@@ -284,7 +305,7 @@ double make_filter::update(double *w) {
     try {
       switch (shape) {
       case RemezFIR:
-        complex_taps = design_complex_fir("remez", band_type, remez_taps, fl, fu, remez_trans, remez_stop_weight);		break;
+        complex_taps = design_complex_fir("remez", band_type, remez_taps, fl, fu, remez_trans, remez_weight);		break;
       case MaxflatFIR:
         complex_taps = design_complex_fir("maxflat", band_type,  maxflat_taps, fl, fu);		break;
       case GaussianFIR:

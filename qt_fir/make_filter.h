@@ -23,7 +23,9 @@ class make_filter {
 	std::vector<double> taps;
   double remez_pass_edge;
   double remez_trans;
-  double remez_stop_weight;
+  double remez_stop_atten;
+  double remez_pass_ripple;
+  double remez_weight;
   double rc_fc;
   double rrc_fc;
   double maxflat_fc;

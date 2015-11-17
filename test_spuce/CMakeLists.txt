@@ -12,7 +12,7 @@ add_library(spuce_debug plot_fft.cpp cfft.cpp gen_iir_df)
 set_property(TARGET spuce_debug PROPERTY CXX_STANDARD 11)
 set_property(TARGET spuce_debug PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 
-SET(TARGETS
+SET(PLOT_TARGETS
 	chebyshev_iir chebyshev_iir_hpf
 	chebyshev2_iir chebyshev2_iir_hpf
 	elliptic_iir elliptic_iir_hpf
@@ -35,11 +35,24 @@ SET(TARGETS
   interp
 	)
 
-FOREACH(mod ${TARGETS})
+FOREACH(mod ${PLOT_TARGETS})
 	SET(SRC test_${mod}.cpp)
 	ADD_EXECUTABLE(plot_${mod} ${SRC})
   TARGET_LINK_LIBRARIES(plot_${mod} spuce spuce_debug ${PYTHON_LIBRARY})
 	set_property(TARGET plot_${mod} PROPERTY CXX_STANDARD 11)
 	set_property(TARGET plot_${mod} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+ENDFOREACH(mod ${EXTS})
+
+
+SET(UNIT_TARGETS
+  remez_estimate
+	)
+
+FOREACH(mod ${UNIT_TARGETS})
+	SET(SRC test_${mod}.cpp)
+	ADD_EXECUTABLE(test_${mod} ${SRC})
+  TARGET_LINK_LIBRARIES(test_${mod} spuce spuce_debug ${PYTHON_LIBRARY})
+	set_property(TARGET test_${mod} PROPERTY CXX_STANDARD 11)
+	set_property(TARGET test_${mod} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 ENDFOREACH(mod ${EXTS})
 
