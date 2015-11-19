@@ -1,4 +1,12 @@
+Release 0.4 (2015-11-18)
+==========================
 
+-  Bug fixes for Remez Bandpass/Bandstop and Complex Bandstop - for bandpass/stop bandwidth was 2 times bigger,
+   for complex bandstop, weight was wrong
+
+Release 0.3 (2015-11-15)
+==========================
+- Just packaging for homebrew install
 
 Release 0.2 (2015-11-14)
 ==========================
