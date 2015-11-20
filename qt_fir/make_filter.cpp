@@ -91,11 +91,11 @@ void make_filter::reset() {
   rc_alpha = rrc_alpha = 0.25;
 	sinc_fc = 0.125;
 
-  gauss_taps = 21;
-  remez_taps = 51;
-	sinc_taps = 33;
-  maxflat_taps = 45;
-  rc_taps = rrc_taps = 33;
+  gauss_taps = 101;
+  remez_taps = 101;
+	sinc_taps = 101;
+  maxflat_taps = 101;
+  rc_taps = rrc_taps = 101;
   shape = RemezFIR;
   band_type = "LOW_PASS";
   center = 0.25;
