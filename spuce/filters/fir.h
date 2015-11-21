@@ -87,12 +87,12 @@ template <class Numeric, class Coeff = float_type> class fir {
   }
   void set_coeffs(fir_coeff<Coeff> C) {
     int i;
-    int n = num_taps = C.num_taps;
+    int n = num_taps = C.number_of_taps();
     if (n > 0) {
       coeff.resize(n);
       z.resize(n);
       for (i = 0; i < n; i++) z[i] = (Numeric)0;
-      for (i = 0; i < n; i++) coeff[i] = C.coeff[i];
+      for (i = 0; i < n; i++) coeff[i] = C.gettap(i);
     }
   }
   //! Set size of Filter
@@ -176,7 +176,7 @@ template <class Numeric, class Coeff = float_type> class fir {
   }
 	Coeff get_coeff(int i) const { return coeff[i];}
 	
- private:
+ protected:
   std::vector<Coeff> coeff;
   std::vector<Numeric> z;
   long num_taps;

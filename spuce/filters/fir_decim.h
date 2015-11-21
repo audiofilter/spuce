@@ -8,10 +8,10 @@ namespace spuce {
 //! \author Tony Kirke
 //! \ingroup double_templates fir
 template <class Numeric, class Coeff = float_type> class fir_decim : public fir<Numeric, Coeff> {
-  using spuce::fir<Numeric, Coeff>::num_taps;
   using spuce::fir<Numeric, Coeff>::coeff;
   using spuce::fir<Numeric, Coeff>::z;
   using spuce::fir<Numeric, Coeff>::read_taps;
+  using spuce::fir<Numeric, Coeff>::number_of_taps;
   typedef typename base_type<Numeric>::btype Numeric_base;
   typedef typename mixed_type<Numeric, Coeff>::dtype sum_type;
   int rate;
@@ -24,7 +24,7 @@ template <class Numeric, class Coeff = float_type> class fir_decim : public fir<
   fir_decim<Numeric, Coeff>(const char* file) { read_taps(file); }
   fir_decim<Numeric, Coeff>(fir_coeff<Coeff> C) : fir<Numeric, Coeff>(C) {
     int i;
-    int n = num_taps = C.num_taps;
+    int n = C.number_of_taps();
     if (n > 0) {
       coeff.resize(n);
       z.resize(n);
@@ -33,10 +33,23 @@ template <class Numeric, class Coeff = float_type> class fir_decim : public fir<
     }
   }
 
+  void skip() {
+    phase++;
+    phase = phase % rate;
+  }
+  //! Set interpolation rate
+  void set_rate(long r) {
+    rate = r;
+  }
+  void set_manual(int def_phase = 0) {
+    phase = def_phase;
+  }
+
+
   void input(Numeric in) {
     int i;
     // Update history of inputs
-    for (i = num_taps - 1; i > 0; i--) z[i] = z[i - 1];
+    for (i = number_of_taps() - 1; i > 0; i--) z[i] = z[i - 1];
     // Add new input
     z[0] = in;
   }
@@ -47,7 +60,7 @@ template <class Numeric, class Coeff = float_type> class fir_decim : public fir<
     // Perform FIR
     Numeric output;
     int i;
-    for (i = 0; i < num_taps; i++) sum += coeff[i] * z[i];
+    for (i = 0; i < number_of_taps(); i++) sum += coeff[i] * z[i];
 
     output = (sum);
     return (output);
