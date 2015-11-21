@@ -172,6 +172,7 @@ template <class Numeric, class Coeff = float_type> class fir {
   template <class N, class C> friend std::vector<C> get_taps(const fir<N, C>& x);
   template <class N, class C> friend std::vector<N> get_input(const fir<N, C>& y);
   void set_taps(const std::vector<Coeff>& taps) {
+    set_size(taps.size()); // Make sure it's the right size first
     for (int i = 0; i < num_taps; i++) coeff[i] = taps[i];
   }
 	Coeff get_coeff(int i) const { return coeff[i];}

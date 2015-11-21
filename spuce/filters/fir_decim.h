@@ -29,7 +29,17 @@ template <class Numeric, class Coeff = float_type> class fir_decim : public fir<
       coeff.resize(n);
       z.resize(n);
       for (i = 0; i < n; i++) z[i] = (Numeric)0;
-      for (i = 0; i < n; i++) coeff[i] = C.coeff[i];
+      coeff = get_taps(C);
+    }
+    phase = 0;
+  }
+  fir_decim<Numeric, Coeff>(const std::vector<Coeff>& C) : fir<Numeric, Coeff>(C.size()) {
+    int n = C.size();
+    if (n > 0) {
+      coeff.resize(n);
+      z.resize(n);
+      for (int i = 0; i < n; i++) z[i] = (Numeric)0;
+      for (int i = 0; i < n; i++) coeff[i] = C[i];
     }
   }
 
@@ -47,9 +57,8 @@ template <class Numeric, class Coeff = float_type> class fir_decim : public fir<
 
 
   void input(Numeric in) {
-    int i;
     // Update history of inputs
-    for (i = number_of_taps() - 1; i > 0; i--) z[i] = z[i - 1];
+    for (int i = number_of_taps() - 1; i > 0; i--) z[i] = z[i - 1];
     // Add new input
     z[0] = in;
   }
@@ -66,12 +75,14 @@ template <class Numeric, class Coeff = float_type> class fir_decim : public fir<
     return (output);
   }
   void process(const std::vector<Numeric>& in, std::vector<Numeric>& out) {
-    out.resize(in.size() - phase + rate - 1 / rate);
+    out.resize((in.size() - phase + rate - 1 )/ rate);
     int j = 0;
     for (int i = 0; i < in.size(); i++) {
       input(in[i]);
       phase = (phase + 1) % rate;
-      if (phase == 0) { out[j++] = decim(); }
+      if (phase == 0) {
+        out[j++] = decim();
+      }
     }
   }
 };
