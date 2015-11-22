@@ -3,6 +3,8 @@
 ########################################################################
 cmake_minimum_required(VERSION 2.8)
 
+SET(SPUCE_LIBVER "0.4.1")
+
 SET(FILT_SRCS  
 	filters/butterworth_iir.cpp
 	filters/chebyshev_iir.cpp
@@ -47,3 +49,4 @@ install(TARGETS spuce
 
 #set_target_properties(spuce PROPERITES SOVERSION ${SPUCE_SOVER})
 #set_target_properties(spuce PROPERITES VERSION ${SPUCE_LIBVER})
+#set_target_properties(spuce PROPERTIES DEFINE_SYMBOL "SPUCE_DLL_EXPORTS")
