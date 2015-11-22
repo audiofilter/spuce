@@ -1,5 +1,6 @@
-soapysdr (0.4.1) unstable; urgency=low
+spuce (0.4.1) unstable; urgency=low
 
   * Release 0.4.1 (2015-11-22)
 
- -- Tony Kirke <tony@pyspuc.com> 
+ -- Tony Kirke <tony@pyspuc.com>  Sun, 22 Nov 2015 11:25:09 -0700
+

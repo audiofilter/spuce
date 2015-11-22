@@ -39,3 +39,4 @@ QT5_USE_Modules(spuce_fir_plot Core)
 QT5_USE_Modules(spuce_fir_plot Widgets)
 QT5_USE_Modules(spuce_fir_plot PrintSupport)
 
+INSTALL(TARGETS spuce_fir_plot DESTINATION bin)
