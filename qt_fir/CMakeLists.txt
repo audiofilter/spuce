@@ -1,19 +1,15 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-SET(CMAKE_BUILD_TYPE "DEBUG")
+SET(CMAKE_BUILD_TYPE "RELEASE")
+
 PROJECT("fir_plot")
 Message("Project spuce fir_plot")
 
-set(CMAKE_CXX_FLAGS " -std=c++11 ")
-set(CMAKE_PREFIX_PATH "/usr/local/opt/qt5")
+#set(CMAKE_CXX_FLAGS " -std=c++11 ")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 FIND_PACKAGE(Qt5 REQUIRED Gui Core Widgets)
-
-ADD_DEFINITIONS("-Wall -fPIC")
-INCLUDE_DIRECTORIES(".." "/usr/local/opt/qt5/include")
-LINK_DIRECTORIES("/usr/local/lib")
 
 set(EXECUTABLE_OUTPUT_PATH ..)
 
@@ -28,14 +24,18 @@ SET(fir_plot_HEADERS mainwindow.h other_freq.h qcustomplot.h)
 INCLUDE_DIRECTORIES(${QT5_INCLUDES})
 ADD_DEFINITIONS(${QT5Widgets_DEFINITIONS})
 
-ADD_LIBRARY(firlib ${SOURCES})
-ADD_EXECUTABLE(fir_plot ${fir_plot_SOURCES} ${fir_plot_HEADERS_MOC})
-set_property(TARGET firlib PROPERTY CXX_STANDARD 11)
+ADD_LIBRARY(spuce_fir ${SOURCES})
+ADD_EXECUTABLE(spuce_fir_plot ${fir_plot_SOURCES} ${fir_plot_HEADERS_MOC})
+set_property(TARGET spuce_fir PROPERTY CXX_STANDARD 11)
 
-TARGET_LINK_LIBRARIES(fir_plot firlib ${QT_LIBRARIES} spuce)
-set_property(TARGET fir_plot PROPERTY CXX_STANDARD 11)
-QT5_USE_Modules(fir_plot Gui)
-QT5_USE_Modules(fir_plot Core)
-QT5_USE_Modules(fir_plot Widgets)
-QT5_USE_Modules(fir_plot PrintSupport)
+set_property(TARGET spuce_fir PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+set_property(TARGET spuce_fir_plot PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+set_property(TARGET spuce_fir_plot PROPERTY CXX_STANDARD 11)
+
+TARGET_LINK_LIBRARIES(spuce_fir_plot spuce_fir ${QT_LIBRARIES} spuce)
+set_property(TARGET spuce_fir_plot PROPERTY CXX_STANDARD 11)
+QT5_USE_Modules(spuce_fir_plot Gui)
+QT5_USE_Modules(spuce_fir_plot Core)
+QT5_USE_Modules(spuce_fir_plot Widgets)
+QT5_USE_Modules(spuce_fir_plot PrintSupport)
 
