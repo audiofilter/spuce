@@ -37,5 +37,13 @@ SET(FILT_SRCS
 
 add_library(spuce ${FILT_SRCS})
 set_property(TARGET spuce PROPERTY CXX_STANDARD 11)
-install(TARGETS spuce DESTINATION ./lib)
-	
+set_property(TARGET spuce PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+
+install(TARGETS spuce
+  LIBRARY DESTINATION lib${LIB_SUFFIX} # .so file
+  ARCHIVE DESTINATION lib${LIB_SUFFIX} # .lib file
+  RUNTIME DESTINATION bin              # .dll file
+)	
+
+#set_target_properties(spuce PROPERITES SOVERSION ${SPUCE_SOVER})
+#set_target_properties(spuce PROPERITES VERSION ${SPUCE_LIBVER})

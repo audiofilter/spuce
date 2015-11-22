@@ -33,9 +33,6 @@ if (ENABLE_PYTHON)
 	add_subdirectory(test_spuce)
 endif()
 
-
-
-
 ########################################################################
 # install include files
 ########################################################################
@@ -43,7 +40,7 @@ install(
     DIRECTORY spuce
     DESTINATION include
     COMPONENT spuce_dev
-    PATTERN "*.cpp" EXCLUDE
+    FILES_MATCHING PATTERN "*.h"
 )
 
 # uninstall target
