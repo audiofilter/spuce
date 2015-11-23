@@ -1,7 +1,9 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+
 IF(NOT CMAKE_BUILD_TYPE)
 	SET(CMAKE_BUILD_TYPE "DEBUG")
 ENDIF()
+
 PROJECT("spuce tests")
 message("Project spuce_tests")
 
@@ -42,7 +44,6 @@ FOREACH(mod ${PLOT_TARGETS})
 	set_property(TARGET plot_${mod} PROPERTY CXX_STANDARD 11)
 	set_property(TARGET plot_${mod} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 ENDFOREACH(mod ${EXTS})
-
 
 SET(UNIT_TARGETS
   remez_estimate

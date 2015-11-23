@@ -1,7 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-SET(CMAKE_BUILD_TYPE "RELEASE")
-
 PROJECT("fir_plot")
 Message("Project spuce fir_plot")
 
@@ -9,8 +7,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 FIND_PACKAGE(Qt5 REQUIRED Gui Core Widgets)
-
-set(EXECUTABLE_OUTPUT_PATH ..)
 
 set(SOURCES
 	make_filter.cpp 

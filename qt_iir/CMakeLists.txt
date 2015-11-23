@@ -1,16 +1,12 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-SET(CMAKE_BUILD_TYPE "DEBUG")
 PROJECT("iir_plot")
 Message("Project spuce iir_plot")
 
-set(CMAKE_CXX_FLAGS " -std=c++11 ")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 FIND_PACKAGE(Qt5 REQUIRED Gui Core Widgets)
-
-set(EXECUTABLE_OUTPUT_PATH ..)
 
 set(SOURCES
 	make_filter.cpp 	
@@ -37,3 +33,4 @@ QT5_USE_Modules(spuce_iir_plot Core)
 QT5_USE_Modules(spuce_iir_plot Widgets)
 QT5_USE_Modules(spuce_iir_plot PrintSupport)
 
+INSTALL(TARGETS spuce_iir_plot DESTINATION bin)

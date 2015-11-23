@@ -1,3 +1,13 @@
+Release 0.4.1 (2015-11-22)
+==========================
+
+-  Bug fix for iir_plot QT app.
+-  Update README
+-  Add fir_adapt, fir_interp, fir_decim, compile fixes for fir
+-  Add debian packaging & update CMakeLists files
+-  Rename some executables to start with spuce_
+
+
 Release 0.4 (2015-11-18)
 ==========================
 

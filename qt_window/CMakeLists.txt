@@ -1,6 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-SET(CMAKE_BUILD_TYPE "DEBUG")
 PROJECT("window_plot")
 Message("Project spuce window_plot")
 
@@ -8,8 +7,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 FIND_PACKAGE(Qt5 REQUIRED Gui Core Widgets)
-
-set(EXECUTABLE_OUTPUT_PATH ..)
 
 set(SOURCES	make_filter.cpp)
 
@@ -34,3 +31,4 @@ QT5_USE_Modules(spuce_window_plot Core)
 QT5_USE_Modules(spuce_window_plot Widgets)
 QT5_USE_Modules(spuce_window_plot PrintSupport)
 
+INSTALL(TARGETS spuce_window_plot DESTINATION bin)
