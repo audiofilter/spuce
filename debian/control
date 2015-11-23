@@ -3,6 +3,7 @@ Section: comm
 Priority: optional
 Maintainer: Tony Kirke <tony@pyspuc.com>
 Build-Depends:
+    debhelper (>= 9.0.0),
     cmake (>= 2.8.7),
 Standards-Version: 3.9.6
 Homepage: https://github.com/audiofilter/spuce/wiki
@@ -14,7 +15,9 @@ Section: libs
 Architecture: any
 Multi-Arch: same
 Pre-Depends: multiarch-support, ${misc:Pre-Depends}
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends:
+     ${shlibs:Depends},
+     ${misc:Depends}
 Description: Spuce - shared library
  A DSP filtering library.
 
@@ -23,6 +26,7 @@ Section: libdevel
 Architecture: any
 Depends:
     libspuce (= ${binary:Version}),
+    ${shlibs:Depends},
     ${misc:Depends}
 Description: Spuce - development files
  A DSP filtering library.
