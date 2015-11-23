@@ -5,7 +5,6 @@ SET(CMAKE_BUILD_TYPE "RELEASE")
 PROJECT("fir_plot")
 Message("Project spuce fir_plot")
 
-#set(CMAKE_CXX_FLAGS " -std=c++11 ")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
@@ -33,7 +32,6 @@ set_property(TARGET spuce_fir_plot PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 set_property(TARGET spuce_fir_plot PROPERTY CXX_STANDARD 11)
 
 TARGET_LINK_LIBRARIES(spuce_fir_plot spuce_fir ${QT_LIBRARIES} spuce)
-set_property(TARGET spuce_fir_plot PROPERTY CXX_STANDARD 11)
 QT5_USE_Modules(spuce_fir_plot Gui)
 QT5_USE_Modules(spuce_fir_plot Core)
 QT5_USE_Modules(spuce_fir_plot Widgets)
