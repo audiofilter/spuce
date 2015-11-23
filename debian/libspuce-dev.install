@@ -1,4 +1,2 @@
 usr/include/
-usr/share/cmake/
-usr/lib/*/pkgconfig/
 usr/lib/*/libspuce.so
