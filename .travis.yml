@@ -12,5 +12,5 @@ install:
 before_script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DCMAKE_PREFIX_PATH=/usr/local/opt/qt5
 script: make
