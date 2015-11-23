@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Tony Kirke <tony@pyspuc.com>
 Build-Depends:
     cmake (>= 2.8.7),
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Homepage: https://github.com/audiofilter/spuce/wiki
 Vcs-Git: https://github.com/audiofilter/spuce.git
 Vcs-Browser: https://github.com/audiofilter/spuce
