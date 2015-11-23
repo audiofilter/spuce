@@ -25,7 +25,7 @@ Package: libspuce-dev
 Section: libdevel
 Architecture: any
 Depends:
-    libspuce (= ${binary:Version}),
+    libspuce0 (= ${binary:Version}),
     ${shlibs:Depends},
     ${misc:Depends}
 Description: Spuce - development files
