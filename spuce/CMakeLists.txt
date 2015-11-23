@@ -4,6 +4,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 SET(SPUCE_LIBVER "0.4.1")
+SET(SPUCE_SOVER "0.4.1")
 
 SET(FILT_SRCS  
 	filters/butterworth_iir.cpp
@@ -41,12 +42,14 @@ add_library(spuce ${FILT_SRCS})
 set_property(TARGET spuce PROPERTY CXX_STANDARD 11)
 set_property(TARGET spuce PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 
+set_target_properties(spuce PROPERTIES SOVERSION ${SPUCE_SOVER})
+set_target_properties(spuce PROPERTIES VERSION ${SPUCE_LIBVER})
+set_target_properties(spuce PROPERTIES DEFINE_SYMBOL "SPUCE_DLL_EXPORTS")
+
+
 install(TARGETS spuce
   LIBRARY DESTINATION lib${LIB_SUFFIX} # .so file
   ARCHIVE DESTINATION lib${LIB_SUFFIX} # .lib file
   RUNTIME DESTINATION bin              # .dll file
 )	
 
-#set_target_properties(spuce PROPERITES SOVERSION ${SPUCE_SOVER})
-#set_target_properties(spuce PROPERITES VERSION ${SPUCE_LIBVER})
-#set_target_properties(spuce PROPERTIES DEFINE_SYMBOL "SPUCE_DLL_EXPORTS")
