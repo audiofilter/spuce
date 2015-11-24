@@ -3,9 +3,6 @@
 ########################################################################
 cmake_minimum_required(VERSION 2.8)
 
-SET(SPUCE_LIBVER "0.4.1")
-SET(SPUCE_SOVER "0.4.1")
-
 SET(FILT_SRCS  
 	filters/butterworth_iir.cpp
 	filters/chebyshev_iir.cpp

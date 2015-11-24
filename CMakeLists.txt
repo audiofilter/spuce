@@ -19,6 +19,10 @@ endif()
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
+SET(SPUCE_LIBVER "0.4.1")
+SET(SPUCE_SOVER "${SPUCE_LIBVER}")
+set(SPUCE_VERSION "${SPUCE_LIBVER}")
+
 add_subdirectory(spuce)
 FIND_PACKAGE(Qt5 COMPONENTS Gui Core Widgets)
 if (NOT Qt5_FOUND)
