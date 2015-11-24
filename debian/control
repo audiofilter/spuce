@@ -31,3 +31,13 @@ Depends:
 Description: Spuce - development files
  A DSP filtering library.
 
+Package: spuce
+Section: science
+Architecture: any
+Depends:
+    libspuce0 (= ${binary:Version}),
+    ${shlibs:Depends},
+    ${misc:Depends}
+Description: Spuce - example applications
+ A DSP filtering library.
+
