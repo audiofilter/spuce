@@ -39,6 +39,6 @@ Depends:
     qtbase5-dev,
     ${shlibs:Depends},
     ${misc:Depends}
-Description: Spuce - example applications
+Description: Example applications for libspuce
  A DSP filtering library.
 
