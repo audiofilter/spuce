@@ -42,6 +42,24 @@ if (ENABLE_PYTHON)
 	add_subdirectory(test_spuce)
 endif()
 
+
+
+########################################################################
+# Install cmake helper modules
+########################################################################
+configure_file(
+    ${PROJECT_SOURCE_DIR}/cmake/SpuceConfigVersion.in.cmake
+    ${PROJECT_BINARY_DIR}/SpuceConfigVersion.cmake
+@ONLY)
+set(cmake_files
+    ${PROJECT_SOURCE_DIR}/cmake/SpuceConfig.cmake
+    ${PROJECT_BINARY_DIR}/SpuceConfigVersion.cmake)
+if (UNIX)
+    install(FILES ${cmake_files} DESTINATION share/cmake/${CMAKE_PROJECT_NAME})
+elseif (WIN32)
+    install(FILES ${cmake_files} DESTINATION cmake)
+endif ()
+
 ########################################################################
 # install include files
 ########################################################################

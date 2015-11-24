@@ -39,10 +39,10 @@ SET(PLOT_TARGETS
 
 FOREACH(mod ${PLOT_TARGETS})
 	SET(SRC test_${mod}.cpp)
-	ADD_EXECUTABLE(plot_${mod} ${SRC})
-  TARGET_LINK_LIBRARIES(plot_${mod} spuce spuce_debug ${PYTHON_LIBRARY})
-	set_property(TARGET plot_${mod} PROPERTY CXX_STANDARD 11)
-	set_property(TARGET plot_${mod} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+	ADD_EXECUTABLE(spuce_plot_${mod} ${SRC})
+  TARGET_LINK_LIBRARIES(spuce_plot_${mod} spuce spuce_debug ${PYTHON_LIBRARY})
+	set_property(TARGET spuce_plot_${mod} PROPERTY CXX_STANDARD 11)
+	set_property(TARGET spuce_plot_${mod} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 ENDFOREACH(mod ${EXTS})
 
 SET(UNIT_TARGETS
@@ -51,9 +51,9 @@ SET(UNIT_TARGETS
 
 FOREACH(mod ${UNIT_TARGETS})
 	SET(SRC test_${mod}.cpp)
-	ADD_EXECUTABLE(test_${mod} ${SRC})
-  TARGET_LINK_LIBRARIES(test_${mod} spuce spuce_debug ${PYTHON_LIBRARY})
-	set_property(TARGET test_${mod} PROPERTY CXX_STANDARD 11)
-	set_property(TARGET test_${mod} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+	ADD_EXECUTABLE(spuce_${mod} ${SRC})
+  TARGET_LINK_LIBRARIES(spuce_${mod} spuce spuce_debug ${PYTHON_LIBRARY})
+	set_property(TARGET spuce_${mod} PROPERTY CXX_STANDARD 11)
+	set_property(TARGET spuce_${mod} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 ENDFOREACH(mod ${EXTS})
 
