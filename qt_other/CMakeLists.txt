@@ -16,7 +16,7 @@ SET(other_plot_HEADERS mainwindow.h qcustomplot.h)
 INCLUDE_DIRECTORIES(${QT5_INCLUDES})
 ADD_DEFINITIONS(${QT5Widgets_DEFINITIONS})
 
-ADD_LIBRARY(spuce_other ${SOURCES})
+ADD_LIBRARY(spuce_other STATIC ${SOURCES})
 
 ADD_EXECUTABLE(spuce_other_plot ${other_plot_SOURCES} ${other_plot_HEADERS_MOC})
 

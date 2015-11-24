@@ -19,7 +19,7 @@ SET(fir_plot_HEADERS mainwindow.h other_freq.h qcustomplot.h)
 INCLUDE_DIRECTORIES(${QT5_INCLUDES})
 ADD_DEFINITIONS(${QT5Widgets_DEFINITIONS})
 
-ADD_LIBRARY(spuce_fir ${SOURCES})
+ADD_LIBRARY(spuce_fir STATIC ${SOURCES})
 ADD_EXECUTABLE(spuce_fir_plot ${fir_plot_SOURCES} ${fir_plot_HEADERS_MOC})
 set_property(TARGET spuce_fir PROPERTY CXX_STANDARD 11)
 

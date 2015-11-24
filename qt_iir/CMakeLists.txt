@@ -19,7 +19,7 @@ SET(iir_plot_HEADERS mainwindow.h qcustomplot.h)
 INCLUDE_DIRECTORIES(${QT5_INCLUDES})
 ADD_DEFINITIONS(${QT5Widgets_DEFINITIONS})
 
-ADD_LIBRARY(spuce_iir ${SOURCES})
+ADD_LIBRARY(spuce_iir STATIC ${SOURCES})
 ADD_EXECUTABLE(spuce_iir_plot ${iir_plot_SOURCES} ${iir_plot_HEADERS_MOC})
 
 set_property(TARGET spuce_iir PROPERTY CXX_STANDARD 11)

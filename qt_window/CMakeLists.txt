@@ -16,7 +16,7 @@ SET(window_plot_HEADERS mainwindow.h qcustomplot.h)
 INCLUDE_DIRECTORIES(${QT5_INCLUDES})
 ADD_DEFINITIONS(${QT5Widgets_DEFINITIONS})
 
-ADD_LIBRARY(spuce_win ${SOURCES})
+ADD_LIBRARY(spuce_win STATIC ${SOURCES})
 ADD_EXECUTABLE(spuce_window_plot ${window_plot_SOURCES} ${window_plot_HEADERS_MOC})
 
 set_property(TARGET spuce_win PROPERTY CXX_STANDARD 11)
