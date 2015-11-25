@@ -5,6 +5,7 @@ Maintainer: Tony Kirke <tony@pyspuc.com>
 Build-Depends:
     debhelper (>= 9.0.0),
     cmake (>= 2.8.7),
+    qtbase5-dev,
 Standards-Version: 3.9.6
 Homepage: https://github.com/audiofilter/spuce/wiki
 Vcs-Git: https://github.com/audiofilter/spuce.git
@@ -36,7 +37,6 @@ Section: science
 Architecture: any
 Depends:
     libspuce0 (= ${binary:Version}),
-    qtbase5-dev,
     ${shlibs:Depends},
     ${misc:Depends}
 Description: Example applications for libspuce

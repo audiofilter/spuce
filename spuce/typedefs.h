@@ -5,6 +5,8 @@
 #include <complex>
 #include "complex_operators.h"
 
+#define _USE_MATH_DEFINES
+
 namespace spuce {
 	// if defined USE_FLOAT, default to float type
 #ifndef USE_FLOAT
