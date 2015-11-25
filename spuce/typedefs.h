@@ -1,11 +1,9 @@
 #pragma once
 // Copyright (c) 2015 Tony Kirke.  Boost Software License - Version 1.0  (http://www.opensource.org/licenses/BSL-1.0)
-
+#define _USE_MATH_DEFINES
 // Putting std::complex here allows possible replacement with custom complex type later
 #include <complex>
 #include "complex_operators.h"
-
-#define _USE_MATH_DEFINES
 
 namespace spuce {
 	// if defined USE_FLOAT, default to float type
