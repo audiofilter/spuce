@@ -2,12 +2,12 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <complex>
+#include <memory>
 #include "make_filter.h"
-
 namespace spuce {
 
 	template <typename T> void other_freq(T& AP, int pts, double* w) {
-		double d[pts];
+    std::unique_ptr<double []> d(new double[pts]);
 		double imp = 1;
 		double dsum = 0;
 		double db=0;
