@@ -23,7 +23,7 @@ template <class Numeric, class Coeff = float_type> class fir {
     for (int i = 0; i < num_taps; i++) coeff[i] = c.gettap(i);
   }
   long number_of_taps() const { return (num_taps); }
-  Coeff gettap(long i) { return (coeff[i]); }
+  Coeff gettap(long i) const { return (coeff[i]); }
   //! Reset
   void reset() {
     for (int i = 0; i < num_taps; i++) z[i] = (Numeric)0;
