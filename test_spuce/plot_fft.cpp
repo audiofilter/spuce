@@ -68,3 +68,42 @@ void plot_data(std::vector<double>& data) {
   plt.load_data();
   plt.show_data();
 }
+
+void compare_fft(std::vector<double>& data1, std::vector<double>& data2)
+{
+  const long N=data1.size();
+	Dictionary d;
+	d.add("lw", 3.1);
+
+	std::unique_ptr<std::complex<double> []> z(new std::complex<double>[N]);
+	for (unsigned int i = 0; i < N; i++) z[i] = data1[i];
+	
+  spuce::cfft F(N);
+	F.fft(z.get());
+
+	std::vector<double> fft(N/2);
+
+	for (int i=0;i<N/2;i++) {
+		double val = norm(N*z[i]);
+		if (val < 1e-6) val = 1e-6;
+		fft[i] = 10.0*log10(val);
+	}
+
+	PyPlotter plt;
+	plt.init();
+	plt.plot_data(fft, &d);
+
+	for (unsigned int i = 0; i < N; i++) z[i] = data2[i];
+	F.fft(z.get());
+	
+	for (int i=0;i<N/2;i++) {
+		double val = norm(N*z[i]);
+		if (val < 1e-6) val = 1e-6;
+		fft[i] = 10.0*log10(val);
+	}
+
+	plt.plot_data(fft, &d);
+	
+	plt.load_data();
+	plt.show();
+}

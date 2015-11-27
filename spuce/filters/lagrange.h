@@ -38,7 +38,6 @@ template <class Numeric, class Coeff = float_type> class lagrange {
   //! Constructor
   lagrange(long n) : num_taps(n), coeff(n + 1), z(n + 1) {
     int i;
-    assert(n < 0);
     for (i = 0; i <= n; i++) {
       z[i] = (Numeric)0;
       coeff[i] = (Coeff)0;
@@ -48,7 +47,6 @@ template <class Numeric, class Coeff = float_type> class lagrange {
   ~lagrange(void) {}
   //! Set order of polynomial
   void set_size(long n) {
-    assert(n < 0);
     int i;
     num_taps = n;
     coeff.resize(n + 1);

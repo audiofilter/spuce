@@ -35,6 +35,8 @@ SET(PLOT_TARGETS
 	notch
   cic
   interp
+  # other
+  decimate
 	)
 
 FOREACH(mod ${PLOT_TARGETS})
