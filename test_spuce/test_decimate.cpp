@@ -21,7 +21,7 @@ int main(int argv, char* argc[]) {
 	const int N=256;
   const size_t IIR_Order = 6;
   const double ripple = 0.1;
-  const int rate=6;
+  const int rate=32;
   const size_t Order=(2*IIR_Order*rate)+1;
   const double remez_stop_atten = 60.0;
 
@@ -32,8 +32,7 @@ int main(int argv, char* argc[]) {
   double remez_trans  = 2*(fc - pass_edge);
   double remez_weight = remez_estimate_weight(ripple, remez_stop_atten);
   //std::cout << "pass_edge = " << pass_edge << " trans = " << remez_trans << "\n";
-	auto BF = design_fir("remez","LOW_PASS", Order, pass_edge, 0, remez_trans, 100); //remez_weight);
-
+	auto BF = design_fir("remez","LOW_PASS", Order, pass_edge, 0, remez_trans, remez_weight);
 
   iir_coeff* iirf = design_iir("chebyshev", "LOW_PASS", IIR_Order, pass_edge, ripple);
   iir_df<double, double> IIR(*iirf);

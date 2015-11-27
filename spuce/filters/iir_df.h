@@ -38,13 +38,13 @@ template <class Numeric, class Coeff = float_type> class iir_df {
     zeros.reset();
   }
   void set_taps(const std::vector<double>& taps) {
-	// Divide vector in half, 1st half are feedforward, 2nd half feedback
-	assert(taps.size() != 0);
-	auto size = taps.size()/2;
-	zeros.set_size(size);
-	poles.set_size(size-1);
+    // Divide vector in half, 1st half are feedforward, 2nd half feedback
+    assert(taps.size() != 0);
+    auto size = taps.size()/2;
+    zeros.set_size(size);
+    poles.set_size(size-1);
     for (size_t i = 0; i < size; i++) { zeros.settap(i, taps[i]); }
-	// Skip 1st feedback and negate the rest
+    // Skip 1st feedback and negate the rest
     for (size_t i = 0; i < size-1; i++) { poles.settap(i, -taps[i+size+1]); }
   }
   int order(void) { return zeros.number_of_taps(); }
@@ -54,6 +54,14 @@ template <class Numeric, class Coeff = float_type> class iir_df {
     output = poles.iir(output);
     return (output);
   }
+  void process(const std::vector<Numeric>& samples_in,
+               std::vector<Numeric>& if_out)
+  {
+    if_out.resize(samples_in.size());
+    for (size_t i=0;i<samples_in.size();i++) {
+      if_out[i] = update(samples_in[i]);
+    }
+  }    
   void print(void) {
     std::cout << "B ";
     zeros.print();
