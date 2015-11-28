@@ -5,10 +5,8 @@
 #include <spuce/filters/iir_coeff.h>
 #include <spuce/filters/iir_df.h>
 #include <spuce/filters/fir_coeff.h>
-#include <spuce/filters/design_iir.h>
-#include <spuce/filters/design_fir.h>
 #include <spuce/filters/fir.h>
-#include <spuce/filters/remez_estimate.h>
+#include <spuce/filters/calculate_decimator_taps.h>
 using namespace std;
 using namespace spuce;
 #include "plot_fft.h"
@@ -20,24 +18,16 @@ using namespace spuce;
 int main(int argv, char* argc[]) {
 	const int N=256;
   const size_t IIR_Order = 6;
-  const double ripple = 0.1;
-  const int rate=32;
-  const size_t Order=(2*IIR_Order*rate)+1;
-  const double remez_stop_atten = 60.0;
+  const int rate=6;
 
-  //auto TAPS = design_fir("remez","LOW_PASS", Order, 0.0625, 0, 0.15, 100.0);
+  auto iir_taps = calculate_decimator_taps(rate, IIR_Order, false);
+  auto fir_taps = calculate_decimator_taps(rate, IIR_Order, true);
 
-  double fc = 0.5/rate;
-  double pass_edge = 0.8*fc;
-  double remez_trans  = 2*(fc - pass_edge);
-  double remez_weight = remez_estimate_weight(ripple, remez_stop_atten);
-  //std::cout << "pass_edge = " << pass_edge << " trans = " << remez_trans << "\n";
-	auto BF = design_fir("remez","LOW_PASS", Order, pass_edge, 0, remez_trans, remez_weight);
+  iir_df<double, double> IIR;
+  IIR.set_taps(iir_taps);
 
-  iir_coeff* iirf = design_iir("chebyshev", "LOW_PASS", IIR_Order, pass_edge, ripple);
-  iir_df<double, double> IIR(*iirf);
-
-	fir<double> BFIR(BF);
+	fir<double> BFIR(fir_taps);
+  
 	std::vector<double> x(N);
 	std::vector<double> y(N);
   

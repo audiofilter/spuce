@@ -33,6 +33,8 @@ SET(FILT_SRCS
 	filters/elliptic_allpass.cpp
   filters/shelf_allpass1.cpp
   filters/farrow_upsampler.cpp
+  #
+  filters/calculate_decimator_taps.cpp
 )
 
 add_library(spuce ${FILT_SRCS})
