@@ -17,8 +17,12 @@ namespace spuce {
     spuce::fir_decim<Numeric>  m_if_fir;
     spuce::iir_df<Numeric>     m_if_iir;
 
-  public:  
-    decimator(unsigned int rate, int low_rate_multipliers, bool use_fir=true) 
+  public:
+    decimator() {;}
+    decimator(unsigned int rate, int low_rate_multipliers, bool use_fir=true) {
+      setup(rate,low_rate_multipliers, use_fir);
+    }
+    void setup(unsigned int rate, int low_rate_multipliers, bool use_fir=true) 
     {
       m_use_fir = use_fir;
       m_rate = rate;
