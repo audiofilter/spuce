@@ -37,6 +37,7 @@ SET(PLOT_TARGETS
   interp
   # other
   decimate
+  decimate2
 	)
 
 FOREACH(mod ${PLOT_TARGETS})
