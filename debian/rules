@@ -21,4 +21,5 @@ override_dh_auto_configure:
 	dh_auto_configure -- \
 		-DLIB_SUFFIX="/$(DEB_HOST_MULTIARCH)" \
 		-DBUILD_SHARED_LIBS=ON \
+		-DENABLE_PYTHON=OFF \
 		-DSPUCE_EXTVER="$(DEB_VERSION_EXTVER)"

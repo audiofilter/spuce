@@ -34,6 +34,21 @@ Currently there is some code for IIR Filter Design & Implementation
 * brew tap audiofilter/spuce
 * brew install spuce  (or brew install -HEAD spuce for latest sources)
 
+**To install for Linux**
+
+The deb package is provided by the MyriadRF SDR Drivers PPA.
+The PPAs support the following Ubuntu releases:
+
+* Trusty (14.04 LTS)
+* Vivid (15.04)
+* Wily (15.10)
+
+Do the following to install on your Ubuntu system
+
+* sudo add-apt-repository -y ppa:myriadrf/drivers
+* sudo apt-get update
+* sudo apt-get install libspuce-dev
+
 For testing, python + matplotlib is used.
 
 
