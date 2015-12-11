@@ -59,7 +59,7 @@ set(cmake_files
     ${PROJECT_SOURCE_DIR}/cmake/SpuceConfig.cmake
     ${PROJECT_BINARY_DIR}/SpuceConfigVersion.cmake)
 if (UNIX)
-    install(FILES ${cmake_files} DESTINATION share/cmake/${CMAKE_PROJECT_NAME})
+    install(FILES ${cmake_files} DESTINATION share/cmake/${PROJECT_NAME})
 elseif (WIN32)
     install(FILES ${cmake_files} DESTINATION cmake)
 endif ()

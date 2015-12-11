@@ -144,6 +144,18 @@ template <class Numeric, class Coeff = float_type> class fir {
       out[j] = (sum);
     }
   }
+  void process_inplace(std::vector<Numeric>& io) {
+    // Update history of inputs
+    for (int j = 0; j < io.size(); j++) {
+      for (int i = num_taps - 1; i > 0; i--) z[i] = z[i - 1];
+      // Add new input
+      z[0] = io[j];
+      // Perform FIR
+      sum_type sum(0);
+      for (int i = 0; i < num_taps; i++) sum = sum + coeff[i] * z[i];
+      io[j] = (sum);
+    }
+  }
   // Tapped delay line uses previous outputs (to behave like an IIR)
   Numeric iir(Numeric in) {
     typename mixed_type<Numeric, Coeff>::dtype sum;
