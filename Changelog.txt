@@ -1,3 +1,10 @@
+Release 0.4.2 (2015-12-11)
+==========================
+
+- Add a decimator class and audio_equalizer
+- Misc. packaging changes
+- Wiki changes on Github
+
 Release 0.4.1 (2015-11-22)
 ==========================
 

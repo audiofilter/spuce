@@ -1,3 +1,9 @@
+spuce (0.4.2-myriadrf1~wily) wily; urgency=low
+
+  * Release 0.4.2 (2015-12-11)
+
+ -- Tony Kirke <tony@pyspuc.com>  Fri, 11 Dec 2015 15:35:00 -0700
+
 spuce (0.4.1-ppa1-jessie64) unstable; urgency=low
 
   * Release 0.4.1 (2015-11-22)
