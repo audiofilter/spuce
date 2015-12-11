@@ -1,4 +1,5 @@
 // Copyright (c) 2015 Tony Kirke.  Boost Software License - Version 1.0  (http://www.opensource.org/licenses/BSL-1.0)
+#define _USE_MATH_DEFINES
 #include <spuce/filters/calculate_decimator_taps.h>
 #include <cassert>
 #include <cmath>
