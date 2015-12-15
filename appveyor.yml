@@ -39,6 +39,6 @@ branches:
 # configure and build
 build_script:
   - mkdir build && cd build
-  - cmake ../ -G "%GENERATOR%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DENABLE_GUI=OFF -DENABLE_PYTHON=OFF 
+  - cmake ../ -G "%GENERATOR%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DENABLE_GUI=OFF -DBUILD_TESTING=OFF 
   - cmake --build . --config %CONFIGURATION%
 
