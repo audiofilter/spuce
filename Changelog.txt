@@ -1,3 +1,8 @@
+Release 0.4.3 (2015-12-19)
+==========================
+- Fix library/version numbering in packaging
+- Change CMake option ENABLE_PYTHON to BUILD_TESTING
+
 Release 0.4.2 (2015-12-11)
 ==========================
 
