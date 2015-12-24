@@ -13,14 +13,13 @@ void gaussian_fir(fir_coeff<float_type>& gaussf, float_type bt) {
   // and transfer coefficients to "gaussf".
   // spb   = samples per bit (at full rate)
   // BT    = filter bandwidth
-  int i;
   float_type s, t0, ts, gsum;
-  int nir = gaussf.number_of_taps();
+  size_t nir = gaussf.number_of_taps();
   float_type* gf = new float_type[nir];
   s = 1.0 / (sqrt(log(2.0)) / (2.0 * M_PI * bt));
   t0 = -0.5 * nir;
   gsum = 0.0;  // std::normalize to unit sum
-  for (i = 0; i < nir; i++) {
+  for (size_t i = 0; i < nir; i++) {
     t0++;
     ts = s * t0;
     gf[i] = ::exp(-0.5 * ts * ts);
@@ -28,6 +27,6 @@ void gaussian_fir(fir_coeff<float_type>& gaussf, float_type bt) {
   }
   // Unity DC gain
   gsum = 1.0 / gsum;
-  for (i = 0; i < nir; i++) gaussf.settap(i,gf[i] * gsum);
+  for (size_t i = 0; i < nir; i++) gaussf.settap(i,gf[i] * gsum);
 }
 }  // namespace spuce

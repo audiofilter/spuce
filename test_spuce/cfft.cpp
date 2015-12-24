@@ -21,8 +21,8 @@ cfft::cfft(size_t size, float_type scalef1, float_type scalef2, float_type scale
   iscales[1] = scalei2;
 
   for (k = 0;; ++k) {
-    if ((1 << k) == size) break;
-    if (k == 18 || (1 << k) > size) throw "cfft: size not power of 2";
+    if (((size_t)1 << k) == size) break;
+    if (k == 18 || ((size_t)1 << k) > size) throw "cfft: size not power of 2";
   }
   N = 1 << k;
   log2N = k;
