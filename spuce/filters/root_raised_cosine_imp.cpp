@@ -5,7 +5,7 @@
 #include <spuce/typedefs.h>
 #include <spuce/filters/root_raised_cosine_imp.h>
 namespace spuce {
-float_type root_raised_cosine_imp(float_type alpha, float_type xin, float_type r, long num_taps)
+float_type root_raised_cosine_imp(float_type alpha, float_type xin, float_type r, size_t num_taps)
 //----------------------------------------------------------------------------------------------------
 // Calculates the square root raised cosine pulse shape given the bandwidth value alpha and the index.
 //----------------------------------------------------------------------------------------------------

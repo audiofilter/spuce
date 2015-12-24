@@ -28,7 +28,7 @@ namespace spuce {
 //!  \ingroup classes misc
 typedef std::complex<float_type> CPLX;
 class cfft {
-  int N, log2N;           //! these define size of FFT buffer
+  size_t N, log2N;           //! these define size of FFT buffer
   CPLX *w;                //! array [N/2] of cos/sin values
   int *bitrev;            //! bit-reversing table, in 0..N
   float_type fscales[2];  //! f-transform scalings

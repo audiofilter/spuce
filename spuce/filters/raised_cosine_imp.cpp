@@ -5,7 +5,7 @@
 #include <spuce/typedefs.h>
 #include <spuce/filters/raised_cosine_imp.h>
 namespace spuce {
-float_type raised_cosine_imp(float_type alpha, float_type xin, float_type r, long num_taps)
+float_type raised_cosine_imp(float_type alpha, float_type xin, float_type r, size_t num_taps)
 //------------------------------------------------------------------------------------------------
 // Calculates the raised cosine pulse shape given the excess bandwidth value alpha and the index.
 //------------------------------------------------------------------------------------------------
