@@ -7,7 +7,7 @@ namespace spuce {
 //! \author Tony Kirke,  Copyright(c) 2001
 //! \ingroup template_array_functions misc
 template <class T> std::vector<T> partial_convolve(const std::vector<T>& x, const std::vector<T>& y, size_t N, size_t M) {
-  size_t i, j;
+  int i, j;
   auto L = M + N - 1;
   std::vector<T> c(L);
   for (i = 0; i < L; i++) {
