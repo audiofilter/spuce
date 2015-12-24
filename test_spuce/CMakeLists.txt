@@ -1,9 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-IF(NOT CMAKE_BUILD_TYPE)
-	SET(CMAKE_BUILD_TYPE "DEBUG")
-ENDIF()
-
 PROJECT("spuce tests")
 message("Project spuce_tests")
 
@@ -11,7 +7,6 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   add_definitions("/WX")
 endif()
-
 
 FIND_PACKAGE(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
