@@ -9,7 +9,7 @@ SET(FILT_SRCS
 	filters/chebyshev2_iir.cpp
 	filters/elliptic_iir.cpp
 	filters/find_roots.cpp
-	filters/fir_coeff.cpp
+#	filters/fir_coeff.cpp
 	filters/iir_coeff.cpp
   filters/design_iir.cpp
 	# FIR stuff
