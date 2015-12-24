@@ -24,7 +24,7 @@ void create_remez_lpfir(fir_coeff<float_type>& remezfir, float_type pass_edge, f
   f1[0] = 1.0;
   f1[1] = 0.0;
   std::vector<float_type> fir_coef(nfilt);
-  ok = Remz.remez(fir_coef, nfilt, 2, e1, f1, w1, remez_type::BANDPASS);
+  ok = Remz.remez(fir_coef, (int)nfilt, 2, e1, f1, w1, remez_type::BANDPASS);
   if (ok) {
     for (size_t i = 0; i < nfilt; i++) remezfir.settap(i, fir_coef[i]);
   } else {
