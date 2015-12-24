@@ -38,8 +38,8 @@ void iir_coeff::print_pz() const {
   std::cout << "}\n";
 }
 
-int iir_coeff::isOdd(void) const { return odd; }
-int iir_coeff::getOrder(void) const { return order; }
+size_t iir_coeff::isOdd(void) const { return odd; }
+size_t iir_coeff::getOrder(void) const { return order; }
 bool iir_coeff::calculate_biquad_coefficents() {
   if (state == filter_state::z_domain) {
     convert_to_ab();
@@ -52,13 +52,13 @@ bool iir_coeff::calculate_biquad_coefficents() {
     return false;
   }
 }
-int iir_coeff::getN2(void) const { return n2; }
+size_t iir_coeff::getN2(void) const { return n2; }
 float_type iir_coeff::getGain(void) const { return gain; }
 void iir_coeff::apply_gain(float_type g) {
   for (size_t i = 0; i < b_tf.size(); i++) { b_tf[i] *= g; }
 }
 // Doesn't change filter_type or center frequency, but loses all other info
-void iir_coeff::resize(long ord) {
+void iir_coeff::resize(size_t ord) {
   order = ord;
   gain = hpf_gain = 1.0;
   n2 = (order + 1) / 2;
@@ -67,13 +67,13 @@ void iir_coeff::resize(long ord) {
   zeros.resize(n2);
   a_tf.resize(ord + 1);
   b_tf.resize(ord + 1);
-  for (int j = 0; j < n2; j++) {
+  for (size_t j = 0; j < n2; j++) {
     poles[j] = std::complex<float_type>(0.0, 0.0);
     zeros[j] = std::complex<float_type>(0.0, 0.0);
   }
   state = filter_state::start;  // un-initialized
 }
-iir_coeff::iir_coeff(long ord, filter_type lp)
+iir_coeff::iir_coeff(size_t ord, filter_type lp)
     : poles((ord + 1) / 2), zeros((ord + 1) / 2), a_tf(ord + 1), b_tf(ord + 1), lpf(lp) {
   // amax - attenuation at cutoff
   order = ord;
@@ -82,7 +82,7 @@ iir_coeff::iir_coeff(long ord, filter_type lp)
   // Put at fs/4
   center_freq = 0.25;
   c0 = cos(center_freq*2*M_PI); 
-  for (int j = 0; j < n2; j++) {
+  for (size_t j = 0; j < n2; j++) {
     poles[j] = std::complex<float_type>(0.0, 0.0);
     zeros[j] = std::complex<float_type>(0.0, 0.0);
   }
@@ -96,7 +96,7 @@ iir_coeff::~iir_coeff() {}
 void iir_coeff::bilinear() {
   hpf_gain = 1.0;
   if (odd) hpf_gain = 1.0 + real(poles[0]);
-  for (int j = 0; j < n2; j++) {
+  for (size_t j = 0; j < n2; j++) {
     zeros[j] = ((float_type)1.0 - zeros[j]) / ((float_type)1.0 + zeros[j]);
     poles[j] = ((float_type)1.0 - poles[j]) / ((float_type)1.0 + poles[j]);
   }
@@ -119,7 +119,7 @@ void iir_coeff::make_band(float_type c) {
     old_zeros.push_back(zeros[i]);
   }
 
-  int was_odd = isOdd();
+  size_t was_odd = isOdd();
 
   resize(2 * getOrder());
 
@@ -127,9 +127,9 @@ void iir_coeff::make_band(float_type c) {
   // q should be 1 for bandpass,- 1 for bandstop
   if (lpf == filter_type::bandpass) q = 1;
 
-  int k = 0;
+  size_t k = 0;
   // For Original odd order filters, skip the 1st pole/zero
-  for (int j = was_odd; j < was_odd + n2 / 2; j++) {
+  for (size_t j = was_odd; j < was_odd + n2 / 2; j++) {
     std::complex<float_type> pi = -old_poles[j];
     std::complex<float_type> zi = -old_zeros[j];
     std::complex<float_type> p0 = c0 * (1.0 + q * pi);
@@ -205,7 +205,7 @@ void iir_coeff::ab_to_tf() {
   state = filter_state::z_domain_ab;  // in Z-domain 2nd order A/B coefficients
 }
 void iir_coeff::z_root_to_ab(std::vector<std::complex<float_type> >& z) {
-  for (int j = odd; j < n2; j++) {
+  for (size_t j = odd; j < n2; j++) {
     gain *= (std::norm(z[j]) - 2 * real(z[j]) + 1.0);
     hpf_gain *= (std::norm(z[j]) + 2 * real(z[j]) + 1.0);
     z[j] = std::complex<float_type>(-2 * real(z[j]), std::norm(z[j]));
@@ -222,15 +222,15 @@ std::vector<float_type> iir_coeff::pz_to_poly(const std::vector<std::complex<flo
 
   p[0] = 1;
   p2[0] = 1;
-  long m = 1;
+  size_t m = 1;
 
-  for (int j = 0; j < n2; j++) {
+  for (size_t j = 0; j < n2; j++) {
     td = 1 - 2 * real(z[j]) + std::norm(z[j]);
     p2[1] = (1 - std::norm(z[j])) / td;
     p2[2] = 2.0 * imag(z[j]) / td;
     tf = partial_convolve(p, p2, m, 3);
     m += 2;
-    for (int i = 0; i < m; i++) p[i] = tf[i];
+    for (size_t i = 0; i < m; i++) p[i] = tf[i];
   }
   // tf_state = 1;
   return (tf);
@@ -245,31 +245,31 @@ std::vector<float_type> iir_coeff::p2_to_poly(const std::vector<std::complex<flo
 
   p[0] = 1;
   p2[0] = 1;
-  long m = 1;
+  size_t m = 1;
   if (odd) {
     p2[1] = -real(ab[0]);
     p2[2] = 0;
     tf = partial_convolve(p, p2, m, 2);
     m += 1;
-    for (int i = 0; i < m; i++) p[i] = tf[i];
+    for (size_t i = 0; i < m; i++) p[i] = tf[i];
   }
-  for (int j = odd; j < n2; j++) {
+  for (size_t j = odd; j < n2; j++) {
     p2[1] = real(ab[j]);
     p2[2] = imag(ab[j]);
     tf = partial_convolve(p, p2, m, 3);
     m += 2;
-    for (int i = 0; i < m; i++) { p[i] = tf[i]; }
+    for (size_t i = 0; i < m; i++) { p[i] = tf[i]; }
   }
   return tf;
 }
-float_type iir_coeff::get_a(long i) const {
+float_type iir_coeff::get_a(size_t i) const {
   if (i < order + 1) {
     return (a_tf[i]);
   } else {
     return (0);
   }
 }
-float_type iir_coeff::get_coeff_a(long i) const {
+float_type iir_coeff::get_coeff_a(size_t i) const {
   if (i < order) {
     if (i % 2 == 0)
       return (real(poles[i / 2]));
@@ -279,7 +279,7 @@ float_type iir_coeff::get_coeff_a(long i) const {
     return (0);
   }
 }
-float_type iir_coeff::get_coeff_b(long i) const {
+float_type iir_coeff::get_coeff_b(size_t i) const {
   if (i < order) {
     if (i % 2 == 0)
       return (real(zeros[i / 2]));
@@ -289,27 +289,27 @@ float_type iir_coeff::get_coeff_b(long i) const {
     return (0);
   }
 }
-float_type iir_coeff::get_b(long i) const {
+float_type iir_coeff::get_b(size_t i) const {
   if (i < order + 1) {
     return (b_tf[i]);
   } else {
     return (0);
   }
 }
-std::complex<float_type> iir_coeff::get_pole(long i) {
+std::complex<float_type> iir_coeff::get_pole(size_t i) {
   if (i <= n2)
     return (poles[i]);
   else
     return (std::complex<float_type>(0.0, 0.0));
 }
-std::complex<float_type> iir_coeff::get_zero(long i) {
+std::complex<float_type> iir_coeff::get_zero(size_t i) {
   if (i <= n2)
     return (zeros[i]);
   else
     return (std::complex<float_type>(0.0, 0.0));
 }
 void iir_coeff::pz_to_ap() {
-  int m = 2 * order - 1;
+  size_t m = 2 * order - 1;
   typedef std::vector<float_type> Array;
   typedef std::vector<std::complex<float_type> > CArray;
   Array fa;
@@ -322,8 +322,8 @@ void iir_coeff::pz_to_ap() {
   CArray h2(m);
   float_type divtmp;
   float_type tmp;
-  int np, nq;
-  int i, j;
+  size_t np, nq;
+  size_t i, j;
 
   // Convert from poles and zeros to 2nd order section coefficients
   //  root_to_ab(zeros);
@@ -381,7 +381,7 @@ void iir_coeff::pz_to_ap() {
 }
 float_type iir_coeff::max_abs_coeff() {
   float_type maxv = 0;
-  for (int j = 0; j < n2; j++) {
+  for (size_t j = 0; j < n2; j++) {
     if (std::fabs(real(poles[j])) > maxv) maxv = std::fabs(real(poles[j]));
     if (std::fabs(imag(poles[j])) > maxv) maxv = std::fabs(imag(poles[j]));
     if (std::fabs(real(zeros[j])) > maxv) maxv = std::fabs(real(zeros[j]));
@@ -392,7 +392,7 @@ float_type iir_coeff::max_abs_coeff() {
 
 // Get frequency response at freq
 float_type iir_coeff::freqz_mag(float_type freq) {
-  int i;
+  size_t i;
   std::complex<float_type> z(1, 0);
   std::complex<float_type> z_inc = std::complex<float_type>(std::cos(freq), std::sin(freq));
   std::complex<float_type> nom(0);

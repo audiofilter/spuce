@@ -14,8 +14,8 @@ enum class filter_type {low,high,bandpass,bandstop};
 class iir_coeff {
  public:
   //! ord = Filter order
-  iir_coeff(long ord = 1, filter_type lp = filter_type::low);
-	void resize(long ord);
+  iir_coeff(size_t ord = 1, filter_type lp = filter_type::low);
+	void resize(size_t ord);
   //! Destructor
   ~iir_coeff();
   //! Do bilinear transformation
@@ -27,22 +27,22 @@ class iir_coeff {
   void ab_to_tf();
   std::vector<float_type> p2_to_poly(const std::vector<std::complex<float_type> >& ab);
   std::vector<float_type> pz_to_poly(const std::vector<std::complex<float_type> >& z);
-  void set_zero(const std::complex<float_type>& z, long i) { zeros[i] = z; }
-  void set_pole(const std::complex<float_type>& z, long i) { poles[i] = z; }
-  std::complex<float_type> get_zero(long i);
-  std::complex<float_type> get_pole(long i);
-  float_type get_a(long i) const;
-  float_type get_b(long i) const;
-  float_type get_coeff_a(long i) const;
-  float_type get_coeff_b(long i) const;
+  void set_zero(const std::complex<float_type>& z, size_t i) { zeros[i] = z; }
+  void set_pole(const std::complex<float_type>& z, size_t i) { poles[i] = z; }
+  std::complex<float_type> get_zero(size_t i);
+  std::complex<float_type> get_pole(size_t i);
+  float_type get_a(size_t i) const;
+  float_type get_b(size_t i) const;
+  float_type get_coeff_a(size_t i) const;
+  float_type get_coeff_b(size_t i) const;
   float_type max_abs_coeff();
   void apply_gain(float_type g);
   float_type freqz_mag(float_type freq);
   float_type getGain(void) const;
-  int getOrder(void) const;
-  int getN2(void) const;
+  size_t getOrder(void) const;
+  size_t getN2(void) const;
   bool calculate_biquad_coefficents();
-  int isOdd(void) const;
+  size_t isOdd(void) const;
   std::vector<float_type> get_a() const;
   std::vector<float_type> get_b() const;
   filter_type get_type(void) const { return lpf; }
@@ -61,9 +61,9 @@ class iir_coeff {
   float_type c0;
   float_type center_freq;
   float_type hpf_gain;
-  long n2;
-  long odd;
-  long order;
+  size_t n2;
+  size_t odd;
+  size_t order;
   filter_state state;
   //long tf_state;
   //long ap_state;
