@@ -25,7 +25,7 @@ void butterworth_iir(iir_coeff& filt, float_type fcd, float_type amax = 3.0) {
 	if (filt.get_type()==filter_type::bandpass) filt.set_bandpass_gain();
 }
 //! Calculate roots
-void butterworth_s(iir_coeff& filt, float_type wp, long n) {
+void butterworth_s(iir_coeff& filt, float_type wp, size_t n) {
   auto l = (n % 2 == 0) ? 1 : 0;
   int n2 = (n + 1) / 2;
   float_type arg;

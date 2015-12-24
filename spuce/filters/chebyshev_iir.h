@@ -8,5 +8,5 @@ namespace spuce {
 //! \author Tony Kirke,  Copyright(c) 2015
 //! \ingroup functions iir
 void chebyshev_iir(iir_coeff& cheb, float_type fcd, float_type ripple);
-void chebyshev_s(iir_coeff& filt, float_type wp, float_type epi, long n);
+void chebyshev_s(iir_coeff& filt, float_type wp, float_type epi, size_t n);
 }  // namespace spuce

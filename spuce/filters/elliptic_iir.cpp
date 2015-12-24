@@ -38,8 +38,8 @@ void elliptic_iir(iir_coeff& filt, float_type fcd, float_type ripple, float_type
   k = 1.0 / wr;
   m = k * k;
   Kk = ellpk(m);
-  u = lamda_plane(m, order, epi);
-  s_plane(filt, order, u, m, k, Kk, wc);
+  u = lamda_plane(m, (int)order, epi);
+  s_plane(filt, (int)order, u, m, k, Kk, wc);
 
   filt.bilinear();
 	if (filt.get_type()==filter_type::bandpass || filt.get_type()==filter_type::bandstop) {

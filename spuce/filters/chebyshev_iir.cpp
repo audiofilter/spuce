@@ -27,7 +27,7 @@ void chebyshev_iir(iir_coeff& filt, float_type fcd, float_type ripple = 3.0) {
   if (!filt.isOdd()) filt.apply_gain(gain);
 }
 //! Calculate poles (chebyshev)
-void chebyshev_s(iir_coeff& filt, float_type wp, float_type epi, long n) {
+void chebyshev_s(iir_coeff& filt, float_type wp, float_type epi, size_t n) {
   auto l = 1;
   int n2 = (n + 1) / 2;
   float_type arg;

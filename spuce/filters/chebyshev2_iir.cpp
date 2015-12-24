@@ -25,7 +25,7 @@ void chebyshev2_iir(iir_coeff& filt, float_type fcd, float_type stopband = 40.0)
 	if (filt.get_type()==filter_type::bandpass) filt.set_bandpass_gain();
 }
 //! Calculate poles (chebyshev)
-void chebyshev2_s(iir_coeff& filt, float_type wp, float_type epi, long order) {
+void chebyshev2_s(iir_coeff& filt, float_type wp, float_type epi, size_t order) {
   auto l = 1;
   int n2 = (order + 1) / 2;
   float_type x = 1 / epi;

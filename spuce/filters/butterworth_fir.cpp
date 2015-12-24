@@ -45,9 +45,9 @@ void butterworth_fir(fir_coeff<float_type>& butfir, float_type spb) {
   |a| * y(at) <--> Y(f/a)
 
   */
-  int end, i, i2, j;
+  size_t end;
   float_type x, xend, t;
-  int taps = butfir.number_of_taps();
+  size_t taps = butfir.number_of_taps();
   int spbi = (int)floor(1.0 / spb + 0.5);
   int ord = (int)floor(taps / spbi + 0.5);
   if (ord % 2) ord += 1;  // make even
@@ -61,7 +61,7 @@ void butterworth_fir(fir_coeff<float_type>& butfir, float_type spb) {
   std::vector<float_type> wk(end);
   std::vector<float_type> lamda(end);
 
-  for (i = 0; i < end; i++) {
+  for (size_t i = 0; i < end; i++) {
     x = (float_type)i + 1.0;
     beta[i] = M_PI * (2.0 * x - 1.0) / (2.0 * ord);
     lamda[i] = sin(xend * beta[i]) / sin(beta[i]);
@@ -72,23 +72,23 @@ void butterworth_fir(fir_coeff<float_type>& butfir, float_type spb) {
     yk[i] = (1.0 - alpha[i] * ak[i]) / wk[i];
   }
 
-  for (i = 0; i < end; i++)
-    for (i2 = 0; i2 < end; i2++)
+  for (size_t i = 0; i < end; i++)
+    for (size_t i2 = 0; i2 < end; i2++)
       if (i2 != i) lamda[i] /= (2.0 * (ak[i] - cos(beta[i2])));
 
   float_type ht;
 	float_type sum=0;
 	float_type coeff;
-  for (j = 0; j < taps; j++) {
+  for (size_t j = 0; j < taps; j++) {
     ht = 0.0;
     t = 2*M_PI * j / (float_type)spbi;
-    for (i = 0; i < end; i++) ht += lamda[i] * ::exp(-t * ak[i]) * (xk[i] * cos(t * wk[i]) + yk[i] * sin(t * wk[i]));
+    for (size_t i = 0; i < end; i++) ht += lamda[i] * ::exp(-t * ak[i]) * (xk[i] * cos(t * wk[i]) + yk[i] * sin(t * wk[i]));
 		coeff = 2.0*M_PI*ht;
 		sum += coeff;
     butfir.settap(j,coeff);
   }
 	// Normalize
-  for (j = 0; j < taps; j++) {
+  for (size_t j = 0; j < taps; j++) {
 		butfir.settap(j,butfir.gettap(j)/sum);
 	}
 }
