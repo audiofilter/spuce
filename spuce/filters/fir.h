@@ -162,7 +162,7 @@ template <class Numeric, class Coeff = float_type> class fir {
     // Update history of outputs
     for (i = num_taps - 1; i > 0; i--) z[i] = z[i - 1];
 
-    output = (sum + in);
+    output = (Numeric)(sum + in);
     // Add new output to delay line
     z[0] = output;
     return (output);

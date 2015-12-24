@@ -14,7 +14,7 @@ namespace spuce {
 template <class Numeric, class Coeff = float_type> class iir_df {
  public:
 	//  iir_df<Numeric, Coeff>() { ; }
-  iir_df<Numeric, Coeff>(const int order=1) : poles(order), zeros(order + 1) {
+  iir_df<Numeric, Coeff>(const size_t order=1) : poles(order), zeros(order + 1) {
     for (auto i = 0; i < order + 1; i++) zeros.settap(i,1.0);
     for (auto i = 0; i < order; i++) poles.settap(i,0.0);
   }
@@ -47,7 +47,7 @@ template <class Numeric, class Coeff = float_type> class iir_df {
     // Skip 1st feedback and negate the rest
     for (size_t i = 0; i < size-1; i++) { poles.settap(i, -taps[i+size+1]); }
   }
-  int order(void) { return zeros.number_of_taps(); }
+  size_t order(void) { return zeros.number_of_taps(); }
   Numeric clock(Numeric in) { return (update(in)); }
   Numeric update(Numeric in) {
     Numeric output = zeros.update(in);
@@ -68,8 +68,8 @@ template <class Numeric, class Coeff = float_type> class iir_df {
     std::cout << "A ";
     poles.print();
   }
-	int a_size() const { return poles.number_of_taps(); }
-	int b_size() const { return zeros.number_of_taps(); }
+	size_t a_size() const { return poles.number_of_taps(); }
+	size_t b_size() const { return zeros.number_of_taps(); }
 
  private:
   fir<Numeric, Coeff> poles;
