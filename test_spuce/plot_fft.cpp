@@ -50,7 +50,7 @@ void plot_fft(std::vector<std::complex<double>>& data) {
     double val = norm((double)N * z[i]);
     if (val < 1e-6) val = 1e-6;
     fft[i] = 10.0 * log10(val);
-		x[i] = (double)(-N/2.0 + i)/N;
+		x[i] = (double)(-(signed)N/2.0 + i)/N;
   }
   PyPlotter plt;
   plt.init();

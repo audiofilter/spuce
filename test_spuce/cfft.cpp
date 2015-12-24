@@ -52,7 +52,7 @@ cfft::cfft(size_t size, float_type scalef1, float_type scalef2, float_type scale
   //
   if (k > 0) {
     CPLX ww;
-    k = (1 << (k - 1));
+    k = ((size_t)1 << (k - 1));
     for (i = 0; i < k; ++i) {
       t = float_type(bitrev[i << 1]) * M_PI / float_type(k);
       ww = CPLX(cos(t), sin(t));

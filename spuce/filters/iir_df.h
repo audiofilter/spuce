@@ -15,21 +15,21 @@ template <class Numeric, class Coeff = float_type> class iir_df {
  public:
 	//  iir_df<Numeric, Coeff>() { ; }
   iir_df<Numeric, Coeff>(const size_t order=1) : poles(order), zeros(order + 1) {
-    for (auto i = 0; i < order + 1; i++) zeros.settap(i,1.0);
-    for (auto i = 0; i < order; i++) poles.settap(i,0.0);
+    for (size_t i = 0; i < order + 1; i++) zeros.settap(i,1.0);
+    for (size_t i = 0; i < order; i++) poles.settap(i,0.0);
   }
 
   iir_df<Numeric, Coeff>(const iir_df<Numeric, Coeff>& cp) : poles(a_size()),	zeros(b_size()) {
-    for (auto i = 0; i < a_size(); i++) poles.settap(i, cp.poles.get_coeff(i));
-    for (auto i = 0; i < b_size(); i++) zeros.settap(i, cp.zeros.get_coeff(i));
+    for (size_t i = 0; i < a_size(); i++) poles.settap(i, cp.poles.get_coeff(i));
+    for (size_t i = 0; i < b_size(); i++) zeros.settap(i, cp.zeros.get_coeff(i));
   }
 
   iir_df<Numeric, Coeff>(const iir_coeff& filt) : poles(filt.getOrder()), zeros(filt.getOrder() + 1) {
     // Apply gain to feedforward taps to normalize
-    for (auto i = 0; i < filt.getOrder() + 1; i++) zeros.settap(i, filt.get_b(i));
+    for (size_t i = 0; i < filt.getOrder() + 1; i++) zeros.settap(i, filt.get_b(i));
     // For feedback, skip a[0] which is 1 and used negative of remaining coefficients
     // for `iir` part
-    for (auto i = 0; i < filt.getOrder(); i++) poles.settap(i, -filt.get_a(i + 1));
+    for (size_t i = 0; i < filt.getOrder(); i++) poles.settap(i, -filt.get_a(i + 1));
   }
   ~iir_df(void) {}
   //! Reset

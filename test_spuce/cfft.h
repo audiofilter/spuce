@@ -49,7 +49,7 @@ class cfft {
   {
     fft_func(buf, 1);
   }
-  inline int length() const { return N; }
+  inline size_t length() const { return N; }
   //! used to fill in last half of complex spectrum of real signal
   //! when the first half is already there.
   void hermitian(CPLX *buf);
