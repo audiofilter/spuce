@@ -7,6 +7,11 @@ ENDIF()
 PROJECT("spuce tests")
 message("Project spuce_tests")
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+endif()
+
+
 FIND_PACKAGE(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
 
