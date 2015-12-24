@@ -1,12 +1,11 @@
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-using namespace std;
 #include <spuce/filters/iir_coeff.h>
 #include <spuce/filters/butterworth_iir.h>
 #include <spuce/filters/iir_df.h>
 #include "plot_fft.h"
-
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+using namespace std;
 using namespace spuce;
 //! \brief testing various types for IIR
 //! \ingroup examples
