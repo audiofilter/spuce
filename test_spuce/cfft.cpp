@@ -76,7 +76,7 @@ cfft::~cfft() {
 void cfft::hermitian(CPLX *buf) {
   int i, j;
   if (N <= 2) return;  // nothing to do
-  i = (N >> 1) - 1;    // input
+  i = (int)(N >> 1) - 1;    // input
   j = i + 2;           // output
   while (i > 0) {
     buf[j] = conj(buf[i]);
@@ -107,7 +107,7 @@ void cfft::fft_func(CPLX *buf, int iflag) {
   //  1st element  = sum of 1st & middle, middle element = diff.
   // repeat N/2 times.
 
-  k = N >> 1;
+  k = (int)N >> 1;
 
   if (log2N == 1) s *= sp[1];  // final scale
 

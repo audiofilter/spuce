@@ -357,7 +357,7 @@ void iir_coeff::pz_to_ap() {
 
   for (j = 0; j < m; j++) q[j] += b_tf[j];
 
-  rq = find_roots(q, m);
+  rq = find_roots(q, (long)m);
 
   np = nq = 0;
   for (j = 0; j < m; j++) {
