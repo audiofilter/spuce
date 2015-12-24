@@ -24,10 +24,10 @@ namespace spuce {
       const double remez_stop_atten = 60.0;
       const double remez_trans  = 2*(fc - pass_edge);
       const double remez_weight = remez_estimate_weight(ripple, remez_stop_atten);
-      auto taps = design_fir("remez","LOW_PASS", Order, pass_edge, 0, remez_trans, remez_weight);
+      auto taps = design_fir("remez","LOW_PASS", (int)Order, pass_edge, 0, remez_trans, remez_weight);
       return taps;
     } else {
-      iir_coeff* filt = design_iir("chebyshev", "LOW_PASS", IIR_Order, pass_edge, ripple);
+      iir_coeff* filt = design_iir("chebyshev", "LOW_PASS", (int)IIR_Order, pass_edge, ripple);
       // get the tap from iir_coeff for iir_filter, incorporating the gain to feedforward taps
       std::vector<double> b = filt->get_b();
       std::vector<double> a = filt->get_a();

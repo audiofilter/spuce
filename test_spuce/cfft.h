@@ -36,7 +36,7 @@ class cfft {
   void fft_func(CPLX *buf, int iflag);
 
  public:
-  cfft(int size,                                            // size is power of 2
+  cfft(size_t size,                                            // size is power of 2
        float_type scalef1 = 0.5, float_type scalef2 = 1.0,  // fwd transform scalings
        float_type scalei1 = 1.0, float_type scalei2 = 1.0   // rev xform
        );

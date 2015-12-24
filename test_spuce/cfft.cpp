@@ -11,8 +11,8 @@ namespace spuce {
  * scalings for the forward transform; scalei1 and scalei2 are
  * the same for the inverse transform.
  */
-cfft::cfft(int size, float_type scalef1, float_type scalef2, float_type scalei1, float_type scalei2) {
-  int i, j, k;
+cfft::cfft(size_t size, float_type scalef1, float_type scalef2, float_type scalei1, float_type scalei2) {
+  size_t i, j, k;
   float_type t;
 
   fscales[0] = scalef1;
