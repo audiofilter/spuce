@@ -27,9 +27,9 @@ void butterworth_iir(iir_coeff& filt, float_type fcd, float_type amax = 3.0) {
 //! Calculate roots
 void butterworth_s(iir_coeff& filt, float_type wp, size_t n) {
   auto l = (n % 2 == 0) ? 1 : 0;
-  int n2 = (n + 1) / 2;
+  size_t n2 = (n + 1) / 2;
   float_type arg;
-  for (int j = 0; j < n2; j++) {
+  for (size_t j = 0; j < n2; j++) {
     arg = -0.5 * M_PI * l / ((float_type)(n));
     if (filt.get_type()==filter_type::low) {
       filt.set_pole(wp * exp(std::complex<double>(0, arg)), j);

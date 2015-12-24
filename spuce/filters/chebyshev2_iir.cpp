@@ -27,12 +27,12 @@ void chebyshev2_iir(iir_coeff& filt, float_type fcd, float_type stopband = 40.0)
 //! Calculate poles (chebyshev)
 void chebyshev2_s(iir_coeff& filt, float_type wp, float_type epi, size_t order) {
   auto l = 1;
-  int n2 = (order + 1) / 2;
+  size_t n2 = (order + 1) / 2;
   float_type x = 1 / epi;
   float_type lambda = pow(x*(1.0 + sqrt(1.0 + epi*epi)),1.0/order);
   float_type sm = 0.5*((1.0/lambda) - lambda);
   float_type cm = 0.5*((1.0/lambda) + lambda);
-  for (int j = 0; j < n2; j++) {
+  for (size_t j = 0; j < n2; j++) {
     float_type arg  = M_PI * (2*l-1) / ((float_type)(2*order));
 		std::complex<float_type> p = std::complex<float_type>(sm * sin(arg), cm * cos(arg));
     if (filt.get_type()==filter_type::low) {
