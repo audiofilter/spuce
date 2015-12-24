@@ -23,23 +23,22 @@ template <class Numeric, class Coeff = float_type> class fir_decim : public fir<
   fir_decim<Numeric, Coeff>(long n) : fir<Numeric, Coeff>(n) {}
   fir_decim<Numeric, Coeff>(const char* file) { read_taps(file); }
   fir_decim<Numeric, Coeff>(fir_coeff<Coeff> C) : fir<Numeric, Coeff>(C) {
-    int i;
-    int n = C.number_of_taps();
+    size_t n = C.number_of_taps();
     if (n > 0) {
       coeff.resize(n);
       z.resize(n);
-      for (i = 0; i < n; i++) z[i] = (Numeric)0;
+      for (size_t i = 0; i < n; i++) z[i] = (Numeric)0;
       coeff = get_taps(C);
     }
     phase = 0;
   }
   fir_decim<Numeric, Coeff>(const std::vector<Coeff>& C) : fir<Numeric, Coeff>(C.size()) {
-    int n = C.size();
+    size_t n = C.size();
     if (n > 0) {
       coeff.resize(n);
       z.resize(n);
-      for (int i = 0; i < n; i++) z[i] = (Numeric)0;
-      for (int i = 0; i < n; i++) coeff[i] = C[i];
+      for (size_t i = 0; i < n; i++) z[i] = (Numeric)0;
+      for (size_t i = 0; i < n; i++) coeff[i] = C[i];
     }
   }
 
@@ -58,7 +57,7 @@ template <class Numeric, class Coeff = float_type> class fir_decim : public fir<
 
   void input(Numeric in) {
     // Update history of inputs
-    for (int i = number_of_taps() - 1; i > 0; i--) z[i] = z[i - 1];
+    for (size_t i = number_of_taps() - 1; i > 0; i--) z[i] = z[i - 1];
     // Add new input
     z[0] = in;
   }
@@ -68,16 +67,14 @@ template <class Numeric, class Coeff = float_type> class fir_decim : public fir<
     sum_type sum(0);
     // Perform FIR
     Numeric output;
-    int i;
-    for (i = 0; i < number_of_taps(); i++) sum += coeff[i] * z[i];
-
-    output = (sum);
+    for (size_t i = 0; i < number_of_taps(); i++) sum += coeff[i] * z[i];
+    output = Numeric(sum);
     return (output);
   }
   void process(const std::vector<Numeric>& in, std::vector<Numeric>& out) {
     out.resize((in.size() - phase + rate - 1 )/ rate);
-    int j = 0;
-    for (int i = 0; i < in.size(); i++) {
+    size_t j = 0;
+    for (size_t i = 0; i < in.size(); i++) {
       input(in[i]);
       phase = (phase + 1) % rate;
       if (phase == 0) {

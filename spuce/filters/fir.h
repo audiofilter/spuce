@@ -127,7 +127,7 @@ template <class Numeric, class Coeff = float_type> class fir {
     z[0] = in;
     // Perform FIR
     for (size_t i = 0; i < num_taps; i++) sum = sum + coeff[i] * z[i];
-    output = (sum);
+    output = Numeric(sum);
     return (output);
   }
   void process(const std::vector<Numeric>& in, std::vector<Numeric>& out) {
