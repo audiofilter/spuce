@@ -37,7 +37,7 @@ template <class Numeric, class Coeff = float_type> class iir_df {
     poles.reset();
     zeros.reset();
   }
-  void set_taps(const std::vector<float_type>& taps) {
+  void set_taps(const std::vector<Coeff>& taps) {
     // Divide vector in half, 1st half are feedforward, 2nd half feedback
     assert(taps.size() != 0);
     auto size = taps.size()/2;
