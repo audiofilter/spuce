@@ -18,12 +18,12 @@ namespace spuce {
 template <class Numeric, class Coeff = float_type> class fir {
  public:
   //! Set tap weights
-  void settap(long i, Coeff tap) { coeff[i] = tap; }
+  void settap(size_t i, Coeff tap) { coeff[i] = tap; }
   void settaps(fir_coeff<Coeff>& c) {
     for (int i = 0; i < num_taps; i++) coeff[i] = c.gettap(i);
   }
-  long number_of_taps() const { return (num_taps); }
-  Coeff gettap(long i) const { return (coeff[i]); }
+  size_t number_of_taps() const { return (num_taps); }
+  Coeff gettap(size_t i) const { return (coeff[i]); }
   //! Reset
   void reset() {
     for (int i = 0; i < num_taps; i++) z[i] = (Numeric)0;
@@ -51,12 +51,12 @@ template <class Numeric, class Coeff = float_type> class fir {
   //! Get current output
   Numeric out() { return (output); }
   //! Clock in new sample & compute current output
-  Numeric check(long i) { return (z[i]); }
+  Numeric check(size_t i) { return (z[i]); }
   ~fir(void) {}
   //! Constructor
   fir(void) { ; }
   //! Constructor
-  fir(long n) : coeff(n), z(n), num_taps(n) {
+  fir(size_t n) : coeff(n), z(n), num_taps(n) {
 		assert(n > 0);
     int i;
     if (n > 0) {
@@ -96,7 +96,7 @@ template <class Numeric, class Coeff = float_type> class fir {
     }
   }
   //! Set size of Filter
-  void set_size(long n) {
+  void set_size(size_t n) {
 		if (get_size() == n) {
 			// size already is correct
 		} else {
@@ -112,7 +112,7 @@ template <class Numeric, class Coeff = float_type> class fir {
 			}
 		}
   }
-  long get_size(void) { return (num_taps); }
+  size_t get_size(void) { return (num_taps); }
   //!  Constructor that gets coefficients from file (requires fir.cpp)
   fir(const char* file) { read_taps(file); }
   // Assign fir of one type to another
@@ -192,20 +192,20 @@ template <class Numeric, class Coeff = float_type> class fir {
  protected:
   std::vector<Coeff> coeff;
   std::vector<Numeric> z;
-  long num_taps;
+  size_t num_taps;
   Numeric output;
   typedef typename base_type<Numeric>::btype Numeric_base;
   typedef typename mixed_type<Numeric, Coeff>::dtype sum_type;
 };
 
 template <class Numeric, class Coeff> std::vector<Coeff> get_taps(const fir<Numeric, Coeff>& f) {
-  long N = f.num_taps;
+  size_t N = f.num_taps;
   std::vector<Coeff> V(N);
   for (int i = 0; i < N; i++) V[i] = f.coeff[i];
   return (V);
 }
 template <class Numeric, class Coeff> std::vector<Numeric> get_input(const fir<Numeric, Coeff>& f) {
-  long N = f.num_taps;
+  size_t N = f.num_taps;
   std::vector<Numeric> V(N);
   for (int i = 0; i < N; i++) V[i] = f.z[i];
   return (V);
