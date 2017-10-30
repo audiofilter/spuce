@@ -17,7 +17,7 @@ int main(int argv, char* argc[]) {
 	std::vector<double> y(N);
 
   imp = 1;
-	signed char dump = 1;
+	bool dump = true;
   for (i=0;i<N;i++) {
 		dump = ((i % rate) == 0);
     y[i] = (F.interpolate(imp, dump))*pow(rate,-O);
