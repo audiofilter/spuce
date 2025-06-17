@@ -1,0 +1,60 @@
+# Build & Core Dependencies (C++)
+cmake>=3.5
+gcc>=7.0 | clang>=5.0  # C++11 support required
+
+# Python Testing & Plotting
+python>=3.6
+matplotlib>=3.0  # For frequency/impulse response plots
+numpy>=1.15      # Numerical support for tests
+scipy>=1.0       # Optional (for reference comparisons)
+
+# QT5 for Demo Apps (Linux/macOS/Windows)
+qt5-default       # Linux (Debian/Ubuntu)
+pyqt5>=5.15       # Python bindings for QT apps
+pyside2           # Alternative QT bindings (if preferred)
+
+# Homebrew (macOS-only, handled separately)
+# brew install qt5  # Manual step for macOS users
+
+# Packaging (Debian/Ubuntu)
+debhelper         # For .deb package generation
+doxygen           # Documentation
+```
+
+---
+
+### **Additional Setup Notes**:
+1. **For Homebrew (macOS)**:
+   ```bash
+   brew install qt5 cmake
+   ```
+2. **For Ubuntu/Debian**:
+   ```bash
+   sudo apt-get install qt5-default cmake doxygen debhelper
+   ```
+3. **Python Virtual Environment** (recommended):
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Linux/macOS
+   pip install -r requirements.txt
+   ```
+
+---
+
+### **Key Dependencies Explained**:
+- **C++11 Compiler**: Required for modern SPUCE features.
+- **QT5**: Needed for the demo apps (`fir_plot`, `iir_plot`, etc.).
+- **Python Libraries**: Used for testing/plotting filter responses.
+- **Debian Packaging**: For `.deb` files (PPA releases).
+
+---
+
+### **Optional Extras**:
+- **Eigen3** (for advanced linear algebra in C++ tests):
+  ```plaintext
+  libeigen3-dev>=3.3
+  ```
+- **Boost** (if older C++98 compatibility is needed):
+  ```plaintext
+  libboost-all-dev>=1.65
+  ```
